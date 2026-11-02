@@ -60,7 +60,9 @@ QA_max_cut_lib/
 | TeX | MiKTeX 25.12, pdfTeX 4.23 |
 | Свободно на диске C: | около 19 ГБ на момент подготовки |
 
-Точный список установленных версий: `requirements/lock-cpu-py312-win.txt`.
+Точный список установленных версий: `requirements/freeze-local-py312-win.txt`.
+Разрешённые lock-файлы профилей: `requirements/lock-cpu-py312-win.txt` и
+`requirements/lock-gpu-cu13-py312-win.txt`.
 
 ### Активация
 
@@ -80,6 +82,16 @@ source .venv/Scripts/activate
 
 В PyCharm: **File → Open** → каталог проекта; интерпретатор
 `.venv\Scripts\python.exe`.
+
+Для JupyterLab зарегистрировано пользовательское ядро
+`Python 3.12 (QA_max_cut_lib)`. Запуск:
+
+```bash
+.venv/Scripts/jupyter.exe lab notebooks/01_quickstart.ipynb
+```
+
+Ядро указывает на `.venv` этого проекта. Если проект переносится в другой
+каталог, ядро нужно зарегистрировать заново.
 
 ### Установка с нуля
 

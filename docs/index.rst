@@ -26,8 +26,11 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 
 * :download:`Все конфигурационные поля, аргументы и атрибуты <API.md>`
 * :download:`Математические определения и численные ограничения <MATHEMATICS.md>`
-* :download:`Установка CPU и будущего GPU-профиля <INSTALLATION.md>`
-* :download:`Проверка сборки <VALIDATION.md>`
+* :download:`Установка CPU и NVIDIA-профиля <INSTALLATION.md>`
+* :download:`Карта архитектуры и состояния переноса <ARCHITECTURE_MAP_RU.md>`
+* :download:`Рабочее окружение проекта <PROJECT_SETUP_RU.md>`
+* :download:`Локальная проверка Windows <VALIDATION_LOCAL.md>`
+* :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
 Два выполненных учебных ноутбука находятся в папке notebooks исходного

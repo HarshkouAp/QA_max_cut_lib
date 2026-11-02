@@ -18,6 +18,7 @@
 | Сборка wheel | `python -m build` | созданы wheel и sdist `0.1.0a1` |
 | Сборка Sphinx | `python -m sphinx -W -b html docs docs/_build/html` | успешно, без предупреждений |
 | GPU | `cupy.cuda.runtime`, elementwise, `RawKernel` | CuPy 14.2.0, CUDA runtime 13020, ядро скомпилировано |
+| Целостность исходников | SHA-256 89 Python-файлов | 89/89 совпадают с распаковкой `RQAOA_main.rar` |
 | Импорт профиля | `import QA_max_cut_lib, cvxpy, plotly, dimod, dwave.samplers, community` | успешно |
 
 ## Версии основных пакетов
@@ -39,8 +40,9 @@
 | Sphinx | 9.1.1 |
 | CuPy | 14.2.0 (`cupy-cuda13x`) |
 
-Полный список: `requirements/lock-cpu-py312-win.txt` (CPU-профиль) и
-`requirements/lock-gpu-cu13-py312-win.txt` (текущее окружение с CuPy).
+Полный список: `requirements/freeze-local-py312-win.txt`; разрешённые версии
+профилей — `requirements/lock-cpu-py312-win.txt` и
+`requirements/lock-gpu-cu13-py312-win.txt`.
 
 ## Что подтверждено
 
