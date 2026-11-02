@@ -5,7 +5,7 @@
 ## База
 
 - `QA_max_cut_lib 0.1.0a16`, Python 3.12.14, NumPy 2.5.4.
-- CPU: `197 passed, 1 skipped, 1 warning`.
+- CPU: `198 passed, 1 skipped, 1 warning`.
 - Sphinx `-W`: успешно.
 - Wheel установлен в `.venv` и `.venv-wheelcheck`; CLI/examples вне src.
 
@@ -52,8 +52,8 @@ provenance сохраняется отдельно.
 ## Артефакты
 
 - wheel: `qa_max_cut_lib-0.1.0a16-py3-none-any.whl`, SHA-256
-  `a7fafe37bcac76c35ddb528518c3ac84973c0f4e8286034eac3535c37f3e8607`;
+  `c200fbd1b182f402573154205d2388e40be4e5a4c8306b4d65d300235fd28805`;
 - sdist: `qa_max_cut_lib-0.1.0a16.tar.gz`, SHA-256
-  `0e8e6b56f024b9ee5705950e620086d0b5a857f159547d1c49e11e8e85656bbf`.
+  `34038652e0df5ec1fdecf833bc0ff38eb2d32ffdad050854f05782dd15ad8584`.
 - delivery zip: `C:\Users\Alexey\Downloads\QA_max_cut_lib_0.1.0a16.zip`,
-  SHA-256 `137ada3860808af8b750befeb1a483b602a667c896914ccfab102156391da6bd`.
+  SHA-256 `c7923f8896292cb4a780a101438c4e9f1ce6b5e411bac8756b1365381b1b9f`.

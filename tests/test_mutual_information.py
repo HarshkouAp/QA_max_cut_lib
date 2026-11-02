@@ -131,3 +131,31 @@ def test_prefix_theta_uses_two_halves():
     frames = solver.result["mi_frames"]
     assert [frame["layer"] for frame in frames] == [1, 2, 3]
     assert frames[1]["pairs"]
+
+
+def test_partial_trace_matches_dense_small_reference():
+    rng = np.random.default_rng(7)
+    for n in (1, 2, 3):
+        state = rng.normal(size=1 << n) + 1j * rng.normal(size=1 << n)
+        state /= np.linalg.norm(state)
+        dense = np.outer(state, state.conj())
+        for positions in ([0], [n - 1], list(range(min(2, n)))):
+            rho = reduced_density_matrix(state, positions, list(range(n)))
+            reference = np.zeros((1 << len(positions),) * 2, dtype=complex)
+            environment = [position for position in range(n) if position not in positions]
+            for row in range(1 << len(positions)):
+                for col in range(1 << len(positions)):
+                    total = 0.0j
+                    for env_number in range(1 << len(environment)):
+                        index_row = 0
+                        index_col = 0
+                        for k, position in enumerate(positions):
+                            index_row |= ((row >> (len(positions) - 1 - k)) & 1) << position
+                            index_col |= ((col >> (len(positions) - 1 - k)) & 1) << position
+                        for k, position in enumerate(environment):
+                            bit = (env_number >> (len(environment) - 1 - k)) & 1
+                            index_row |= bit << position
+                            index_col |= bit << position
+                        total += dense[index_row, index_col]
+                    reference[row, col] = total
+            assert np.allclose(rho, reference, atol=1e-12)

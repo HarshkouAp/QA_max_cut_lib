@@ -385,6 +385,7 @@ class RecordingCorrelationSource:
                 "probabilities": probabilities,
                 "correlations": dict(result.values),
                 "batch": getattr(self.source, "_last_samples", None),
+                "cut_offset": getattr(state, "cut_offset", None),
                 "task": state,
             }
         )
@@ -449,6 +450,7 @@ class RQAOAWithMIObserverCPU(RQAOACPU):
             frame["reduction_step"] = item["task_version"] + 1
             frame["task_version"] = item["task_version"]
             frame["coordinates"] = "active_before_reduction"
+            frame["cut_offset"] = item["cut_offset"]
             frame["removed_labels"] = [
                 int(constraint.removed) for constraint in item["task"].constraints
             ]
