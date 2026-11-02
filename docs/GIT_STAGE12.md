@@ -1,6 +1,6 @@
 # Git Stage 12
 
-Основной коммит: `Stage 12: add warm-start ensemble RQAOA (0.1.0a12)`.
+Основной коммит: `29224e8` — `Stage 12: add warm-start ensemble RQAOA (0.1.0a12)`.
 
 ## Состав
 
