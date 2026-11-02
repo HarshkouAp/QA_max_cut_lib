@@ -52,6 +52,6 @@ provenance сохраняется отдельно.
 ## Артефакты
 
 - wheel: `qa_max_cut_lib-0.1.0a16-py3-none-any.whl`, SHA-256
-  `c200fbd1b182f402573154205d2388e40be4e5a4c8306b4d65d300235fd28805`;
+  `c5884c7f02552b99a044b64faa126cb877a63fe91e5275c1fe359dbfa5b28d2d`;
 - sdist: `qa_max_cut_lib-0.1.0a16.tar.gz`, SHA-256
-  `34038652e0df5ec1fdecf833bc0ff38eb2d32ffdad050854f05782dd15ad8584`.
+  `9de6baac3e88eeb6eb8d523309a05ee1a56cb6ef261bca453270adac4418a7b9`.

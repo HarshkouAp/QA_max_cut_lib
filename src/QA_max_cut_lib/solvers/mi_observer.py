@@ -455,6 +455,20 @@ class RQAOAWithMIObserverCPU(RQAOACPU):
                 int(constraint.removed) for constraint in item["task"].constraints
             ]
             frame["original_labels"] = [int(label) for label in item["task"].original_nodes]
+            original_labels = [int(label) for label in item["task"].original_nodes]
+            original_values = [[0.0 for _ in original_labels] for _ in original_labels]
+            original_mask = [[False for _ in original_labels] for _ in original_labels]
+            for pair_entry in frame["quantum_mi"]:
+                u, v, value = pair_entry
+                a = original_labels.index(int(u))
+                b = original_labels.index(int(v))
+                original_values[a][b] = original_values[b][a] = float(value)
+                original_mask[a][b] = original_mask[b][a] = True
+            frame["original_matrix"] = {
+                "labels": original_labels,
+                "quantum_mi": original_values,
+                "valid_mask": original_mask,
+            }
             if observer.config["classical_z"]["estimator"] == "reuse_correlation_batch":
                 # The source already produced a physical ZZ table for this frame.
                 frame["classical_z_provenance"] = "source_correlation_batch"
