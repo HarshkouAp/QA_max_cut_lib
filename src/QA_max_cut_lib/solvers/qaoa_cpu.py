@@ -450,7 +450,7 @@ class QAOACPU(BaseSolver):
             "expected_cut_source": "exact_final_statevector",
             "objective_value": training["objective_value"],
             "optimizer_loss": training["best_loss"],
-            "best_evaluation_id": training.get("state_record", {}).get("best_evaluation_id"),
+            "best_evaluation_id": training.get("best_evaluation_id", training.get("state_record", {}).get("best_evaluation_id")),
             "objective_source": (
                 "best_training_evaluation"
                 if training["best_loss"] is not None
