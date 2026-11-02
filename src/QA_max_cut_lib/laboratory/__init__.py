@@ -17,9 +17,16 @@ from .catalog import (
     load_inventory,
     source_to_variant,
 )
-from ..solvers.warm_start_qaoa_cpu import WarmStartQAOACPU
-
 IMPLEMENTED_VARIANTS = ("warm_start_product_qaoa_cpu_v1",)
+
+
+def __getattr__(name):
+    if name == "WarmStartQAOACPU":
+        from .warm_start_qaoa_cpu import WarmStartQAOACPU
+        globals()[name] = WarmStartQAOACPU
+        return WarmStartQAOACPU
+    raise AttributeError(name)
+
 
 __all__ = [
     "CatalogError",
