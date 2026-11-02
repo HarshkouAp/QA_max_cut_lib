@@ -58,6 +58,6 @@ cut `17.5`, без CuPy/CVXPY.
 ## Артефакты
 
 - wheel: `qa_max_cut_lib-0.1.0a17-py3-none-any.whl`, SHA-256
-  `c88d691797a4bd4dd0e1dc1bb5fd1ef7d1d1e140cf21f903378a6a6cf389dc85`;
+  `2939482686e0096780d44ab8656c5cc588a165b2089cf4c2f8109bf9a1a7fc2f`;
 - sdist: `qa_max_cut_lib-0.1.0a17.tar.gz`, SHA-256
-  `72c749ec7739a9b5588186bc868beba11e2d2a493d87c20e461ce721356d5df4`.
+  `45f54d106c4887b6e3e2d41bcbbb244153b7e34f53b0ece811516dfc827d5554`.

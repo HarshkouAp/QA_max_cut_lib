@@ -580,6 +580,7 @@ class IncrementalLSRQAOACPU(BaseSolver):
         unknown_spend = False
         last_quotas = []
         applied_threads = 1
+        max_applied_threads = 1
         requested_threads = int(config["num_treads"])
         executor = None
         started = perf_counter()
@@ -666,6 +667,7 @@ class IncrementalLSRQAOACPU(BaseSolver):
                     steps, quotas = allocation
                     last_quotas = list(quotas)
                     applied_threads = max(1, min(requested_threads, os.cpu_count() or 1, len(viable)))
+                    max_applied_threads = max(max_applied_threads, applied_threads)
                     payloads = [
                         self._make_payload(task, state, config, steps[index], quotas[index])
                         for index, task in enumerate(viable)
@@ -969,8 +971,8 @@ class IncrementalLSRQAOACPU(BaseSolver):
             "reductions_completed": int(reductions),
             "epochs": int(reductions),
             "num_treads_requested": int(requested_threads),
-            "num_treads_applied": int(applied_threads),
-            "num_treads": int(applied_threads),
+            "num_treads_applied": int(max_applied_threads),
+            "num_treads": int(max_applied_threads),
             "unknown_worker_spend": bool(unknown_spend),
             "shots_upper_bound": int(budget.used + (sum(last_quotas) if unknown_spend else 0)),
             "budget": budget.snapshot(),
@@ -988,7 +990,7 @@ class IncrementalLSRQAOACPU(BaseSolver):
             "reduced_solution": {int(k): int(v) for k, v in residual_solution.items()},
             "reduced_cut_value": float(state.current_graph().cut_value(residual_solution)),
             "solution_source": solution_source,
-            "num_treads": int(applied_threads),
+            "num_treads": int(max_applied_threads),
             "epoch_history": epoch_history if config["collect"]["summary"] else None,
             "bank_history": bank_history if (config["collect"]["summary"] or config["collect"]["epoch_bank"]) else None,
             "selection_history": selection_history if config["collect"]["summary"] else None,
