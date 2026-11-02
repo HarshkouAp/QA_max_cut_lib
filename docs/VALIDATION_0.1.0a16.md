@@ -53,3 +53,5 @@ provenance сохраняется отдельно.
   `a7fafe37bcac76c35ddb528518c3ac84973c0f4e8286034eac3535c37f3e8607`;
 - sdist: `qa_max_cut_lib-0.1.0a16.tar.gz`, SHA-256
   `0e8e6b56f024b9ee5705950e620086d0b5a857f159547d1c49e11e8e85656bbf`.
+- delivery zip: `C:\Users\Alexey\Downloads\QA_max_cut_lib_0.1.0a16.zip`,
+  SHA-256 `137ada3860808af8b750befeb1a483b602a667c896914ccfab102156391da6bd`.
