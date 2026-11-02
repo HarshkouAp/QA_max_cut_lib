@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "type": "laboratory.conditional_qaoa_cpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {
+    "active_vertices": [10, 30],
+    "layers": 1,
+    "max_active_vertices": 18,
+    "dtype": "complex128"
+  },
+  "environment": {
+    "type": "fixed_spins",
+    "source": {
+      "type": "provided_spins",
+      "parameters": {
+        "entries": [
+          {"node": -7, "spin": -1},
+          {"node": 10, "spin": 1},
+          {"node": 30, "spin": 1},
+          {"node": 80, "spin": 1},
+          {"node": 101, "spin": -1}
+        ]
+      }
+    }
+  },
+  "boundary": {"type": "fixed_spins_conditional"},
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "objective_reference": "original_graph",
+  "estimation": {"mode": "shots", "shots_per_evaluation": 32},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {
+      "max_steps": 2,
+      "learning_rate": 0.05,
+      "gradient_tolerance": 0.0
+    },
+    "gradient": {
+      "type": "central_difference",
+      "parameters": {"step": 0.01}
+    }
+  },
+  "initialization": {
+    "type": "fixed_angles",
+    "parameters": {"values": [0.4, 0.2]}
+  },
+  "readout": {"mode": "best_of_shots", "shots": 64},
+  "limits": {"shots_total": 384},
+  "collect": {
+    "optimizer_history": true,
+    "objective_history": true,
+    "probabilities": true,
+    "statevector": false
+  },
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

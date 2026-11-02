@@ -52,6 +52,7 @@ def train_statevector(
     control=None,
     checkpoint_callback=None,
     state_function=None,
+    score_cuts=None,
 ):
     """Train QAOA at fixed cuts and return the best evaluated angles.
 
@@ -105,6 +106,12 @@ def train_statevector(
         raise ValueError("initial_angles must contain 2*layers finite values.")
     if state_function is None:
         state_function = lambda angles: state_at_angles(cuts, angles, layers, dtype)
+    if score_cuts is None:
+        score_cuts = cuts
+    else:
+        score_cuts = np.asarray(score_cuts, dtype=float)
+        if score_cuts.shape != np.asarray(cuts).shape or not np.isfinite(score_cuts).all():
+            raise ValueError("score_cuts must match cuts and be finite.")
     restored = dict(state or {})
     if restored:
         theta = np.asarray(restored.get("theta", theta), dtype=float).copy()
@@ -174,7 +181,7 @@ def train_statevector(
             shots += shots_each
         else:
             masses = probabilities
-        value = objective_value(cuts, masses, objective)
+        value = objective_value(score_cuts, masses, objective)
         loss = -value
         evaluations += 1
         if not math.isfinite(loss):

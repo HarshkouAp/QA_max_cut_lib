@@ -49,6 +49,14 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.warm_start_ensemble.WarmStartEnsembleCorrelationSource
 
+.. autoclass:: QA_max_cut_lib.solvers.conditional_qaoa_cpu.ConditionalQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.conditional.ConditionalCutProblem
+
+.. autoclass:: QA_max_cut_lib.solvers.environment_ls_rqaoa_cpu.EnvironmentLSRQAOACPU
+   :members: solve
+
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
 

@@ -39,6 +39,10 @@ def build_correlation_source(config, *, seed=None):
         from .qaoa_gpu import QAOAGPUCorrelationSource
 
         return QAOAGPUCorrelationSource(config, seed=seed)
+    if kind == "qaoa_ising_statevector_cpu":
+        from .conditional_source import ConditionalCorrelationSource
+
+        return ConditionalCorrelationSource(config, seed=seed)
     raise ValueError(f"Unknown correlation source: {kind!r}.")
 
 

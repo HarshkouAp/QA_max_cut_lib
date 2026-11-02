@@ -245,7 +245,7 @@ class LSRQAOACPU(BaseSolver):
             raise ValueError(
                 "A GPU correlation source requires LSRQAOAGPU (ls_rqaoa_gpu)."
             )
-        if source_config.get("objective_reference") != "working_graph":
+        if source_config.get("objective_reference") != "working_graph" and source_config["type"] != "qaoa_ising_statevector_cpu":
             raise ValueError("LS local objectives must use objective_reference='working_graph'.")
         config["correlation_source"] = source_config
 
@@ -410,6 +410,14 @@ class LSRQAOACPU(BaseSolver):
             "collect_objective_history": bool(config["collect"]["local_optimizer_history"]),
         }
 
+    def _fallback_solution(self, state):
+        """Return the configured stack-consistent fallback assignment."""
+        return {int(node): 1 for node in state.current_nodes}
+
+    def _on_reduction(self, state, event):
+        """Hook for an environment reference update after a reducer commit."""
+        return None
+
     def _run(self, graph, config, rng):
         from ..tools.reporting import log_message
 
@@ -461,7 +469,7 @@ class LSRQAOACPU(BaseSolver):
         def fallback(reason, state_status="stopped"):
             nonlocal residual_solution, reduced_cut_value, solution_source
             nonlocal termination_reason, status
-            residual_solution = {int(node): 1 for node in state.current_nodes}
+            residual_solution = self._fallback_solution(state)
             reduced_cut_value = state.current_graph().cut_value(residual_solution)
             solution_source = "all_plus_reduced_fallback"
             termination_reason = reason
@@ -752,6 +760,7 @@ class LSRQAOACPU(BaseSolver):
                     )
                     reductions += 1
                     event = deepcopy(event)
+                    self._on_reduction(state, event)
                     event["correlation_origin"] = "local_subgraph_mixture"
                     event["physical_correlation"] = selection.correlation
                     event["expected_fixed_energy_local"] = event.get("expected_fixed_energy")

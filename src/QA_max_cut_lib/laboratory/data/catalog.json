@@ -323,11 +323,67 @@
         "Keep unresolved files visible",
         "Do not claim transfer from folder presence."
       ]
+    },
+    {
+      "schema_version": 1,
+      "variant_id": "conditional_fields_cpu_v1",
+      "display_name": "Conditional fields QAOA and environment LS (CPU)",
+      "family": "conditional_fields",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Laboratory/QAOA_F.py",
+          "sha256": "4e57cda4964271851494cd2d3ca61d6c0dea76d7f0532e25e1f8c171ee6107ef",
+          "role": "field_ansatz_review"
+        },
+        {
+          "path": "Laboratory/LS_QAOA_field.py",
+          "sha256": "0ee6e4916ef055f20c8b24f06c52125d442d4f228e03bc2e07b2caf4dd6ea750",
+          "role": "ls_field_controller_review"
+        }
+      ],
+      "role": "standalone_and_ls_solver",
+      "algorithm_signature": {
+        "initial_state": "equal_superposition_on_active_block",
+        "cost_convention": "energy_equals_negative_affected_cut",
+        "boundary_policy": "fixed_discrete_external_spins",
+        "parameter_order": "gammas_then_betas",
+        "bit_order": "little_endian_node_order",
+        "objective_references": [
+          "conditional_affected_cut",
+          "conditional_working_graph",
+          "original_graph"
+        ],
+        "controller": "frozen_per_reduction_exact_conditioning"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "corrected_import",
+      "declared_differences": [
+        "exact_conditioning_not_legacy_field_heuristic",
+        "no_soft_mean_exchange",
+        "no_correlation_weighted_fields",
+        "no_gpu_field_backend"
+      ],
+      "backlog": [
+        "iterative_mean_spin_exchange",
+        "soft_mean_surrogate",
+        "correlation_weighted_fields",
+        "gpu_field_backend",
+        "field_analytic_p1"
+      ]
     }
   ],
   "implemented_variant_ids": [
     "warm_start_product_qaoa_cpu_v1",
-    "warm_start_ensemble_rqaoa_cpu_v1"
+    "warm_start_ensemble_rqaoa_cpu_v1",
+    "conditional_fields_cpu_v1"
   ],
   "deferred_variant_ids": [
     "legacy_ls_rqaoa_fast_alias",

@@ -31,6 +31,8 @@ class SolverFactory:
             "refined",
             "laboratory.warm_start_qaoa_cpu",
             "laboratory.warm_start_rqaoa_cpu",
+            "laboratory.conditional_qaoa_cpu",
+            "laboratory.environment_ls_rqaoa_cpu",
         )
 
     @staticmethod
@@ -50,6 +52,8 @@ class SolverFactory:
         from ..solvers.refined import RefinedSolver
         from ..solvers.warm_start_qaoa_cpu import WarmStartQAOACPU
         from ..solvers.warm_start_rqaoa_cpu import WarmStartRQAOACPU
+        from ..solvers.conditional_qaoa_cpu import ConditionalQAOACPU
+        from ..solvers.environment_ls_rqaoa_cpu import EnvironmentLSRQAOACPU
 
         types = {
             "exact_cpu": ExactCPU,
@@ -66,6 +70,8 @@ class SolverFactory:
             "refined": RefinedSolver,
             "laboratory.warm_start_qaoa_cpu": WarmStartQAOACPU,
             "laboratory.warm_start_rqaoa_cpu": WarmStartRQAOACPU,
+            "laboratory.conditional_qaoa_cpu": ConditionalQAOACPU,
+            "laboratory.environment_ls_rqaoa_cpu": EnvironmentLSRQAOACPU,
         }
         if config.get("type") not in types:
             raise ValueError(

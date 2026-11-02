@@ -197,6 +197,10 @@ def validate_correlation_source_config(config):
         from .warm_start_ensemble import validate_warm_ensemble_source_config
 
         return validate_warm_ensemble_source_config(config)
+    if config.get("type") == "qaoa_ising_statevector_cpu":
+        from .conditional_source import ConditionalCorrelationSource
+
+        return ConditionalCorrelationSource(config).config
     allowed = {
         "type",
         "parameters",

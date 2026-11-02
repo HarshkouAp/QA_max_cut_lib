@@ -44,6 +44,7 @@ def solve_local_task(payload):
     graph = WeightedGraph(edges=payload["edges"], nodes=payload["nodes"])
     state = GraphReducer().start(graph)
     source_config = deepcopy(payload["source_config"])
+    conditional = payload.get("conditional")
     initial_angles = None
     initialization = source_config.get("initialization")
     if isinstance(initialization, dict):
@@ -65,13 +66,46 @@ def solve_local_task(payload):
 
         native_context = nullcontext()
     with native_context:
-        result = source.estimate(
-            state,
-            budget=budget,
-            pair_domain=payload["pair_domain"],
-            collect_optimizer_history=bool(payload.get("collect_optimizer_history", False)),
-            collect_objective_history=bool(payload.get("collect_objective_history", False)),
-        )
+        if conditional is not None:
+            from .conditional import ConditionalCutProblem
+            from .conditional_source import ConditionalCorrelationSource
+
+            local_nodes = tuple(conditional["nodes"])
+            reference = {
+                int(node): int(conditional["reference"][str(node)])
+                for node in local_nodes
+            }
+            problem = ConditionalCutProblem(
+                graph=graph,
+                nodes=local_nodes,
+                reference=reference,
+                couplings={
+                    (int(u), int(v)): float(value)
+                    for u, v, value in conditional["couplings"]
+                },
+                fields={int(node): float(value) for node, value in conditional["fields"]},
+                constant=float(conditional["constant"]),
+                outside_cut=float(conditional["outside_cut"]),
+                cut_offset=float(conditional.get("cut_offset", 0.0)),
+            )
+            cond_source = ConditionalCorrelationSource(source_config, seed=payload.get("seed"))
+            from types import SimpleNamespace
+
+            result = SimpleNamespace(
+                **cond_source.estimate_problem(
+                    problem,
+                    budget=budget,
+                    pair_domain=payload["pair_domain"],
+                )
+            )
+        else:
+            result = source.estimate(
+                state,
+                budget=budget,
+                pair_domain=payload["pair_domain"],
+                collect_optimizer_history=bool(payload.get("collect_optimizer_history", False)),
+                collect_objective_history=bool(payload.get("collect_objective_history", False)),
+            )
         native_pools = None
         try:
             from threadpoolctl import threadpool_info
