@@ -1,4 +1,4 @@
-# API версии 0.1.0a7
+# API версии 0.1.0a8
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -9,7 +9,8 @@ from QA_max_cut_lib import (
     WeightedGraph, GraphFactory, SolverFactory, RunRecord, ExactCPU, QAOACPU,
     RQAOACPU, AnalyticP1Evaluator, AnalyticP1CorrelationSource,
     LSRQAOACPU, QAOAGPU, QAOAGPUCorrelationSource, RQAOAGPU, LSRQAOAGPU,
-    QAOAInQAOACPU, QAOAInQAOAGPU,
+    QAOAInQAOACPU, QAOAInQAOAGPU, GoemansWilliamsonCPU, SimulatedAnnealingCPU,
+    ExactBlockRefiner, RefinedSolver,
     GraphReducer, ReductionState, IsingProblem, SpinConstraint,
     QAOAStatevectorCorrelationSource, MaxAbsCorrelationSelector, ExactCPUFinisher,
 )
@@ -22,7 +23,7 @@ from QA_max_cut_lib.solvers.objectives import validate_objective, objective_valu
 from QA_max_cut_lib._version import __version__
 ```
 
-`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu", "qaoa_gpu", "rqaoa_gpu", "ls_rqaoa_gpu", "qaoa_in_qaoa_cpu", "qaoa_in_qaoa_gpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
+`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu", "qaoa_gpu", "rqaoa_gpu", "ls_rqaoa_gpu", "qaoa_in_qaoa_cpu", "qaoa_in_qaoa_gpu", "gw_cpu", "simulated_annealing_cpu", "refined")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
 
 Общий конструктор солвера — `ClassName(config=None)`. Он копирует конфигурацию. `solve(graph, *, report=None, logs=None, num_treads=None)` принимает новый граф и возвращает `dict[int, int]`. Аргументы уровня вывода и числа потоков переопределяют конфигурацию данного запуска. Один экземпляр рассчитан на один активный запуск. Для одновременных расчётов нужны разные экземпляры.
 
@@ -625,6 +626,16 @@ tasks = builder.build(graph, version=0)
 ```
 
 `build()` возвращает `round`, `block`, `nodes`, `task_id` и `boundary`; он не меняет граф и не вызывает QAOA.
+
+## Классические методы (`gw_cpu`, `simulated_annealing_cpu`, `refined`)
+
+`GoemansWilliamsonCPU` (`gw_cpu`) решает SDP через CVXPY/SCS и округляет независимыми гиперплоскостями. `parameters` содержит `num_hyperplanes`, `solver="SCS"`, `eps_abs`, `eps_rel`, `max_iters`, `allow_inaccurate`, `psd_tolerance`, `diag_tolerance` и `repair_tolerance`. `sdp_upper_bound` равен `null`: строгий dual certificate в этом этапе не строится; численное значение релаксации не выдаётся за сертифицированную границу.
+
+`SimulatedAnnealingCPU` (`simulated_annealing_cpu`) строит spin BQM с `h=0`, `J=w/2`, `offset=-sum(w)/2` и вызывает классический `dwave.samplers.SimulatedAnnealingSampler` по одному логическому read на вызов. `parameters`: `num_reads`, `num_sweeps`, `beta_schedule_type` (`linear`/`geometric`), `beta_range`. `limits`: `anneal_reads_total`, `anneal_sweeps_total`. Это не quantum shots.
+
+`ExactBlockRefiner` (`exact_block`) принимает `refine(graph, spins, context=...)` и возвращает улучшенную независимую копию. `selector` — `explicit_blocks` или `pair_greedy_abs_weight` с `max_seed_pairs`/`ranked_pairs`. Блоки применяются последовательно; поля пересчитываются после каждого принятого блока. `limits.refinement_states_total` резервирует полные `2**|S|` перечисления до старта блока.
+
+`RefinedSolver` (`refined`) принимает `base_solver` и `refiner`; `base_run` и `refinement_run` независимы. Итоговые `cut_value` и `solution` относятся к улучшенному назначению; квантовые углы и `expected_energy` остаются в `base_run`. `limits` допускает `anneal_reads_total`, `anneal_sweeps_total` и `refinement_states_total`.
 
 ## QAOA-in-QAOA (`qaoa_in_qaoa_cpu`, `qaoa_in_qaoa_gpu`)
 

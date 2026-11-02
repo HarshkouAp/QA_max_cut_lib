@@ -1,15 +1,16 @@
-# Статус 0.1.0a7
+# Статус 0.1.0a8
 
-Версия 0.1.0a7 добавляет **базовый QAOA-in-QAOA** с локальным рисунком
-блока, одной ориентацией блока и точной проекцией через `GraphReducer`.
-CPU-вариант использует `spawn`-пул, GPU-вариант — одного владельца устройства.
-Моментный аналитический источник не выдаётся за локальный readout.
+Версия 0.1.0a8 добавляет **GW через SDP/SCS**, классический simulated
+annealing через `dwave.samplers` и **точный refiner блоков**. `RefinedSolver`
+сохраняет независимые base/refinement records; классические методы не
+расходуют квантовые шоты.
 
 | Область | В этой сборке | Следующий объём работ |
 |---|---|---|
 | Граф | `WeightedGraph`, исходные целые номера, пропуски, отрицательные/нулевые веса, снимок и fingerprint | Дополнительные операции по потребностям редукций |
 | Редукции | `IsingProblem`, `SpinConstraint`, `ReductionState`, `GraphReducer`; точное равенство энергий, сдвиг `b_t`, полная константа `c_t`, обратное восстановление, JSON-снимок | Подключить к другим источникам корреляций и подграфам |
-| Solvers | `ExactCPU`, `QAOACPU`, `RQAOACPU`, `LSRQAOACPU`, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`; общий lifecycle, JSON и прямые атрибуты | GW, FineTuning, QAOA-in-QAOA варианты с окружением |
+| Solvers | `ExactCPU`, `QAOACPU`, `RQAOACPU`, `LSRQAOACPU`, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, `GoemansWilliamsonCPU`, `SimulatedAnnealingCPU`, `RefinedSolver`; общий lifecycle, JSON и прямые атрибуты | Классические серии, FineTuning-политики |
+| Классические | GW SDP/SCS и hyperplane rounding; SA reads/sweeps/seeds; `ExactBlockRefiner` с полями окружения; `RefinedSolver` с base/refinement | Benchmark series, ParallelismProfiler, checkpoint |
 | Иерархия | Блоки, anchor-нормировка, локальный readout, `GraphReducer` constraints, `W`/`Delta b`, дерево `(level,anchor)`, CPU-пул и GPU-владелец, `level_round_robin` | CE/обновляемое окружение, поля, произвольные пересечения, общий quantum state |
 | RQAOA | Обучение QAOA или аналитический p=1, физические ZZ-корреляции, выбор пары по `|c|`, `edges`/`all_pairs`, точная редукция, exact остаток, fallback, строгий бюджет; GPU-источник использует тот же координатор | Другие локальные и иерархические варианты |
 | LS-RQAOA | Два построителя, индуцированные локальные задачи, `mean`, покрытие, anchor-задача, один глобальный reducer, `refresh_all`, `spawn`-пул, общий shot/CPU-бюджет; GPU-LS использует одного владельца устройства | Другие варианты LS, поля, частичные обновления, Meta-LS |
@@ -18,7 +19,7 @@ CPU-вариант использует `spawn`-пул, GPU-вариант — �
 | QAOA | CPU и NVIDIA GPU: ADAM, центральные разности, p слоёв, пять критериев, точная/шотовая оценка, два режима readout; GPU full/pairs, семплер и exact-Mean-Cut adjoint | CUDA Graphs, Walsh-плитки, batch, другие оптимизаторы |
 | GPU | `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`; CuPy 14.2.0, RTX 3050 Laptop CC 8.6, 4 GiB; CPU-импорт без CUDA | RTX 5060/V100 и другие карты требуют отдельной проверки; multi-GPU |
 | Generators | Complete, G(n,m), G(n,p), три генератора весов, индуцированные подграфы, случайное разбиение, `random_partition`, `greedy_abs_weight_partition` | Исследовательские генераторы и стратегии подграфов из архива |
-| Tools | Корреляции, качество, статические графики, карта p=1, веса/энергия редукций, покрытие LS, траектории `binomial(2p,2)`, иерархические overview/3D/tree и автономный 3D HTML | Гистограммы больших распределений, профилировщик |
+| Tools | Корреляции, качество, статические графики, карта p=1, веса/энергия редукций, покрытие LS, траектории `binomial(2p,2)`, иерархические overview/3D/tree, GW/SA/refinement и автономный 3D HTML | Гистограммы больших распределений, профилировщик |
 | Laboratory | Пакет пуст | Все содержательно разные версии из архива |
 | Серии | Независимые `RunRecord` вручную | Общий планировщик бенчмарков, свип, resume |
 | Параллелизм | `LSRQAOACPU` и `QAOAInQAOACPU` с `num_treads>1` через `ProcessPoolExecutor` и `spawn`; GPU-варианты используют одного владельца | Общий профилировщик и другие параллельные алгоритмы |

@@ -15,6 +15,10 @@ def __getattr__(name):
         "LSRQAOAGPU": ".ls_rqaoa_gpu",
         "QAOAInQAOACPU": ".qaoa_in_qaoa_cpu",
         "QAOAInQAOAGPU": ".qaoa_in_qaoa_gpu",
+        "GoemansWilliamsonCPU": ".goemans_williamson_cpu",
+        "SimulatedAnnealingCPU": ".simulated_annealing_cpu",
+        "ExactBlockRefiner": ".exact_block_refiner",
+        "RefinedSolver": ".refined",
         "AnalyticP1Evaluator": ".analytic_p1",
         "AnalyticP1CorrelationSource": ".analytic_p1",
     }

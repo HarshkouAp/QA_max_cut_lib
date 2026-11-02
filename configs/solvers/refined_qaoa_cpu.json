@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "type": "refined",
+  "seed": 7,
+  "num_treads": 1,
+  "base_solver": {
+    "type": "qaoa_cpu",
+    "parameters": {"layers": 1, "max_vertices": 8, "dtype": "complex128"},
+    "objective": {"type": "mean_cut", "parameters": {}},
+    "estimation": {"mode": "exact"},
+    "optimizer": {
+      "type": "adam",
+      "parameters": {"max_steps": 4},
+      "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+    },
+    "initialization": {"type": "fixed_angles", "parameters": {"values": [0.7, -0.3]}},
+    "readout": {"mode": "most_probable"}
+  },
+  "refiner": {
+    "type": "exact_block",
+    "parameters": {"max_size": 6, "batch_size": 256, "max_passes": 1},
+    "selector": {
+      "type": "pair_greedy_abs_weight",
+      "parameters": {"max_seed_pairs": 8}
+    }
+  },
+  "limits": {"refinement_states_total": 1024},
+  "collect": {"base_run": true, "refinement_history": true},
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

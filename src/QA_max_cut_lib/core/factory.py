@@ -26,6 +26,9 @@ class SolverFactory:
             "ls_rqaoa_gpu",
             "qaoa_in_qaoa_cpu",
             "qaoa_in_qaoa_gpu",
+            "gw_cpu",
+            "simulated_annealing_cpu",
+            "refined",
         )
 
     @staticmethod
@@ -40,6 +43,9 @@ class SolverFactory:
         from ..solvers.ls_rqaoa_gpu import LSRQAOAGPU
         from ..solvers.qaoa_in_qaoa_cpu import QAOAInQAOACPU
         from ..solvers.qaoa_in_qaoa_gpu import QAOAInQAOAGPU
+        from ..solvers.goemans_williamson_cpu import GoemansWilliamsonCPU
+        from ..solvers.simulated_annealing_cpu import SimulatedAnnealingCPU
+        from ..solvers.refined import RefinedSolver
 
         types = {
             "exact_cpu": ExactCPU,
@@ -51,6 +57,9 @@ class SolverFactory:
             "ls_rqaoa_gpu": LSRQAOAGPU,
             "qaoa_in_qaoa_cpu": QAOAInQAOACPU,
             "qaoa_in_qaoa_gpu": QAOAInQAOAGPU,
+            "gw_cpu": GoemansWilliamsonCPU,
+            "simulated_annealing_cpu": SimulatedAnnealingCPU,
+            "refined": RefinedSolver,
         }
         if config.get("type") not in types:
             raise ValueError(

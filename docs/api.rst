@@ -65,6 +65,21 @@
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_gpu.QAOAInQAOAGPU
    :members: solve
 
+.. autoclass:: QA_max_cut_lib.solvers.goemans_williamson_cpu.GoemansWilliamsonCPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.simulated_annealing_cpu.SimulatedAnnealingCPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.exact_block_refiner.ExactBlockRefiner
+   :members: refine
+
+.. autoclass:: QA_max_cut_lib.solvers.refined.RefinedSolver
+   :members: solve
+
+.. automodule:: QA_max_cut_lib.tools.classical_plots
+   :members: analyze_solution, plot_gw_convergence, plot_sa_reads, plot_refinement, plot_classical_comparison
+
 .. automodule:: QA_max_cut_lib.tools.hierarchy_plots
    :members: plot_hierarchy_overview, plot_hierarchy_parameters, plot_hierarchy_parameters_3d, plot_hierarchy_tree
 

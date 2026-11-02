@@ -39,6 +39,12 @@ notebooks = [
 ]
 gpu-cu12 = ["cupy-cuda12x[ctk]"]
 gpu-cu13 = ["cupy-cuda13x[ctk]"]
+classical = [
+    "cvxpy>=1.6",
+    "scs>=3.2",
+    "dwave-samplers>=1.2",
+    "dimod>=0.12",
+]
 dev = [
     "pytest>=8",
     "build>=1",

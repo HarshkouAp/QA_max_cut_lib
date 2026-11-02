@@ -1,8 +1,8 @@
 # QA_max_cut_lib
 
-Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a7**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1, LS-RQAOA с процессами, NVIDIA CUDA QAOA/семплер и иерархический QAOA-in-QAOA с точной блоковой проекцией.
+Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a8**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1, LS-RQAOA с процессами, NVIDIA CUDA QAOA/семплер, иерархический QAOA-in-QAOA и классические методы GW/SA с точным улучшением блоков.
 
-Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, два построителя подграфов и `GraphReducer`; GPU-путь использует CuPy и явно выбранный backend. Классические эталоны GW, FineTuning, Laboratory, серии экспериментов, общий профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
+Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, `GoemansWilliamsonCPU`, `SimulatedAnnealingCPU`, `ExactBlockRefiner`, `RefinedSolver`, два построителя подграфов и `GraphReducer`. Классические эталоны GW/SA работают на CPU; CVXPY/SCS и dimod/dwave-samplers являются отдельным профилем `classical`. Laboratory, общие серии экспериментов, `ParallelismProfiler` и control-point resume остаются следующими этапами.
 
 ## Установка
 
@@ -26,7 +26,8 @@ python -m pip install -e ".[cpu,notebooks]"
 [VALIDATION_0.1.0a4.md](docs/VALIDATION_0.1.0a4.md), отчёт этапа 05 — в
 [VALIDATION_0.1.0a5.md](docs/VALIDATION_0.1.0a5.md), отчёт этапа 06 — в
 [VALIDATION_0.1.0a6.md](docs/VALIDATION_0.1.0a6.md), отчёт этапа 07 — в
-[VALIDATION_0.1.0a7.md](docs/VALIDATION_0.1.0a7.md).
+[VALIDATION_0.1.0a7.md](docs/VALIDATION_0.1.0a7.md), отчёт этапа 08 — в
+[VALIDATION_0.1.0a8.md](docs/VALIDATION_0.1.0a8.md).
 
 CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные extras `gpu-cu12`/`gpu-cu13` и файлы `requirements/gpu-nvidia-cu12.in`, `requirements/gpu-nvidia-cu13.in`; GPU-путь проверен с `cupy-cuda13x 14.2.0`. См. [описание зависимостей](docs/INSTALLATION.md) и [GPU-руководство](docs/GPU.md).
 
@@ -181,6 +182,29 @@ CuPy. `QAOAGPUCorrelationSource` (`qaoa_statevector_gpu`) подключаетс
 `RQAOAGPU`; `LSRQAOAGPU` использует одну последовательность обслуживания
 `gpu_owner`, а не CUDA-контекст в каждом worker. Подробности — в
 [GPU-руководстве](docs/GPU.md).
+
+## Классические базовые методы и улучшение
+
+`GoemansWilliamsonCPU` (`gw_cpu`) решает SDP-релаксацию через CVXPY/SCS и
+округляет гиперплоскостями. `SimulatedAnnealingCPU`
+(`simulated_annealing_cpu`) использует классический
+`dwave.samplers.SimulatedAnnealingSampler` с явными reads, sweeps и seed-планом.
+`ExactBlockRefiner` (`exact_block`) точно переоптимизирует малые блоки при
+фиксированном внешнем окружении, а `RefinedSolver` (`refined`) запускает
+базовый солвер и сохраняет независимый `base_run`.
+
+```bash
+python -m QA_max_cut_lib.solvers.goemans_williamson_cpu \
+  --graph configs/graphs/erdos_signed_32.json --config configs/solvers/gw_cpu.json
+python -m QA_max_cut_lib.solvers.simulated_annealing_cpu \
+  --graph configs/graphs/erdos_signed_128.json --config configs/solvers/simulated_annealing_cpu.json
+python -m QA_max_cut_lib.solvers.refined \
+  --graph configs/graphs/erdos_signed_64.json --config configs/solvers/refined_sa.json
+```
+
+Классические методы используют `E=-C`, полный словарь спинов и не расходуют
+квантовые шоты. `num_reads`/sweeps — не quantum shots. Для установки
+дополнительных зависимостей: `pip install -e ".[cpu,classical]"`.
 
 ## QAOA-in-QAOA
 

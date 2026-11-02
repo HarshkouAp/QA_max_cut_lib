@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "type": "gw_cpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {
+    "num_hyperplanes": 32,
+    "solver": "SCS",
+    "eps_abs": 1e-6,
+    "eps_rel": 1e-6,
+    "max_iters": 10000,
+    "allow_inaccurate": false,
+    "psd_tolerance": 1e-6,
+    "diag_tolerance": 1e-6,
+    "repair_tolerance": 1e-6
+  },
+  "limits": {"sdp_time_limit": null},
+  "collect": {"candidate_history": true, "sdp_matrix": false, "sdp_factor": false},
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

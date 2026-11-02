@@ -144,6 +144,9 @@ def test_no_silent_unimplemented_features():
         "ls_rqaoa_gpu",
         "qaoa_in_qaoa_cpu",
         "qaoa_in_qaoa_gpu",
+        "gw_cpu",
+        "simulated_annealing_cpu",
+        "refined",
     )
 
 

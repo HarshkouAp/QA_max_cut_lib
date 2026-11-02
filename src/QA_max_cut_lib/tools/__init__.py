@@ -28,6 +28,11 @@ __all__ = [
     "plot_hierarchy_parameters",
     "plot_hierarchy_parameters_3d",
     "plot_hierarchy_tree",
+    "analyze_solution",
+    "plot_gw_convergence",
+    "plot_sa_reads",
+    "plot_refinement",
+    "plot_classical_comparison",
     "TrajectoryPanelCollection",
 ]
 
@@ -45,11 +50,26 @@ def __getattr__(name):
         "plot_hierarchy_parameters",
         "plot_hierarchy_parameters_3d",
         "plot_hierarchy_tree",
+    "analyze_solution",
+    "plot_gw_convergence",
+    "plot_sa_reads",
+    "plot_refinement",
+    "plot_classical_comparison",
     }:
         if name.startswith("plot_hierarchy_"):
             from . import hierarchy_plots
 
             return getattr(hierarchy_plots, name)
+        if name in {
+            "analyze_solution",
+            "plot_gw_convergence",
+            "plot_sa_reads",
+            "plot_refinement",
+            "plot_classical_comparison",
+        }:
+            from . import classical_plots
+
+            return getattr(classical_plots, name)
         from . import reduction_plots
 
         return getattr(reduction_plots, name)

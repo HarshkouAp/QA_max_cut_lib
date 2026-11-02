@@ -4,16 +4,26 @@
 
 Минимальное вычислительное ядро требует `numpy>=1.26,<3` и `scipy>=1.11`.
 Набор `[cpu]` дополнительно устанавливает NetworkX, pandas, jsonschema, Rich,
-Matplotlib, Seaborn, Plotly, joblib, threadpoolctl, psutil, CVXPY, SCS,
-dwave-samplers, dimod и python-louvain. Эти пакеты нужны инструментам,
-классическим солверам и оформлению. Основной импорт не загружает графическую
-подсистему и CuPy.
+Matplotlib, Seaborn, Plotly, joblib, threadpoolctl, psutil и python-louvain.
+Классические GW/SA и точный refiner требуют отдельного профиля `classical`.
+Основной импорт не загружает графическую подсистему, CuPy, CVXPY или dimod.
 
 Из корня проекта:
 
 ```bash
 python -m pip install -e ".[cpu]"
 ```
+
+Классический профиль:
+
+```bash
+python -m pip install -e ".[cpu,classical]"
+```
+
+Он добавляет CVXPY, SCS, dimod и dwave-samplers. Отсутствие этих пакетов
+обнаруживается только при выборе `gw_cpu`/`simulated_annealing_cpu`; оно не
+ломает импорт пакета и ExactCPU/QAOACPU. CVXPY/SCS используются только на
+CPU.
 
 В этом рабочем проекте используется `uv`:
 
@@ -29,8 +39,7 @@ Windows-сборки — в `requirements/lock-cpu-py312-win.txt`.
 
 ## NVIDIA
 
-В данной версии GPU-солверов ещё нет. Следующие профили описывают зависимости
-будущего этапа и не требуются для CPU:
+GPU-солверы этапов 06–07 реализованы отдельно и требуют один CuPy-профиль:
 
 ```bash
 python -m pip install -e ".[cpu,gpu-cu13]"
@@ -45,11 +54,8 @@ python -m pip install -e ".[cpu,gpu-cu13]"
 устанавливать разные варианты CuPy. Основание:
 [официальная инструкция CuPy](https://docs.cupy.dev/en/stable/install.html).
 
-Полноценных GPU-солверов в этой сборке нет. Проверены CuPy 14.2.0 с системным
-CUDA 13.0, доступность устройства и компиляция `RawKernel`. Фабрика не
-принимает неизвестный тип GPU и не подменяет его CPU-алгоритмом. Локальная
-машина имеет RTX 3050 Laptop с 4 ГБ памяти; размер GPU-задачи выбирается по
-фактической памяти.
+Локально проверены CuPy 14.2.0, системный CUDA runtime 13020, RTX 3050 Laptop
+с 4 ГБ памяти и CUDA-кернелы пакета. CPU-профили не импортируют CuPy.
 
 ## Шрифты и LaTeX
 
