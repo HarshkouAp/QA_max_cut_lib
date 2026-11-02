@@ -426,7 +426,15 @@ def build_adaptive_dense_induced(
     used = set()
     specs = []
     for part_index in range(target_parts):
-        allowed = [node for node in labels if overlap_policy == "unrestricted" or node not in used]
+        allowed = [
+            node for node in labels
+            if overlap_policy == "unrestricted"
+            or node not in used
+            or (
+                overlap_policy == "union_fraction_cap"
+                and (1 / 1) <= overlap_cap
+            )
+        ]
         if not allowed:
             break
         def start_score(node):

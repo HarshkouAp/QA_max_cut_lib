@@ -93,7 +93,7 @@ def hop_metrics(graph, *, sample_pairs=None, seed=0):
             if u not in labels or v not in labels or u == v:
                 raise ValueError("sample pair is not active.")
             pairs.add((u, v))
-        sampled = True
+        sampled = len(pairs) < total_pairs
     else:
         pairs = set(itertools.combinations(labels, 2))
         sampled = False

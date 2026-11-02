@@ -69,6 +69,6 @@ pattern не объявлен optimum.
 ## Артефакты
 
 - wheel: `qa_max_cut_lib-0.1.0a18-py3-none-any.whl`, SHA-256
-  `5f668d53dda839b486c62464eec1f3d339d9178c24c9db8253293fa8fa9466d7`;
+  `c360c568de4f170f764a13a9ae08616a5bcc57183f63c201d2e1584faa8065f6`;
 - sdist: `qa_max_cut_lib-0.1.0a18.tar.gz`, SHA-256
-  `7e7695f8ccfbf82afe0292861d5ef8344329c3da86162d1c602eb1b9dc84cc4a`.
+  `a1bdd97a6a2ca4d9a9d23791b8c09fc7847f60d04462fecb7e21adebf4076bab`.
