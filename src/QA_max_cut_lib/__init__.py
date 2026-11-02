@@ -16,13 +16,18 @@ __all__ = [
     "RunRecord",
     "GraphFactory",
     "SolverFactory",
+    "RandomPartitionBuilder",
+    "GreedyAbsWeightPartitionBuilder",
     "ExactCPU",
     "QAOACPU",
     "RQAOACPU",
+    "LSRQAOACPU",
     "AnalyticP1Evaluator",
     "AnalyticP1CorrelationSource",
     "QAOAStatevectorCorrelationSource",
     "MaxAbsCorrelationSelector",
+    "MeanCorrelationAggregator",
+    "ObservedMaxAbsCorrelationSelector",
     "ExactCPUFinisher",
     "CorrelationResult",
     "SelectionResult",
@@ -34,10 +39,16 @@ __all__ = [
 
 _EXPORTS = {
     "GraphFactory": (".generators.graphs", "GraphFactory"),
+    "RandomPartitionBuilder": (".generators.subgraphs", "RandomPartitionBuilder"),
+    "GreedyAbsWeightPartitionBuilder": (
+        ".generators.subgraphs",
+        "GreedyAbsWeightPartitionBuilder",
+    ),
     "SolverFactory": (".core.factory", "SolverFactory"),
     "ExactCPU": (".solvers.exact_cpu", "ExactCPU"),
     "QAOACPU": (".solvers.qaoa_cpu", "QAOACPU"),
     "RQAOACPU": (".solvers.rqaoa_cpu", "RQAOACPU"),
+    "LSRQAOACPU": (".solvers.ls_rqaoa_cpu", "LSRQAOACPU"),
     "AnalyticP1Evaluator": (".solvers.analytic_p1", "AnalyticP1Evaluator"),
     "AnalyticP1CorrelationSource": (
         ".solvers.analytic_p1",
@@ -50,6 +61,14 @@ _EXPORTS = {
     "MaxAbsCorrelationSelector": (
         ".solvers.components",
         "MaxAbsCorrelationSelector",
+    ),
+    "MeanCorrelationAggregator": (
+        ".solvers.ls_components",
+        "MeanCorrelationAggregator",
+    ),
+    "ObservedMaxAbsCorrelationSelector": (
+        ".solvers.ls_components",
+        "ObservedMaxAbsCorrelationSelector",
     ),
     "ExactCPUFinisher": (".solvers.components", "ExactCPUFinisher"),
     "CorrelationResult": (".solvers.components", "CorrelationResult"),

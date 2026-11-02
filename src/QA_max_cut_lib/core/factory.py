@@ -16,7 +16,7 @@ class SolverFactory:
 
     @staticmethod
     def available():
-        return ("exact_cpu", "qaoa_cpu", "rqaoa_cpu")
+        return ("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu")
 
     @staticmethod
     def from_config(config):
@@ -24,11 +24,13 @@ class SolverFactory:
         from ..solvers.exact_cpu import ExactCPU
         from ..solvers.qaoa_cpu import QAOACPU
         from ..solvers.rqaoa_cpu import RQAOACPU
+        from ..solvers.ls_rqaoa_cpu import LSRQAOACPU
 
         types = {
             "exact_cpu": ExactCPU,
             "qaoa_cpu": QAOACPU,
             "rqaoa_cpu": RQAOACPU,
+            "ls_rqaoa_cpu": LSRQAOACPU,
         }
         if config.get("type") not in types:
             raise ValueError(

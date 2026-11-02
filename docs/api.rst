@@ -25,6 +25,14 @@
 
 .. autofunction:: QA_max_cut_lib.generators.graphs.partition
 
+.. autoclass:: QA_max_cut_lib.generators.subgraphs.RandomPartitionBuilder
+   :members: build
+
+.. autoclass:: QA_max_cut_lib.generators.subgraphs.GreedyAbsWeightPartitionBuilder
+   :members: build
+
+.. autofunction:: QA_max_cut_lib.generators.subgraphs.build_subgraph_builder
+
 Солверы
 -------
 
@@ -37,6 +45,15 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_cpu.LSRQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_components.MeanCorrelationAggregator
+   :members: aggregate, make_table
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_components.ObservedMaxAbsCorrelationSelector
+   :members: select
 
 .. autoclass:: QA_max_cut_lib.solvers.components.QAOAStatevectorCorrelationSource
    :members: estimate
@@ -91,4 +108,4 @@
    :members: plot_graph, plot_graph_solution, plot_graph_info, plot_probabilities, plot_optimization, plot_landscape
 
 .. automodule:: QA_max_cut_lib.tools.reduction_plots
-   :members: plot_reduction_weights, plot_reduction_energy, plot_parameter_trajectories, plot_parameter_trajectories_3d, plot_analytic_gamma_profile
+   :members: plot_reduction_weights, plot_reduction_energy, plot_parameter_trajectories, plot_parameter_trajectories_3d, plot_analytic_gamma_profile, plot_ls_coverage

@@ -8,6 +8,7 @@ def __getattr__(name):
         "ExactCPU": ".exact_cpu",
         "QAOACPU": ".qaoa_cpu",
         "RQAOACPU": ".rqaoa_cpu",
+        "LSRQAOACPU": ".ls_rqaoa_cpu",
         "AnalyticP1Evaluator": ".analytic_p1",
         "AnalyticP1CorrelationSource": ".analytic_p1",
     }

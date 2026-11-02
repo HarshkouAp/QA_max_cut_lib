@@ -1,4 +1,4 @@
-# API версии 0.1.0a4
+# API версии 0.1.0a5
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -8,16 +8,20 @@
 from QA_max_cut_lib import (
     WeightedGraph, GraphFactory, SolverFactory, RunRecord, ExactCPU, QAOACPU,
     RQAOACPU, AnalyticP1Evaluator, AnalyticP1CorrelationSource,
+    LSRQAOACPU,
     GraphReducer, ReductionState, IsingProblem, SpinConstraint,
     QAOAStatevectorCorrelationSource, MaxAbsCorrelationSelector, ExactCPUFinisher,
 )
 from QA_max_cut_lib import tools
-from QA_max_cut_lib.generators import partition
+from QA_max_cut_lib.generators import (
+    partition, RandomPartitionBuilder, GreedyAbsWeightPartitionBuilder,
+)
+from QA_max_cut_lib.solvers.ls_components import MeanCorrelationAggregator
 from QA_max_cut_lib.solvers.objectives import validate_objective, objective_value
 from QA_max_cut_lib._version import __version__
 ```
 
-`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
+`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
 
 Общий конструктор солвера — `ClassName(config=None)`. Он копирует конфигурацию. `solve(graph, *, report=None, logs=None, num_treads=None)` принимает новый граф и возвращает `dict[int, int]`. Аргументы уровня вывода и числа потоков переопределяют конфигурацию данного запуска. Один экземпляр рассчитан на один активный запуск. Для одновременных расчётов нужны разные экземпляры.
 
@@ -571,7 +575,55 @@ E(\gamma,\beta)=E_0+A\sin(4\beta)+B\sin^2(2\beta),
 
 Указание `atts` или `save_original_data` в save графика включает дополнительный JSON результата инструмента. В первой версии числовые серии находятся внутри `plot_data`, поэтому нативный экспорт из этой записи не разбирает вложенные поля по точечным путям. Для нативного экспорта карты передайте сам RunRecord сканера в `save_result` и выберите `values`.
 
-Интерактивный HTML, трёхмерные поверхности и траектории редукции в текущем этапе не реализованы; запрос формата html вызывает понятную ошибку.
+Интерактивный HTML, трёхмерные поверхности и траектории редукции реализованы для сохранённых траекторий `RQAOA`/`LS-RQAOA` через `plot_parameter_trajectories_3d`; Plotly.js встраивается в автономный HTML.
+
+## LS-RQAOA (`ls_rqaoa_cpu`)
+
+`LSRQAOACPU.solve(graph, *, report=None, logs=None, num_treads=None)` выполняет один и тот же план локальных задач последовательно при `num_treads=1` и в пуле процессов `spawn` при большем значении. Явный аргумент `num_treads` переопределяет JSON. Запрошенное и фактически применённое значения находятся в `resources.num_treads_requested` и `resources.num_treads_applied`.
+
+### Секции конфигурации
+
+| Секция | Обязательные поля | Смысл |
+|---|---|---|
+| `parameters` | `finish_at`, `max_reductions` | Размер точного остатка и необязательный предел числа глобальных редукций |
+| `subgraph_builder` | `type`, `parameters.max_size`, `parameters.rounds` | `random_partition` или `greedy_abs_weight_partition`; `boundary` только `induced_no_fields` |
+| `correlation_source` | `type`, `objective_reference` | `qaoa_statevector_cpu` p≥1 или `qaoa_analytic_p1_cpu`; локальная цель только `working_graph` |
+| `aggregation` | `type` | В этой версии только `mean`; среднее по числу наблюдений каждой пары |
+| `selection` | `type`, `parameters.pairs` | `max_abs_correlation`, `edges` или `all_pairs`, `zero_sign` |
+| `coverage` | `require_full`, `empty_policy` | `anchor_pair` — явная задача ремонта пустого покрытия |
+| `update` | `type` | Только `refresh_all`: на следующем шаге строится новый план |
+| `execution` | `backend`, `start_method`, `native_threads` | `process`, `spawn`, `1` |
+| `budget_policy` | `type` | Только `step_round_robin` |
+| `finisher` | `type`, `parameters.max_vertices` | Существующий `ExactCPUFinisher` |
+| `limits` | `shots_total`, `max_local_tasks_total` | Общий шотовый лимит и предел числа локальных вызовов на шаг |
+| `collect` | флаги | `reduction_history`, `parameter_trajectory`, `local_task_history`, `local_optimizer_history`, `correlation_tables`, `final_reduction_state` |
+
+`full_graph_when_fits=true` у построителя создаёт одну локальную задачу на всём остатке, если он помещается в `max_size`; в этом режиме обычные повторные проходы не создаются. Дубли одного набора в разных проходах являются отдельными задачами с разными ID/seeds.
+
+### Покрытие и бюджеты
+
+Разрешённая область `A_t` определяется `selection.parameters.pairs`. Наблюдаемая область — объединение разрешённых пар, обе вершины которых попали в запланированные задачи. При `require_full=true` неполное покрытие обнаруживается до обучения и вызывает `ValueError`. При `false` выбор идёт только по наблюдённым парам; отсутствующая оценка не считается нулём.
+
+`budget_policy=step_round_robin` резервирует сумму обязательных корреляционных шотов всех задач шага, затем выдаёт полные итерации по одной каждой задаче в каноническом порядке. Для шотовой оценки statevector стоимость итерации — `(4*p+1)*M_train`; точные и аналитические итерации стоят 0. Квоты фиксируются до запуска worker-процессов. При недостатке минимума шаг не начинается, граф не меняется, возвращается полное решение и `status="stopped"`.
+
+### Результаты LS
+
+Кроме общих полей: `cut_offset`, `ising_constant`, `reduced_solution`, `coverage_history`, `reduction_history`, `parameter_trajectory` (строки локальных задач), `local_task_history`, `local_optimizer_history`, `correlation_tables`, `final_reduction_state`. В событии редукции: `physical_correlation`, `correlation_origin="local_subgraph_mixture"`, `expected_fixed_energy_local`, `local_task_ids`, `aggregation_observations`, `coverage`, `global_expected_energy=None` и причина. Локальное среднее не объявляется глобальным ожиданием полного графа.
+
+Построители:
+
+```python
+from QA_max_cut_lib.generators import (
+    RandomPartitionBuilder, GreedyAbsWeightPartitionBuilder,
+)
+builder = GreedyAbsWeightPartitionBuilder({
+    "type": "greedy_abs_weight_partition",
+    "parameters": {"max_size": 10, "rounds": 2, "full_graph_when_fits": True},
+}, seed=42)
+tasks = builder.build(graph, version=0)
+```
+
+`build()` возвращает `round`, `block`, `nodes`, `task_id` и `boundary`; он не меняет граф и не вызывает QAOA.
 
 ## Запуск модулей
 

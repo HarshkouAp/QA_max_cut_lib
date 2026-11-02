@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "QA_max_cut_lib"
 dynamic = ["version"]
-description = "Weighted Max-Cut research library: first working CPU milestone"
+description = "Weighted Max-Cut research library: CPU solvers and exact reductions"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

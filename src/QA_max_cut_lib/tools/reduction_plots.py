@@ -21,6 +21,7 @@ from .plotting import _finish, _text, _theme
 __all__ = [
     "TrajectoryPanelCollection",
     "plot_analytic_gamma_profile",
+    "plot_ls_coverage",
     "plot_parameter_trajectories",
     "plot_parameter_trajectories_3d",
     "plot_reduction_energy",
@@ -79,6 +80,86 @@ def _angle_unicode(index, layers):
 
 def _pair_list(layers):
     return list(combinations(range(2 * layers), 2))
+
+
+def _trajectory_groups(trajectory):
+    """Return local-task groups without inventing a global average."""
+    if not any("task_id" in row for row in trajectory):
+        return [("", list(trajectory))]
+    groups = {}
+    for row in trajectory:
+        groups.setdefault(str(row["task_id"]), []).append(row)
+    return list(groups.items())
+
+
+def plot_ls_coverage(source, config=None):
+    """Plot observed allowed-pair coverage for each LS reduction step.
+
+    Parameters
+    ----------
+    source : solver, RunRecord, or result dict
+        A completed LS-RQAOA result with ``coverage_history``.
+    config : dict, optional
+        Plot style, axes, title, output, and save settings.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Two panels: coverage fraction and allowed/observed pair counts.
+        A zero allowed domain is drawn as a gap, not as an invented ratio.
+    """
+    record = resolve_record(source)
+    history = record.get("coverage_history")
+    if not history:
+        raise ValueError(
+            "No LS coverage history is available. Run ls_rqaoa_cpu first."
+        )
+    config = deepcopy(config or {})
+    steps = list(range(1, len(history) + 1))
+    fractions = [
+        None if row.get("fraction") is None else float(row["fraction"])
+        for row in history
+    ]
+    allowed = [int(row["allowed_pairs"]) for row in history]
+    observed = [int(row["observed_pairs"]) for row in history]
+    missing = [int(row["missing_pairs"]) for row in history]
+    with _theme(config):
+        import matplotlib.pyplot as plt
+
+        figsize = config.get("style", {}).get("figsize", [12, 5])
+        fig, axes = plt.subplots(1, 2, figsize=figsize)
+        axes[0].plot(
+            steps,
+            [np.nan if value is None else value for value in fractions],
+            color="#2563eb",
+            marker="o",
+        )
+        axes[0].set_ylim(0, 1.05)
+        axes[0].set_xlabel(_text("Reduction step", config))
+        axes[0].set_ylabel(_text("Observed fraction", config))
+        axes[0].set_title(_text("Pair coverage fraction", config))
+        axes[1].plot(steps, allowed, color="#64748b", marker="o", label="allowed")
+        axes[1].plot(steps, observed, color="#059669", marker="s", label="observed")
+        axes[1].plot(steps, missing, color="#dc2626", marker="^", label="missing")
+        axes[1].set_xlabel(_text("Reduction step", config))
+        axes[1].set_ylabel(_text("Pair count", config))
+        axes[1].set_title(_text("Allowed, observed, and missing pairs", config))
+        axes[1].legend()
+        for axis in axes:
+            axis.grid(alpha=0.3)
+        return _finish(
+            fig,
+            config,
+            record,
+            "plot_ls_coverage",
+            {
+                "steps": steps,
+                "fraction": fractions,
+                "allowed_pairs": allowed,
+                "observed_pairs": observed,
+                "missing_pairs": missing,
+            },
+        )
 
 
 def plot_reduction_weights(source, config=None):
@@ -304,12 +385,22 @@ def plot_parameter_trajectories(source, config=None):
 
             fig, axes = plt.subplots(nrows, ncols, squeeze=False)
             flat = axes.reshape(-1)
+            groups = _trajectory_groups(trajectory)
             for axis, (i, j) in zip(flat, chunk):
-                x = [float(row["angles"][i]) for row in trajectory]
-                y = [float(row["angles"][j]) for row in trajectory]
-                axis.plot(x, y, color="#2563eb", marker="o", linewidth=1.2)
-                axis.scatter([x[0]], [y[0]], color="#059669", zorder=3, label="start")
-                axis.scatter([x[-1]], [y[-1]], color="#d97706", zorder=3, label="end")
+                for group_name, rows in groups:
+                    x = [float(row["angles"][i]) for row in rows]
+                    y = [float(row["angles"][j]) for row in rows]
+                    axis.plot(
+                        x,
+                        y,
+                        marker="o",
+                        linewidth=1.2,
+                        label=group_name if group_name else None,
+                    )
+                    axis.scatter([x[0]], [y[0]], color="#059669", zorder=3)
+                    axis.scatter([x[-1]], [y[-1]], color="#d97706", zorder=3)
+                if len(groups) > 1:
+                    axis.legend(fontsize=7, title="local task")
                 axis.set_xlabel(_angle_label(i, layers))
                 axis.set_ylabel(_angle_label(j, layers))
                 axis.set_title(
@@ -516,30 +607,37 @@ def plot_parameter_trajectories_3d(source, config=None):
     trajectory, layers = _trajectory(record)
     config = deepcopy(config or {})
     pairs = _pair_list(layers)
-    steps = [int(row["reduction_step"]) for row in trajectory]
+    groups = _trajectory_groups(trajectory)
     traces = []
+    pair_trace_indices = []
     for i, j in pairs:
-        x = [float(row["angles"][i]) for row in trajectory]
-        y = [float(row["angles"][j]) for row in trajectory]
-        traces.append(
-            go.Scatter3d(
-                x=x,
-                y=y,
-                z=steps,
-                mode="lines+markers",
-                name=f"{_angle_unicode(i, layers)}–{_angle_unicode(j, layers)}",
-                hovertemplate=(
-                    f"{_angle_unicode(i, layers)}=%{{x:.6g}}<br>"
-                    f"{_angle_unicode(j, layers)}=%{{y:.6g}}<br>"
-                    "reduction step=%{z}<extra></extra>"
-                ),
+        indices = []
+        for group_name, rows in groups:
+            x = [float(row["angles"][i]) for row in rows]
+            y = [float(row["angles"][j]) for row in rows]
+            z = [int(row["reduction_step"]) for row in rows]
+            suffix = f" | {group_name}" if group_name else ""
+            indices.append(len(traces))
+            traces.append(
+                go.Scatter3d(
+                    x=x,
+                    y=y,
+                    z=z,
+                    mode="lines+markers",
+                    name=f"{_angle_unicode(i, layers)}–{_angle_unicode(j, layers)}{suffix}",
+                    hovertemplate=(
+                        f"{_angle_unicode(i, layers)}=%{{x:.6g}}<br>"
+                        f"{_angle_unicode(j, layers)}=%{{y:.6g}}<br>"
+                        "reduction step=%{z}<extra></extra>"
+                    ),
+                )
             )
-        )
+        pair_trace_indices.append(indices)
     fig = go.Figure(data=traces)
     n_traces = len(traces)
     buttons = []
-    for index, (i, j) in enumerate(pairs):
-        visible = [position == index for position in range(n_traces)]
+    for pair_index, (i, j) in enumerate(pairs):
+        visible = [position in pair_trace_indices[pair_index] for position in range(n_traces)]
         buttons.append(
             {
                 "label": f"{_angle_unicode(i, layers)}–{_angle_unicode(j, layers)}",
@@ -587,5 +685,8 @@ def plot_parameter_trajectories_3d(source, config=None):
         config,
         record,
         "plot_parameter_trajectories_3d",
-        {"steps": steps, "pairs": [[i, j] for i, j in pairs]},
+        {
+            "steps": [int(row["reduction_step"]) for row in trajectory],
+            "pairs": [[i, j] for i, j in pairs],
+        },
     )

@@ -32,6 +32,7 @@ class BaseSolver:
     """
 
     algorithm_type = None
+    supports_parallel = False
     extra_config_fields = ()
     optional_fields = (
         "solution",
@@ -148,13 +149,13 @@ class BaseSolver:
                 raise ValueError(f"{key} must be 0, 1, or 2.")
         threads = config.get("num_treads", 1) if num_treads is None else num_treads
         positive_int(threads, "num_treads")
-        if threads != 1:
+        if threads != 1 and not self.supports_parallel:
             raise ValueError(
-                "Parallel CPU execution is not implemented in this milestone; use num_treads=1."
+                "Parallel CPU execution is not implemented for this solver; use num_treads=1."
             )
         if output["color"] not in ("auto", "always", "never"):
             raise ValueError("output.color must be auto, always, or never.")
-        config["num_treads"] = 1
+        config["num_treads"] = threads
         self._validate(config, graph)
         self._last_run = None
         self._active = True
@@ -182,7 +183,7 @@ class BaseSolver:
                 cut_value=cut,
                 solution_energy=-cut,
                 seed=config.get("seed"),
-                num_treads=1,
+                num_treads=fields.get("num_treads", config["num_treads"]),
             )
             fields.setdefault("status", "completed")
             fields.setdefault("termination_reason", "completed")

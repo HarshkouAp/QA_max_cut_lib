@@ -1,8 +1,8 @@
 # QA_max_cut_lib
 
-Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a4**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, первый полный CPU RQAOA и аналитический CPU-вычислитель моментов p=1.
+Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a5**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1 и первый LS-RQAOA с настоящими процессами.
 
-Это ещё не перенос всего исследовательского архива. Сейчас доступны `ExactCPU`, `QAOACPU`, `RQAOACPU`, `AnalyticP1Evaluator` и `GraphReducer`; аналитический источник p=1 подключён к RQAOA, но GPU, LS-RQAOA, QAOA-in-QAOA, Laboratory, серии экспериментов, профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
+Это ещё не перенос всего исследовательского архива. Сейчас доступны `ExactCPU`, `QAOACPU`, `RQAOACPU`, `LSRQAOACPU`, `AnalyticP1Evaluator`, два построителя подграфов и `GraphReducer`; GPU, QAOA-in-QAOA, Laboratory, серии экспериментов, общий профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
 
 ## Установка
 
@@ -23,7 +23,8 @@ python -m pip install -e ".[cpu,notebooks]"
 Подробности, версии пакетов и команды проверки — в
 [описании проекта](docs/PROJECT_SETUP_RU.md). Локальная проверка Windows — в
 [VALIDATION_LOCAL.md](docs/VALIDATION_LOCAL.md), отчёт этапа 04 — в
-[VALIDATION_0.1.0a4.md](docs/VALIDATION_0.1.0a4.md).
+[VALIDATION_0.1.0a4.md](docs/VALIDATION_0.1.0a4.md), отчёт этапа 05 — в
+[VALIDATION_0.1.0a5.md](docs/VALIDATION_0.1.0a5.md).
 
 CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные файлы `requirements/gpu-nvidia-cu12.in` и `requirements/gpu-nvidia-cu13.in`; они подготовлены для будущего GPU-этапа и не добавляют работающий GPU-солвер в эту версию. См. [описание зависимостей](docs/INSTALLATION.md).
 
@@ -150,6 +151,47 @@ Threshold Probability, поля и `p>1` этим источником не по
 локальный профиль времени и памяти — в
 [PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt](docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt).
 
+## LS-RQAOA на CPU
+
+`LSRQAOACPU` (тип `ls_rqaoa_cpu`) строит несколько индуцированных подграфов
+текущего графа, решает их независимо, усредняет физические корреляции по
+наблюдениям каждой пары и применяет **одно** ограничение на полном графе.
+Граничные рёбра в локальную задачу не входят. Это явная эвристика
+`induced_no_fields`, а не точное разложение полного гамильтониана.
+
+Доступны построители `random_partition` и `greedy_abs_weight_partition`.
+При `num_treads>1` независимые локальные задачи выполняются в пуле процессов
+со `spawn`; при `num_treads=1` тот же план выполняется последовательно.
+Число фактически применённых процессов не превышает запрошенное значение,
+доступные CPU и число задач и сохраняется отдельно от запроса.
+
+```python
+from QA_max_cut_lib import LSRQAOACPU, tools
+from QA_max_cut_lib.generators.graphs import GraphFactory
+
+graph = GraphFactory.from_recipe(tools.load_json(
+    "configs/graphs/erdos_signed_30.json"
+))
+config = tools.load_json("configs/solvers/ls_rqaoa_analytic.json")
+config.pop("save", None)
+config["num_treads"] = 2
+algorithm = LSRQAOACPU(config)
+solution = algorithm.solve(graph)          # explicit argument overrides JSON too.
+print(algorithm.resources)
+print(algorithm.coverage_history)
+```
+
+Аналитический p=1 работает при `limits.shots_total=0`. Шотовый
+statevector-пример находится в `configs/solvers/ls_rqaoa_shots.json`: бюджеты
+резервируются координатором до запуска задач, поэтому копия `ShotBudget` в
+каждом процессе не может обойти общий лимит. Остановка по лимиту возвращает
+полное допустимое решение с `status="stopped"`.
+
+`parameter_trajectory` содержит отдельные строки локальных задач; это не
+средняя глобальная траектория. `plot_parameter_trajectories` и
+`plot_parameter_trajectories_3d` показывают их по `reduction_step` и `task_id`;
+`plot_ls_coverage` показывает разрешённые, наблюдаемые и пропущенные пары.
+
 ## Сохранение
 
 Без `save` автоматической записи нет. Имена и параметры задаются через JSON-совместимый словарь.
@@ -187,6 +229,7 @@ figure = tools.plot_probabilities(restored, {
 - [Ядро редукций](notebooks/03_reduction_core.ipynb): контрольный пример, цепочка, восстановление и снимок состояния.
 - [RQAOA на CPU](notebooks/04_rqaoa_cpu.ipynb): обучение, корреляции, редукции, восстановление, графики, сохранение и остановка по бюджету.
 - [Аналитический p=1 и RQAOA](notebooks/05_analytic_p1_rqaoa.ipynb): формула, точная beta-минимизация, профиль gamma, подключение к RQAOA и задача из 30 вершин.
+- [LS-RQAOA на CPU](notebooks/06_ls_rqaoa_cpu.ipynb): локальные задачи, два построителя, последовательный и параллельный запуск, покрытие, энергии, локальные углы, бюджет и сохранение.
 - [Математика](docs/MATHEMATICS.md): энергетическая нотация, QAOA, критерии и численные ограничения.
 - [Полный API текущей версии](docs/API.md): аргументы, конфигурационные поля, атрибуты, формы массивов и ошибки.
 - [Карта архитектуры и состояния переноса](docs/ARCHITECTURE_MAP_RU.md): что уже есть, чего нет и какие контракты вводить.
@@ -202,6 +245,8 @@ python -m QA_max_cut_lib.solvers.exact_cpu --report 1 --logs 0
 python -m QA_max_cut_lib.solvers.qaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/qaoa_cpu.json --report 1
 python -m QA_max_cut_lib.solvers.rqaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/rqaoa_cpu.json --report 1
 python -m QA_max_cut_lib.solvers.rqaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/rqaoa_analytic_p1_cpu.json --report 1
+python -m QA_max_cut_lib.solvers.ls_rqaoa_cpu --graph configs/graphs/erdos_signed_30.json --config configs/solvers/ls_rqaoa_analytic.json --report 1
+python -m QA_max_cut_lib.solvers.ls_rqaoa_cpu --graph configs/graphs/erdos_signed_30.json --config configs/solvers/ls_rqaoa_shots.json --report 1
 python examples/quickstart.py
 ```
 

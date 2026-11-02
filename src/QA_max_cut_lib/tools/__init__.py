@@ -21,6 +21,7 @@ __all__ = [
     "plot_reduction_weights",
     "plot_reduction_energy",
     "plot_analytic_gamma_profile",
+    "plot_ls_coverage",
     "plot_parameter_trajectories",
     "plot_parameter_trajectories_3d",
     "TrajectoryPanelCollection",
@@ -33,6 +34,7 @@ def __getattr__(name):
         "plot_reduction_weights",
         "plot_reduction_energy",
         "plot_analytic_gamma_profile",
+        "plot_ls_coverage",
         "plot_parameter_trajectories",
         "plot_parameter_trajectories_3d",
     }:

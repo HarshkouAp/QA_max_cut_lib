@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "type": "erdos_renyi",
+  "seed": 20261104,
+  "parameters": {"n_vertices": 64, "probability": 0.16},
+  "weights": {
+    "type": "uniform",
+    "seed": 20261105,
+    "parameters": {"low": -2.0, "high": 2.0}
+  }
+}

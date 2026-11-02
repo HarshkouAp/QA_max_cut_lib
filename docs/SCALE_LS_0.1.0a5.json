@@ -1,0 +1,19 @@
+{
+  "package_version": "0.1.0a5",
+  "n_vertices": 1000,
+  "n_edges": 4004,
+  "graph_seconds": 0.3184368999209255,
+  "status": "stopped",
+  "termination_reason": "max_reductions",
+  "reductions_completed": 2,
+  "local_tasks_total": 246,
+  "local_tasks_skipped": 4,
+  "num_treads_requested": 4,
+  "num_treads_applied": 4,
+  "seconds": 26.486400400055572,
+  "peak_tracemalloc_mib": 6.023843765258789,
+  "shots_used": 0,
+  "cut_value": 0.6287086332096135,
+  "complete_solution": true,
+  "note": "Bounded check; max_reductions=2 and no claim of a full 1000-vertex solve."
+}

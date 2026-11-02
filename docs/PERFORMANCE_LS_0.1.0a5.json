@@ -1,0 +1,54 @@
+{
+  "package_version": "0.1.0a5",
+  "graph": {
+    "n_vertices": 64,
+    "n_edges": 321
+  },
+  "source": "qaoa_analytic_p1_cpu",
+  "builder": "greedy_abs_weight_partition",
+  "max_size": 10,
+  "rounds": 2,
+  "gamma_points": 9,
+  "finish_at": 6,
+  "rows": [
+    {
+      "requested_threads": 1,
+      "applied_threads": 1,
+      "seconds": 12.799856700003147,
+      "peak_tracemalloc_mib": 3.3825340270996094,
+      "cut_value": 66.37976209883274,
+      "solution_energy": -66.37976209883274,
+      "reductions_completed": 58,
+      "local_tasks_total": 442,
+      "local_tasks_skipped": 18,
+      "shots_used": 0,
+      "same_solution_as_first": true
+    },
+    {
+      "requested_threads": 2,
+      "applied_threads": 2,
+      "seconds": 7.2213534999173135,
+      "peak_tracemalloc_mib": 3.5720643997192383,
+      "cut_value": 66.37976209883274,
+      "solution_energy": -66.37976209883274,
+      "reductions_completed": 58,
+      "local_tasks_total": 442,
+      "local_tasks_skipped": 18,
+      "shots_used": 0,
+      "same_solution_as_first": true
+    },
+    {
+      "requested_threads": 4,
+      "applied_threads": 4,
+      "seconds": 6.653072899905965,
+      "peak_tracemalloc_mib": 3.0679197311401367,
+      "cut_value": 66.37976209883274,
+      "solution_energy": -66.37976209883274,
+      "reductions_completed": 58,
+      "local_tasks_total": 442,
+      "local_tasks_skipped": 18,
+      "shots_used": 0,
+      "same_solution_as_first": true
+    }
+  ]
+}
