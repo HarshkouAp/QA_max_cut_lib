@@ -1,4 +1,4 @@
-# Статус 0.1.0a16
+# Статус 0.1.0a17
 
 Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
 ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
@@ -162,3 +162,10 @@ MI Tools и passive observers добавлены как диагностичес
 `MI_LS_RQAOA.py` классифицированы как diagnostic assemblies, не faithful
 legacy trajectories. Не перенесены: MI-guided selection, tomography,
 quantum-state lift и GPU MI.
+
+## 0.1.0a17 — incremental LS/MK components
+
+Реализованы corrected component recomposition: densest count builder,
+survivor-center cover, epoch mean bank, freshness policies, four scores
+and one CPU assembly. Не перенесены batch MK_3, odds-fusion fast_2,
+round-max LS_exp, CorrelationExtractor rollback, Mk_6/7/8 и GPU.

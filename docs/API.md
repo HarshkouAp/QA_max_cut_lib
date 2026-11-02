@@ -1,4 +1,4 @@
-# API версии 0.1.0a16
+# API версии 0.1.0a17
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -786,3 +786,17 @@ print(solver.warm_start_history)
 `aggregate_statevector=None` и статус `not_applicable_statistical_mixture`.
 `source_cost` classical preprocessing находится в `resources.source_cost`.
 Checkpoint/resume для этой сборки в a12 не заявлен.
+
+## Incremental LS-RQAOA (0.1.0a17)
+
+`QA_max_cut_lib.laboratory.IncrementalLSRQAOACPU` /
+`type="laboratory.incremental_ls_rqaoa_cpu"` принимает compact recipe:
+`initial_builder`, `update`, `bank`, `selection`, `correlation_source`,
+`limits`, `finish_at`, `pairs`. Он сохраняет
+`solve(graph, *, report=None, logs=None, num_treads=None)`, возвращает
+полный словарь исходных labels → ±1 и независимый `RunRecord`.
+
+Основные result-поля: `epoch_history`, `bank_history`,
+`selection_history`, `coverage_history`, `budget_history`, `final_bank`,
+`reductions_completed`, `resources`. `selection.physical_correlation` и
+`selection.score` — разные величины.

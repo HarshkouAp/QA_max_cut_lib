@@ -65,6 +65,13 @@ CAPABILITIES = {
         "phases": ["training", "training_done", "readout_done"],
         "notes": "Observer diagnostics are not a second RNG/budget; partial MI analysis is not checkpointed.",
     },
+    "laboratory.incremental_ls_rqaoa_cpu": {
+        "supports_checkpoint": False,
+        "boundaries": [],
+        "state": "not implemented in a17",
+        "phases": [],
+        "notes": "Epoch bank and plan are checkpointable in memory records, but no durable codec is declared.",
+    },
     "laboratory.rqaoa_mi_cpu": {
         "supports_checkpoint": False,
         "boundaries": [],

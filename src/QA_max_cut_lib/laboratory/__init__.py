@@ -29,6 +29,10 @@ def __getattr__(name):
         from ..solvers.mi_observer import QAOAWithMIObserverCPU, RQAOAWithMIObserverCPU
         globals()[name] = {"QAOAWithMIObserverCPU": QAOAWithMIObserverCPU, "RQAOAWithMIObserverCPU": RQAOAWithMIObserverCPU}[name]
         return globals()[name]
+    if name == "IncrementalLSRQAOACPU":
+        from ..solvers.incremental_ls import IncrementalLSRQAOACPU
+        globals()[name] = IncrementalLSRQAOACPU
+        return globals()[name]
     if name == "DistributedLSRQAOACPU":
         from .distributed_ls_rqaoa_cpu import DistributedLSRQAOACPU
         globals()[name] = DistributedLSRQAOACPU
@@ -62,6 +66,7 @@ __all__ = [
     "EnvironmentLSRQAOACPU",
     "BlockMeanFieldQAOACPU",
     "DistributedLSRQAOACPU",
+    "IncrementalLSRQAOACPU",
     "QAOAWithMIObserverCPU",
     "RQAOAWithMIObserverCPU",
     "IMPLEMENTED_VARIANTS",

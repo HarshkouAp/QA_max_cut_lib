@@ -730,6 +730,106 @@
         "tomography",
         "quantum_state_lift"
       ]
+    },
+    {
+      "variant_id": "incremental_ls_mk_components_v1",
+      "display_name": "Incremental LS/MK component recomposition (CPU)",
+      "schema_version": 1,
+      "family": "incremental_ls",
+      "role": "assembly",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Diplom/MK_1.py",
+          "sha256": "328c0c84e22ad765cd2e0cb29040f5ae9b55ad2757186e9210008235f59e21d1",
+          "role": "densest_subgraph_review"
+        },
+        {
+          "path": "Diplom/MK_2.py",
+          "sha256": "02bb82267fd7002abed481e950660f37ae727f51bed46fe42077377ddf4d31b6",
+          "role": "signed_product_selector_review"
+        },
+        {
+          "path": "Diplom/MK_2_1.py",
+          "sha256": "59df3323290617eddc50e8715469d490af286945219bad1d4281281cbd28c487",
+          "role": "weighted_abs_q1_review"
+        },
+        {
+          "path": "Diplom/MK_2_2.py",
+          "sha256": "0777fd7b470ebd7cf7bfce69e7d2d08d8dc6019d2aa903404fa4727338b068ac",
+          "role": "weighted_abs_q2_review"
+        },
+        {
+          "path": "Diplom/Mk_5.py",
+          "sha256": "34a3dd3ba5346583456d281646a5272cad7506dae09bbb0bb0f90948b780fe71",
+          "role": "partial_refresh_counter_review"
+        },
+        {
+          "path": "Laboratory/LS_RQAOA_fast_5.py",
+          "sha256": "91006f32df8dc04e705e834551a0219f37ae1134253d58816dae2ce3d69c2b5c",
+          "role": "partial_refresh_counter_review"
+        },
+        {
+          "path": "Laboratory/NodeExtender.py",
+          "sha256": "c9a419683b38bd66cfe733ab168598a2536a6f68bbd51dd14e4a54c6d315ea40",
+          "role": "neighborhood_growth_review"
+        },
+        {
+          "path": "Tools/Densest_sub.py",
+          "sha256": "ef3c2a30eaaefc1bb9122bce292f608fad78122681100a5618c5ff34b1b607ae",
+          "role": "topological_density_review"
+        }
+      ],
+      "algorithm_signature": {
+        "solver_type": "laboratory.incremental_ls_rqaoa_cpu",
+        "initial_builders": [
+          "random_partition",
+          "greedy_abs_weight_partition",
+          "single_densest_edge_count_v1"
+        ],
+        "updates": [
+          "refresh_all",
+          "survivor_neighbor_cover_v1"
+        ],
+        "bank": [
+          "current_epoch_only",
+          "keep_unobserved"
+        ],
+        "selectors": [
+          "max_abs_correlation",
+          "max_abs_weighted_correlation_q1",
+          "max_abs_weighted_correlation_q2",
+          "min_signed_edge_product"
+        ],
+        "aggregation": "epoch_mean"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "corrected_component_recomposition",
+      "declared_differences": [
+        "explicit_epoch_sum_once",
+        "separate_physical_c_and_selection_score",
+        "current_weight_for_stale_score",
+        "canonical_one_reduction",
+        "no_set_order_ties",
+        "no_legacy_lbfgsb",
+        "no_mi_guided_selection"
+      ],
+      "backlog": [
+        "checkpoint_resume_bank",
+        "batch_MK3",
+        "odds_fusion_fast2",
+        "round_max_LS_exp",
+        "energy_prediction",
+        "hierarchical_MK8",
+        "gpu_port"
+      ]
     }
   ],
   "implemented_variant_ids": [
@@ -741,7 +841,8 @@
     "distributed_ls_rqaoa_carry_cpu_v1",
     "distributed_ls_rqaoa_cold_cpu_v1",
     "qaoa_mi_observer_cpu_v1",
-    "rqaoa_mi_observer_cpu_v1"
+    "rqaoa_mi_observer_cpu_v1",
+    "incremental_ls_mk_components_v1"
   ],
   "deferred_variant_ids": [
     "legacy_ls_rqaoa_fast_alias",

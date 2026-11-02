@@ -154,6 +154,7 @@ def test_no_silent_unimplemented_features():
         "laboratory.block_mean_field_qaoa_cpu",
         "laboratory.distributed_ls_rqaoa_cpu",
         "laboratory.qaoa_mi_cpu",
+        "laboratory.incremental_ls_rqaoa_cpu",
         "laboratory.rqaoa_mi_cpu",
     )
 

@@ -207,6 +207,10 @@ def build_subgraph_builder(config, *, seed=None):
         return RandomPartitionBuilder(config, seed=seed)
     if kind == "greedy_abs_weight_partition":
         return GreedyAbsWeightPartitionBuilder(config, seed=seed)
+    if kind == "single_densest_edge_count_v1":
+        from .incremental import DensestEdgeCountBuilder
+
+        return DensestEdgeCountBuilder(config, seed=seed)
     raise ValueError(f"Unknown subgraph builder: {kind!r}.")
 
 

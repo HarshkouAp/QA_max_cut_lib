@@ -619,3 +619,28 @@ I_Z(i:j)=\sum_{a,c}p_{ac}\log_b\frac{p_{ac}}{p_a p_c}.
 product state `I_Q=I_Z=0`; для Bell pair `I_Q=2`, `I_Z=1`, причём Φ и Ψ
 имеют одинаковую MI и разный знак ZZ. CZ-plus имеет `I_Q=2`, но
 `I_Z=0`: P_Z не содержит coherences.
+
+## 17. Incremental LS-RQAOA (a17)
+
+Эпоха на `G_t` выполняет полный барьер локальных задач. Для пары `e`:
+
+\[
+\widehat c^{new}_{t,e}
+=\frac{\sum_{a\in\mathcal O_{t,e}}c^{(a)}_{t,e}}{d_{t,e}},
+\qquad d_{t,e}=|\mathcal O_{t,e}|.
+\]
+
+Суммы очищаются один раз перед эпохой; rounds входят в ту же сумму.
+`age_t= t-observed_epoch`. `keep_unobserved` сохраняет не наблюдавшуюся
+пару только при `age_t <= max_age_steps`; новое наблюдение заменяет
+старое, включая настоящий ноль. Score считается отдельно по текущему
+весу:
+
+\[
+S_{abs}=|c|,\quad S_{w1}=|w||c|,\quad S_{w2}=|w|^2|c|,\quad
+S_{prod}=wc.
+\]
+
+Для `min_signed_edge_product` выбирается минимум `S_prod`, но
+\(\sigma=\operatorname{sign}(c)\), а не `sign(wc)`. Направление
+редукции по умолчанию — удалить меньший label, оставить больший.
