@@ -142,7 +142,36 @@ class BlockMeanFieldQAOACPU(BaseSolver):
                 self._validate_spin_entries(graph, sp["entries"])
 
         initialization = config.setdefault("initialization", {})
-        _validate_initialization(config, int(p["layers"]))
+        if initialization.get("type") == "angle_bank":
+            entries = initialization.setdefault("parameters", {}).get("entries")
+            if not isinstance(entries, list) or len(entries) != len(
+                config["partition"]["parameters"]["blocks"]
+            ):
+                raise ValueError("angle_bank requires one entry per block.")
+            for index, item in enumerate(entries):
+                if not isinstance(item, dict) or set(item) != {"block_id", "values"}:
+                    raise ValueError("Each angle bank entry needs block_id and values.")
+                if item["block_id"] != index:
+                    raise ValueError("angle_bank entries must follow block order.")
+                values = np.asarray(item["values"], dtype=float)
+                if values.shape != (2 * int(p["layers"]),) or not np.isfinite(values).all():
+                    raise ValueError("Each angle bank needs exactly 2*layers finite values.")
+        else:
+            values = initialization.get("parameters", {}).get("values")
+            if (
+                initialization.get("type") == "fixed_angles"
+                and isinstance(values, list)
+                and values
+                and isinstance(values[0], (list, tuple))
+            ):
+                if len(values) != len(config["partition"]["parameters"]["blocks"]):
+                    raise ValueError("A nested angle bank needs one row per block.")
+                for row in values:
+                    array = np.asarray(row, dtype=float)
+                    if array.shape != (2 * int(p["layers"]),) or not np.isfinite(array).all():
+                        raise ValueError("Each angle row needs exactly 2*layers finite values.")
+            else:
+                _validate_initialization(config, int(p["layers"]))
 
         schedule = config.setdefault("schedule", {"type": "jacobi", "block_order": "as_given"})
         if set(schedule) - {"type", "block_order"}:
@@ -360,8 +389,22 @@ class BlockMeanFieldQAOACPU(BaseSolver):
 
     def _initial_thetas(self, graph, config, rng):
         layers = int(config["parameters"]["layers"])
-        values, source = _initial_angles(config, layers)
+        initialization = config["initialization"]
         blocks = config["partition"]["parameters"]["blocks"]
+        if initialization.get("type") == "angle_bank":
+            return [
+                np.asarray(item["values"], dtype=float).copy()
+                for item in initialization["parameters"]["entries"]
+            ], "angle_bank"
+        values = initialization.get("parameters", {}).get("values")
+        if (
+            initialization.get("type") == "fixed_angles"
+            and isinstance(values, list)
+            and values
+            and isinstance(values[0], (list, tuple))
+        ):
+            return [np.asarray(row, dtype=float).copy() for row in values], "fixed_angles"
+        values, source = _initial_angles(config, layers)
         if values is not None:
             return [np.asarray(values, dtype=float).copy() for _ in blocks], source
         return [
