@@ -58,6 +58,20 @@ CAPABILITIES = {
         "phases": ["initialized", "reduction_committed"],
         "notes": "Outer nested checkpoint codec; mid-episode child resume is not claimed.",
     },
+    "laboratory.qaoa_mi_cpu": {
+        "supports_checkpoint": True,
+        "boundaries": ["completed ADAM iteration", "training_done", "readout_done"],
+        "state": "baseline QAOACPU state; MI is recomputed passively from selected final angles",
+        "phases": ["training", "training_done", "readout_done"],
+        "notes": "Observer diagnostics are not a second RNG/budget; partial MI analysis is not checkpointed.",
+    },
+    "laboratory.rqaoa_mi_cpu": {
+        "supports_checkpoint": False,
+        "boundaries": [],
+        "state": "not implemented",
+        "phases": [],
+        "notes": "RQAOA recursive checkpoint is not available; MI frames are passive.",
+    },
     "qaoa_gpu": {
         "supports_checkpoint": False,
         "boundaries": [],

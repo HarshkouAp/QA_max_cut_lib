@@ -612,6 +612,124 @@
       ],
       "variant_id": "distributed_ls_rqaoa_cold_cpu_v1",
       "display_name": "Distributed LS-RQAOA (cold restart)"
+    },
+    {
+      "variant_id": "qaoa_mi_observer_cpu_v1",
+      "display_name": "QAOA with passive MI observer (CPU)",
+      "schema_version": 1,
+      "family": "mutual_information_diagnostics",
+      "role": "diagnostic_assembly",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Tools/MutInfo.py",
+          "sha256": "c0ab49ef8538e7bb4b5fe0523dc6c26d0511826074efd84185b031d8e668950a",
+          "role": "legacy_mi_scale_and_trace_review"
+        },
+        {
+          "path": "Tools/MI_QAOA.py",
+          "sha256": "e3eee87591c2a8b3131c022c5e4d5eff1868d95adb7f7814198e04ce266ea170",
+          "role": "layerwise_qaoa_diagnostic_review"
+        },
+        {
+          "path": "Tools/MI_LS_RQAOA.py",
+          "sha256": "8ada89f744624b40add553b2f125186026194795ac4f395e4c43d81fdefc6685",
+          "role": "rqaoa_active_frame_review"
+        }
+      ],
+      "algorithm_signature": {
+        "solver_type": "laboratory.qaoa_mi_cpu",
+        "quantum": "standard_qmi",
+        "classical": "z_basis_mi",
+        "log_base": "2_or_e",
+        "snapshots": "selected_final_or_final_angle_prefixes",
+        "pair_scope": "all_pairs_edges_explicit",
+        "selection": "unchanged_max_abs_zz"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "diagnostic_recomposition",
+      "declared_differences": [
+        "standard_qmi_not_half_nats_default",
+        "correct_entropy_pair_bug",
+        "no_graph_weight_mutation",
+        "active_masks_not_fake_density",
+        "no_mi_guided_selector",
+        "fresh_final_angle_prefixes"
+      ],
+      "backlog": [
+        "full_observer_checkpoint",
+        "cross_process_partial_map_resume",
+        "12_trial_series",
+        "gpu_mi",
+        "tomography",
+        "quantum_state_lift"
+      ]
+    },
+    {
+      "variant_id": "rqaoa_mi_observer_cpu_v1",
+      "display_name": "RQAOA with passive MI observer (CPU)",
+      "schema_version": 1,
+      "family": "mutual_information_diagnostics",
+      "role": "diagnostic_assembly",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Tools/MutInfo.py",
+          "sha256": "c0ab49ef8538e7bb4b5fe0523dc6c26d0511826074efd84185b031d8e668950a",
+          "role": "legacy_mi_scale_and_trace_review"
+        },
+        {
+          "path": "Tools/MI_QAOA.py",
+          "sha256": "e3eee87591c2a8b3131c022c5e4d5eff1868d95adb7f7814198e04ce266ea170",
+          "role": "layerwise_qaoa_diagnostic_review"
+        },
+        {
+          "path": "Tools/MI_LS_RQAOA.py",
+          "sha256": "8ada89f744624b40add553b2f125186026194795ac4f395e4c43d81fdefc6685",
+          "role": "rqaoa_active_frame_review"
+        }
+      ],
+      "algorithm_signature": {
+        "solver_type": "laboratory.rqaoa_mi_cpu",
+        "quantum": "standard_qmi",
+        "classical": "z_basis_mi",
+        "log_base": "2_or_e",
+        "snapshots": "selected_final_or_final_angle_prefixes",
+        "pair_scope": "all_pairs_edges_explicit",
+        "selection": "unchanged_max_abs_zz"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "diagnostic_recomposition",
+      "declared_differences": [
+        "standard_qmi_not_half_nats_default",
+        "correct_entropy_pair_bug",
+        "no_graph_weight_mutation",
+        "active_masks_not_fake_density",
+        "no_mi_guided_selector",
+        "fresh_final_angle_prefixes"
+      ],
+      "backlog": [
+        "full_observer_checkpoint",
+        "cross_process_partial_map_resume",
+        "12_trial_series",
+        "gpu_mi",
+        "tomography",
+        "quantum_state_lift"
+      ]
     }
   ],
   "implemented_variant_ids": [
@@ -621,7 +739,9 @@
     "block_mean_field_gauss_seidel_cpu_v1",
     "block_mean_field_jacobi_cpu_v1",
     "distributed_ls_rqaoa_carry_cpu_v1",
-    "distributed_ls_rqaoa_cold_cpu_v1"
+    "distributed_ls_rqaoa_cold_cpu_v1",
+    "qaoa_mi_observer_cpu_v1",
+    "rqaoa_mi_observer_cpu_v1"
   ],
   "deferred_variant_ids": [
     "legacy_ls_rqaoa_fast_alias",

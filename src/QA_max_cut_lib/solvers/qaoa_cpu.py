@@ -203,6 +203,7 @@ class QAOACPU(BaseSolver):
     def _run(self, graph, config, rng):
         from ..tools.reporting import log_message
 
+        self._last_readout_batch = None
         p = config["parameters"]
         layers = p["layers"]
         cuts = cut_diagonal(graph)
@@ -376,6 +377,7 @@ class QAOACPU(BaseSolver):
                                 kind="readout",
                             )
                         readout = rng.choice(len(cuts), size=reserved, p=probabilities)
+                        self._last_readout_batch = np.asarray(readout, dtype=np.int64).copy()
                         chosen = int(readout[int(np.argmax(cuts[readout]))])
                         budget.spend(reserved)
                         readout_completed = True

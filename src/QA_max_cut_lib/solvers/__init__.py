@@ -41,6 +41,8 @@ def __getattr__(name):
         "ConditionalQAOACPU": ".conditional_qaoa_cpu",
         "BlockMeanFieldQAOACPU": ".block_mean_field_qaoa_cpu",
         "DistributedLSRQAOACPU": ".distributed_ls",
+        "QAOAWithMIObserverCPU": ".mi_observer",
+        "RQAOAWithMIObserverCPU": ".mi_observer",
         "EnvironmentLSRQAOACPU": ".environment_ls_rqaoa_cpu",
     }
     if name not in modules:

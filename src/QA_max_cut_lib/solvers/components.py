@@ -457,10 +457,12 @@ class QAOAStatevectorCorrelationSource:
             collect_objective_history=collect_objective_history,
         )
         probabilities = training["probabilities"]
+        self._last_samples = None
         if corr_shots:
             indices = self._rng.choice(len(cuts), size=corr_shots, p=probabilities).astype(
                 np.uint64
             )
+            self._last_samples = indices.copy()
             # Each sampled index is one bit string.  Build an (M, n) spin
             # table; do not allocate an (M, 2**n) table.
             shifts = np.arange(n, dtype=np.uint64)

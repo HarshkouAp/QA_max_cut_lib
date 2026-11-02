@@ -1,6 +1,14 @@
 """Inspect completed runs without rerunning a solver."""
 
 from .numerics import correlation_matrix, quality_score
+from .mi_plots import plot_mutual_information_map, plot_mutual_information_frames, plot_mutual_information_distance
+from .mutual_information import (
+    MutualInformationError, classical_from_counts, classical_from_moments,
+    classical_from_probabilities, classical_mutual_information, hop_distances,
+    map_summary, pair_scope, quantum_mutual_information, reduced_density_matrix,
+    validate_node_order, validate_statevector, von_neumann_entropy,
+    partial_trace, entropy, quantum_mi, classical_mi,
+)
 from ..core.records import load_result
 from ..core.saving import save_result
 from ..core.factory import load_json
@@ -50,12 +58,52 @@ __all__ = [
     "inspect_checkpoint",
     "restore_checkpoint",
     "TrajectoryPanelCollection",
+    "MutualInformationError",
+    "validate_statevector",
+    "validate_node_order",
+    "reduced_density_matrix",
+    "von_neumann_entropy",
+    "quantum_mutual_information",
+    "classical_mutual_information",
+    "classical_from_probabilities",
+    "classical_from_counts",
+    "classical_from_moments",
+    "pair_scope",
+    "map_summary",
+    "hop_distances",
+    "partial_trace",
+    "entropy",
+    "quantum_mi",
+    "classical_mi",
+    "plot_mutual_information_map",
+    "plot_mutual_information_frames",
+    "plot_mutual_information_distance",
 ]
 
 
 def __getattr__(name):
     if name in {
         "TrajectoryPanelCollection",
+    "MutualInformationError",
+    "validate_statevector",
+    "validate_node_order",
+    "reduced_density_matrix",
+    "von_neumann_entropy",
+    "quantum_mutual_information",
+    "classical_mutual_information",
+    "classical_from_probabilities",
+    "classical_from_counts",
+    "classical_from_moments",
+    "pair_scope",
+    "map_summary",
+    "hop_distances",
+    "partial_trace",
+    "entropy",
+    "quantum_mi",
+    "classical_mi",
+    "plot_mutual_information_map",
+    "plot_mutual_information_frames",
+    "plot_mutual_information_distance",
         "plot_reduction_weights",
         "plot_reduction_energy",
         "plot_analytic_gamma_profile",

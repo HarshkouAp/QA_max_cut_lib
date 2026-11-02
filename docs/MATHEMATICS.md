@@ -594,3 +594,28 @@ returns all `Z` and internal `ZZ`; both `m` and `q` then use the same convex
 damping.  Gauss-Seidel commits each block immediately; Jacobi commits one
 complete sweep at a barrier.  The public answer is sign-rounded messages and
 is checked by a full cut on the original graph.
+
+## 16. Взаимная информация (a16)
+
+Для пары `(i,j)` и reduced density matrix `ρ_ij`:
+
+\[
+I_Q(i:j)=S(\rho_i)+S(\rho_j)-S(\rho_{ij}),\qquad
+S(\rho)=-\sum_{\lambda>0}\lambda\log_b\lambda.
+\]
+
+По умолчанию `b=2` (bits), pair matrix имеет строки `00,01,10,11` с
+первым label как старшим index маленькой matrix. Partial trace строится
+как `ρ_A=M M†`, где `M` — coefficient matrix; глобальная `D×D` matrix
+не хранится.
+
+Классическая Z-мера:
+
+\[
+I_Z(i:j)=\sum_{a,c}p_{ac}\log_b\frac{p_{ac}}{p_a p_c}.
+\]
+
+`legacy_half_nats = 0.5 I_Q(nats)` — отдельный derived view. Для чистого
+product state `I_Q=I_Z=0`; для Bell pair `I_Q=2`, `I_Z=1`, причём Φ и Ψ
+имеют одинаковую MI и разный знак ZZ. CZ-plus имеет `I_Q=2`, но
+`I_Z=0`: P_Z не содержит coherences.

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "type": "laboratory.qaoa_mi_cpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {"layers": 2, "dtype": "complex128"},
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "estimation": {"mode": "shots", "shots_per_evaluation": 16},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {"max_steps": 2, "learning_rate": 0.05, "gradient_tolerance": 0.0},
+    "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+  },
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.4, 0.7, 0.2, 0.3]}},
+  "readout": {"mode": "best_of_shots", "shots": 64},
+  "limits": {"shots_total": 352},
+  "diagnostics": {
+    "mutual_information": {
+      "quantum": {"enabled": true, "definition": "standard", "log_base": 2, "legacy_half_nats_view": true},
+      "classical_z": {"enabled": true, "log_base": 2, "estimator": "probabilities_exact"},
+      "snapshots": {"type": "final_angle_prefixes", "include_initial": true},
+      "pairs": {"type": "all_pairs"},
+      "coordinates": "active",
+      "pair_batch_size": 8,
+      "analysis_limits": {"max_qubits": 18, "max_pairs_per_snapshot": 153, "max_snapshots": 100, "max_pair_evaluations_total": 10000},
+      "distance_profile": {"type": "hop", "graph": "snapshot_current"},
+      "collect": {"one_qubit_rdms": false, "pair_rdms": false}
+    }
+  },
+  "checkpoint": {"enabled": false},
+  "collect": {"optimizer_history": true, "objective_history": true, "probabilities": false, "statevector": false},
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

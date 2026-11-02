@@ -1,4 +1,4 @@
-# Статус 0.1.0a15
+# Статус 0.1.0a16
 
 Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
 ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
@@ -154,3 +154,11 @@ ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бе�
    интерактивных графиков.
 
 Отсутствующие возможности не заменены заглушками с успешным статусом.
+
+## 0.1.0a16 — взаимная информация
+
+MI Tools и passive observers добавлены как диагностический слой; MI не
+меняет optimizer, selection или readout. `MI_QAOA.py` и
+`MI_LS_RQAOA.py` классифицированы как diagnostic assemblies, не faithful
+legacy trajectories. Не перенесены: MI-guided selection, tomography,
+quantum-state lift и GPU MI.

@@ -35,6 +35,8 @@ class SolverFactory:
             "laboratory.environment_ls_rqaoa_cpu",
             "laboratory.block_mean_field_qaoa_cpu",
             "laboratory.distributed_ls_rqaoa_cpu",
+            "laboratory.qaoa_mi_cpu",
+            "laboratory.rqaoa_mi_cpu",
         )
 
     @staticmethod
@@ -58,6 +60,7 @@ class SolverFactory:
         from ..solvers.environment_ls_rqaoa_cpu import EnvironmentLSRQAOACPU
         from ..solvers.block_mean_field_qaoa_cpu import BlockMeanFieldQAOACPU
         from ..solvers.distributed_ls import DistributedLSRQAOACPU
+        from ..solvers.mi_observer import QAOAWithMIObserverCPU, RQAOAWithMIObserverCPU
 
         types = {
             "exact_cpu": ExactCPU,
@@ -78,6 +81,8 @@ class SolverFactory:
             "laboratory.environment_ls_rqaoa_cpu": EnvironmentLSRQAOACPU,
             "laboratory.block_mean_field_qaoa_cpu": BlockMeanFieldQAOACPU,
             "laboratory.distributed_ls_rqaoa_cpu": DistributedLSRQAOACPU,
+            "laboratory.qaoa_mi_cpu": QAOAWithMIObserverCPU,
+            "laboratory.rqaoa_mi_cpu": RQAOAWithMIObserverCPU,
         }
         if config.get("type") not in types:
             raise ValueError(

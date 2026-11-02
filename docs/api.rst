@@ -65,6 +65,18 @@
 .. autoclass:: QA_max_cut_lib.solvers.distributed_ls.DistributedLSRQAOACPU
    :members: solve
 
+.. autoclass:: QA_max_cut_lib.solvers.mi_observer.QAOAWithMIObserverCPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.mi_observer.RQAOAWithMIObserverCPU
+   :members: solve
+
+.. automodule:: QA_max_cut_lib.tools.mutual_information
+   :members: reduced_density_matrix, von_neumann_entropy, quantum_mutual_information, classical_from_probabilities, classical_from_counts, classical_from_moments, map_summary, hop_distances
+
+.. automodule:: QA_max_cut_lib.tools.mi_plots
+   :members: plot_mutual_information_map, plot_mutual_information_frames, plot_mutual_information_distance
+
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
 

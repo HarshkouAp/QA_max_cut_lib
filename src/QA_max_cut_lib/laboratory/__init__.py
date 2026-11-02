@@ -25,6 +25,10 @@ def __getattr__(name):
         from .warm_start_qaoa_cpu import WarmStartQAOACPU
         globals()[name] = WarmStartQAOACPU
         return WarmStartQAOACPU
+    if name in ("QAOAWithMIObserverCPU", "RQAOAWithMIObserverCPU"):
+        from ..solvers.mi_observer import QAOAWithMIObserverCPU, RQAOAWithMIObserverCPU
+        globals()[name] = {"QAOAWithMIObserverCPU": QAOAWithMIObserverCPU, "RQAOAWithMIObserverCPU": RQAOAWithMIObserverCPU}[name]
+        return globals()[name]
     if name == "DistributedLSRQAOACPU":
         from .distributed_ls_rqaoa_cpu import DistributedLSRQAOACPU
         globals()[name] = DistributedLSRQAOACPU
@@ -58,6 +62,8 @@ __all__ = [
     "EnvironmentLSRQAOACPU",
     "BlockMeanFieldQAOACPU",
     "DistributedLSRQAOACPU",
+    "QAOAWithMIObserverCPU",
+    "RQAOAWithMIObserverCPU",
     "IMPLEMENTED_VARIANTS",
     "catalog_summary",
     "get_file",
