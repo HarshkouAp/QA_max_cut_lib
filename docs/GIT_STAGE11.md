@@ -1,6 +1,6 @@
 # Git Stage 11
 
-Основной коммит: `Stage 11: add Laboratory catalog and warm-start CPU (0.1.0a11)`.
+Основной коммит: `e08a343` — `Stage 11: add Laboratory catalog and warm-start CPU (0.1.0a11)`.
 
 ## Состав
 
