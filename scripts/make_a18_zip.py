@@ -18,6 +18,7 @@ INCLUDE_EXTRA = [
     "dist/qa_max_cut_lib-0.1.0a18-py3-none-any.whl",
     "dist/qa_max_cut_lib-0.1.0a18.tar.gz",
     "dist/SHA256SUMS.txt",
+    "results/generators_series/stage18_48_cases.json",
 ]
 
 
