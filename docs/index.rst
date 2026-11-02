@@ -1,9 +1,10 @@
-QA_max_cut_lib 0.1.0a8
+QA_max_cut_lib 0.1.0a10
 ========================
 
-Восьмой этап научной библиотеки взвешенного Max-Cut.
+Десятый этап научной библиотеки взвешенного Max-Cut.
 Реализованы CPU-солверы, RQAOA, LS-RQAOA, NVIDIA GPU QAOA, QAOA-in-QAOA,
-GW/SA и точное улучшение блоков.
+GW/SA, точное улучшение блоков, ExperimentRunner, ParallelismProfiler и
+checkpoint/resume `QAOACPU`.
 Полный перенос архива продолжается; отсутствующие алгоритмы перечислены
 в :download:`статусе переноса <MIGRATION_STATUS.md>`.
 
@@ -38,12 +39,17 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка этапа 06 <VALIDATION_0.1.0a6.md>`
 * :download:`Проверка этапа 07 <VALIDATION_0.1.0a7.md>`
 * :download:`Проверка этапа 08 <VALIDATION_0.1.0a8.md>`
+* :download:`Проверка этапа 09 <VALIDATION_0.1.0a9.md>`
+* :download:`Проверка этапа 10 <VALIDATION_0.1.0a10.md>`
+* :download:`Контрольные точки и resume <CHECKPOINTS_RU.md>`
+* :download:`Серии экспериментов и профилирование <EXPERIMENTS_RU.md>`
 * :download:`NVIDIA GPU QAOA <GPU.md>`
 * :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
-Девять выполненных учебных ноутбуков находятся в папке notebooks исходного
+Десять выполненных учебных ноутбуков находятся в папке notebooks исходного
 проекта. Третий ноутбук проверяет ядро редукций, четвёртый — RQAOA на CPU,
 пятый — аналитический p=1, шестой — LS-RQAOA, седьмой — NVIDIA GPU QAOA,
-восьмой — QAOA-in-QAOA, девятый — GW/SA и refinement.
+восьмой — QAOA-in-QAOA, девятый — GW/SA и refinement, десятый — серии,
+эталоны и профилирование параллелизма, одиннадцатый — checkpoint/resume.
 Все они используют только реализованный API.

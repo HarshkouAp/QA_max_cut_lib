@@ -1,4 +1,4 @@
-# API версии 0.1.0a8
+# API версии 0.1.0a10
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -10,7 +10,9 @@ from QA_max_cut_lib import (
     RQAOACPU, AnalyticP1Evaluator, AnalyticP1CorrelationSource,
     LSRQAOACPU, QAOAGPU, QAOAGPUCorrelationSource, RQAOAGPU, LSRQAOAGPU,
     QAOAInQAOACPU, QAOAInQAOAGPU, GoemansWilliamsonCPU, SimulatedAnnealingCPU,
-    ExactBlockRefiner, RefinedSolver,
+    ExactBlockRefiner, RefinedSolver, BenchmarkSpec, ExperimentRunner,
+    ParallelismProfiler, ProfileSpec, ReferencePolicy, RunControl, restore,
+    inspect_checkpoint,
     GraphReducer, ReductionState, IsingProblem, SpinConstraint,
     QAOAStatevectorCorrelationSource, MaxAbsCorrelationSelector, ExactCPUFinisher,
 )
@@ -672,3 +674,49 @@ GPU-путь не импортирует CuPy при импорте пакета
 ## Запуск модулей
 
 В каждом реализованном модуле солвера есть `main(argv=None)` и `if __name__ == "__main__":`. Аргументы CLI: `--graph` (JSON-рецепт), `--config` (JSON солвера), `--report` и `--logs` (0/1/2). Без файлов запускается небольшой воспроизводимый пример. Эти демонстрационные расчёты не выполняются при импорте.
+
+
+## Эксперименты и профилирование
+
+```python
+from QA_max_cut_lib import BenchmarkSpec, ExperimentRunner, ParallelismProfiler
+from QA_max_cut_lib import tools
+
+spec = BenchmarkSpec(tools.load_json("experiments/benchmark_small.json"))
+plan = spec.plan()
+print(plan.summary)
+series = ExperimentRunner(spec).run()
+profile = ParallelismProfiler(spec, tools.load_json("tools/parallelism_sweep.json")).run()
+```
+
+`BenchmarkSpec` принимает JSON-совместимый словарь и проверяет закрытую схему.
+`plan()` не вызывает солверы; `ExperimentPlan.result` содержит `counts`,
+`graph_instances`, `cases`, `trials`, `reference_jobs` и `rejected`.
+`ExperimentRunner.run()` возвращает `ExperimentSeries` с `result`, `trials`,
+`references`, `analysis`, `budget`, `environment` и `save_status`.
+`ParallelismProfiler.run()` возвращает `ParallelismProfile` с `result`,
+`measurements`, `aggregate`, `per_solver`, `recommended_num_treads`,
+`analysis["fit_amdahl"]` и `analysis["uncertainty"]`.
+
+`ReferencePolicy` принимает `type`, `exact`, `gw`, `best_known`. Политика
+возвращает `ReferenceJob`; `run_job` создаёт независимый reference record.
+Точный минимум выполняется отдельным запуском на графе с весами `-w`.
+GW-запись имеет `proof="heuristic"`; `sdp_upper_bound` не выдумывается.
+
+CLI:
+
+```bash
+python -m QA_max_cut_lib.tools.experiments plan --config experiments/benchmark_small.json
+python -m QA_max_cut_lib.tools.experiments run --config experiments/benchmark_small.json
+python -m QA_max_cut_lib.tools.parallelism --benchmark experiments/benchmark_small.json --config tools/parallelism_sweep.json
+```
+
+
+## Контрольные точки
+
+`QAOACPU.solve(..., control=RunControl(pause_after={"optimizer_iterations": 2}))`
+возвращает полное anytime-назначение и `last_checkpoint`. `tools.inspect_checkpoint`
+читает manifest без solver. `restore(path)` создаёт объект; `resume()` продолжает
+тот же canonical run. Новый `solve()` на восстановленном объекте — новый run.
+CLI: `python -m QA_max_cut_lib.tools.checkpoints inspect --checkpoint PATH`.
+Полная матрица границ — в `CHECKPOINTS_RU.md`.

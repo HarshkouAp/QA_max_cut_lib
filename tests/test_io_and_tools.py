@@ -131,7 +131,7 @@ def test_no_silent_unimplemented_features():
     with pytest.raises(ValueError):
         ExactCPU().solve(graph, num_treads=2)
     with pytest.raises(ValueError):
-        QAOACPU({"checkpoint": {"enabled": True}})
+        ExactCPU({"checkpoint": {"enabled": True, "path": "checkpoints/unsupported"}})
     with pytest.raises(ValueError):
         SolverFactory.from_config({"type": "qaoa_quantum"})
     assert SolverFactory.available() == (

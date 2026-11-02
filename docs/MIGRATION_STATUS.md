@@ -1,9 +1,9 @@
-# Статус 0.1.0a8
+# Статус 0.1.0a10
 
-Версия 0.1.0a8 добавляет **GW через SDP/SCS**, классический simulated
-annealing через `dwave.samplers` и **точный refiner блоков**. `RefinedSolver`
-сохраняет независимые base/refinement records; классические методы не
-расходуют квантовые шоты.
+Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
+ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
+и профиль используют один план, один solver lifecycle и один протокол
+измерений; Classical/GW/SA и refinement входят в обычные solver cases.
 
 | Область | В этой сборке | Следующий объём работ |
 |---|---|---|
@@ -19,12 +19,12 @@ annealing через `dwave.samplers` и **точный refiner блоков**. 
 | QAOA | CPU и NVIDIA GPU: ADAM, центральные разности, p слоёв, пять критериев, точная/шотовая оценка, два режима readout; GPU full/pairs, семплер и exact-Mean-Cut adjoint | CUDA Graphs, Walsh-плитки, batch, другие оптимизаторы |
 | GPU | `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`; CuPy 14.2.0, RTX 3050 Laptop CC 8.6, 4 GiB; CPU-импорт без CUDA | RTX 5060/V100 и другие карты требуют отдельной проверки; multi-GPU |
 | Generators | Complete, G(n,m), G(n,p), три генератора весов, индуцированные подграфы, случайное разбиение, `random_partition`, `greedy_abs_weight_partition` | Исследовательские генераторы и стратегии подграфов из архива |
-| Tools | Корреляции, качество, статические графики, карта p=1, веса/энергия редукций, покрытие LS, траектории `binomial(2p,2)`, иерархические overview/3D/tree, GW/SA/refinement и автономный 3D HTML | Гистограммы больших распределений, профилировщик |
+| Tools | Корреляции, качество, статические графики, карта p=1, веса/энергия редукций, покрытие LS, траектории `binomial(2p,2)`, иерархические overview/3D/tree, GW/SA/refinement, coverage/quality серий, parallelism-панели и автономный HTML | Гистограммы больших распределений, интерактивный профиль |
 | Laboratory | Пакет пуст | Все содержательно разные версии из архива |
-| Серии | Независимые `RunRecord` вручную | Общий планировщик бенчмарков, свип, resume |
-| Параллелизм | `LSRQAOACPU` и `QAOAInQAOACPU` с `num_treads>1` через `ProcessPoolExecutor` и `spawn`; GPU-варианты используют одного владельца | Общий профилировщик и другие параллельные алгоритмы |
+| Серии | `BenchmarkSpec`, стабильные graph/case/trial ID, полный product, rejected records, isolated/concurrent runner, exact/GW/best-known references, write-once records | Checkpoint/resume, распределённые кампании |
+| Параллелизм | `LSRQAOACPU` и `QAOAInQAOACPU`; общий `ParallelismProfiler` с 1/2/4, warmups/repetitions, work counters, Amdahl/Karp–Flatt, paired bootstrap и global recommendation | Concurrent profile на одном GPU, более сложные scheduler policies |
 | Бюджеты | Строгий общий бюджет QAOA/RQAOA/LS; резерв корреляций шага и round-robin квоты | Иерархия бюджетов QAOA-in-QAOA |
-| Контрольные точки | Снимок `ReductionState` есть; checkpoint/resume RQAOA отклоняется | Версионированное состояние оптимизатора, RNG и редукций |
+| Контрольные точки | `QAOACPU` JSON/NPY generation, ADAM theta/m/v/best, PCG64 state, budget/readout token, durable journal, atomic latest; другие компоненты явно отклоняются | RQAOA/LS/hierarchy/GPU codecs |
 | Результат/экспорт | JSON, ndarray/complex, NPY, `atts`, снимки, защита от перезаписи | Сериализаторы специальных объектов будущих алгоритмов |
 | Оформление | Seaborn + Computer Modern/MathText; автономный Plotly HTML | Общая тема всех будущих интерактивных графиков |
 | Документация | Ноутбуки 01–04, справочник API, математика, Sphinx/numpydoc | Расширение одновременно с каждым перенесённым алгоритмом |

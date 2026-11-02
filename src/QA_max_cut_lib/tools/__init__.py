@@ -33,6 +33,22 @@ __all__ = [
     "plot_sa_reads",
     "plot_refinement",
     "plot_classical_comparison",
+    "plan_experiments",
+    "run_experiments",
+    "ExperimentRunner",
+    "load_saved_series",
+    "load_saved_records",
+    "parallelism_profile",
+    "build_profile_plan",
+    "plot_series_coverage",
+    "plot_series_quality",
+    "plot_parallelism",
+    "parallelism_html",
+    "fit_amdahl",
+    "karp_flatt",
+    "recommend_total_curve",
+    "inspect_checkpoint",
+    "restore_checkpoint",
     "TrajectoryPanelCollection",
 ]
 
@@ -55,7 +71,53 @@ def __getattr__(name):
     "plot_sa_reads",
     "plot_refinement",
     "plot_classical_comparison",
+    "plan_experiments",
+    "run_experiments",
+    "ExperimentRunner",
+    "load_saved_series",
+    "load_saved_records",
+    "parallelism_profile",
+    "build_profile_plan",
+    "plot_series_coverage",
+    "plot_series_quality",
+    "plot_parallelism",
+    "parallelism_html",
+    "fit_amdahl",
+    "karp_flatt",
+    "recommend_total_curve",
+    "inspect_checkpoint",
+    "restore_checkpoint",
     }:
+        if name in {
+            "plan_experiments",
+            "run_experiments",
+            "ExperimentRunner",
+        }:
+            from . import experiments
+            return getattr(experiments, name)
+        if name in {"load_saved_series", "load_saved_records"}:
+            from ..core.series_store import load_saved_records, load_saved_series
+            return load_saved_series if name == "load_saved_series" else load_saved_records
+        if name in {"inspect_checkpoint", "restore_checkpoint"}:
+            from . import checkpoints
+            return getattr(checkpoints, name)
+        if name in {
+            "parallelism_profile",
+            "build_profile_plan",
+            "fit_amdahl",
+            "karp_flatt",
+            "recommend_total_curve",
+        }:
+            from . import parallelism
+            return getattr(parallelism, name)
+        if name in {
+            "plot_series_coverage",
+            "plot_series_quality",
+            "plot_parallelism",
+            "parallelism_html",
+        }:
+            from . import experiment_plots
+            return getattr(experiment_plots, name)
         if name.startswith("plot_hierarchy_"):
             from . import hierarchy_plots
 

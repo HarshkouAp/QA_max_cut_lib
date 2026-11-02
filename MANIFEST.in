@@ -2,6 +2,8 @@ include README.md
 include pyproject.toml
 recursive-include docs *.md *.rst *.py *.json
 recursive-include configs *.json
+recursive-include experiments *.json *.py
+recursive-include tools *.json
 recursive-include examples *.py
 recursive-include notebooks *.ipynb
 recursive-include requirements *.txt

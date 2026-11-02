@@ -3,6 +3,20 @@
 from importlib import import_module
 
 
+def restore(path, **kwargs):
+    """Restore a solver object from a checkpoint without running it."""
+    from ..core.checkpoint import restore as _restore
+
+    return _restore(path, **kwargs)
+
+
+def from_config(config):
+    """Construct a solver through the package factory."""
+    from ..core.factory import SolverFactory
+
+    return SolverFactory.from_config(config)
+
+
 def __getattr__(name):
     modules = {
         "ExactCPU": ".exact_cpu",

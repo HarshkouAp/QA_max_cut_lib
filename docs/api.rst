@@ -146,3 +146,52 @@
 
 .. automodule:: QA_max_cut_lib.tools.reduction_plots
    :members: plot_reduction_weights, plot_reduction_energy, plot_parameter_trajectories, plot_parameter_trajectories_3d, plot_analytic_gamma_profile, plot_ls_coverage
+
+Эксперименты и профилирование
+------------------------------
+
+.. autoclass:: QA_max_cut_lib.core.experiment_spec.BenchmarkSpec
+   :members: plan
+
+.. autoclass:: QA_max_cut_lib.core.experiment_spec.ExperimentPlan
+
+.. autoclass:: QA_max_cut_lib.core.runner.ExperimentRunner
+   :members: run
+
+.. autoclass:: QA_max_cut_lib.core.runner.ExperimentSeries
+
+.. autoclass:: QA_max_cut_lib.core.references.ReferencePolicy
+   :members: jobs_for, run_job, run_all
+
+.. autoclass:: QA_max_cut_lib.core.profile.ParallelismProfiler
+   :members: run
+
+.. autoclass:: QA_max_cut_lib.core.profile.ProfileSpec
+
+.. autofunction:: QA_max_cut_lib.core.profile.fit_amdahl
+
+.. autofunction:: QA_max_cut_lib.core.profile.karp_flatt
+
+.. autofunction:: QA_max_cut_lib.core.profile.recommend_total_curve
+
+.. automodule:: QA_max_cut_lib.tools.experiment_plots
+   :members: plot_series_coverage, plot_series_quality, plot_parallelism, parallelism_html
+
+Checkpoints
+-----------
+
+.. autoclass:: QA_max_cut_lib.core.checkpoint.RunControl
+   :members: request_pause, request_cancel, should_pause, snapshot
+
+.. autoclass:: QA_max_cut_lib.core.checkpoint.CheckpointManager
+   :members: write_generation, load, list_generations
+
+.. autofunction:: QA_max_cut_lib.core.checkpoint.inspect_checkpoint
+
+.. autofunction:: QA_max_cut_lib.core.checkpoint.restore
+
+.. autoclass:: QA_max_cut_lib.core.checkpoint.ResourceJournal
+   :members: begin, commit, resolve, reconcile
+
+.. automodule:: QA_max_cut_lib.core.checkpoint_capabilities
+   :members: CAPABILITIES, capability, capabilities

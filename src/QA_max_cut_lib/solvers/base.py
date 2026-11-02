@@ -8,6 +8,7 @@ from .._version import __version__
 from ..core.graph import WeightedGraph
 from ..core.records import RunRecord
 from ..core.saving import save_result, utc_now
+from ..core.checkpoint import RunControl, CheckpointManager, validate_checkpoint_config
 
 
 def positive_int(value, name, *, minimum=1):
@@ -33,6 +34,7 @@ class BaseSolver:
 
     algorithm_type = None
     supports_parallel = False
+    supports_checkpoint = False
     extra_config_fields = ()
     optional_fields = (
         "solution",
@@ -76,11 +78,22 @@ class BaseSolver:
         if self._config.get("schema_version", 1) != 1:
             raise ValueError("Unsupported configuration schema.")
         if self._config.get("checkpoint", {}).get("enabled", False):
-            raise ValueError(
-                f"Checkpoint/resume is planned, not implemented in {__version__}."
-            )
+            if not self.supports_checkpoint:
+                raise ValueError(
+                    f"Checkpoint/resume is not implemented for {self.algorithm_type} in {__version__}."
+                )
+            self._config["checkpoint"] = validate_checkpoint_config(self._config["checkpoint"])
         self._last_run = None
         self._active = False
+        self._run_id = None
+        self._resume_state = None
+        self._resume_arrays = {}
+        self._resume_run_id = None
+        self._resume_graph = None
+        self._resume_control = None
+        self._resume_mode = False
+        self.last_checkpoint = None
+        self._checkpoint_manager = None
 
     @property
     def config(self):
@@ -106,7 +119,7 @@ class BaseSolver:
             return None
         raise AttributeError(name)
 
-    def solve(self, graph, *, report=None, logs=None, num_treads=None):
+    def solve(self, graph, *, report=None, logs=None, num_treads=None, control=None):
         """Run on an independent input snapshot and return a spin dictionary.
 
         Parameters
@@ -116,7 +129,10 @@ class BaseSolver:
         report, logs : {0, 1, 2}, optional
             Independent output levels. Configuration defaults are zero.
         num_treads : int, optional
-            CPU budget. This first milestone implements value 1 only.
+            CPU budget for this run.
+        control : RunControl, optional
+            Explicit pause/cancel control.  A normal solve never resumes an
+            old checkpoint automatically.
 
         Returns
         -------
@@ -125,11 +141,18 @@ class BaseSolver:
 
         Notes
         -----
-        A fresh run resets the configured seed. This is not a warm start.
-        Export errors leave the computed last_run available in memory.
+        A fresh run resets the configured seed.  A restored object continues
+        only through ``resume()``, never through ``solve()``.
         """
         if self._active:
             raise RuntimeError("This solver already has an active run.")
+        if control is not None and not isinstance(control, RunControl):
+            raise TypeError("control must be a RunControl.")
+        if control is not None and not self.supports_checkpoint:
+            raise ValueError(f"RunControl is not supported by {self.algorithm_type}.")
+        resume_mode = bool(self._resume_mode)
+        if resume_mode and control is None:
+            control = self._resume_control
         self._last_run = None
         if not isinstance(graph, WeightedGraph):
             raise TypeError("graph must be a WeightedGraph.")
@@ -162,7 +185,15 @@ class BaseSolver:
         started = utc_now()
         clock = perf_counter()
         snapshot = graph.copy()
-        rng = np.random.default_rng(config.get("seed"))
+        self._run_id = self._resume_run_id if resume_mode and self._resume_run_id else str(uuid4())
+        if resume_mode and self._resume_state is not None:
+            saved_rng = self._resume_state.get("rng_state")
+            rng = np.random.default_rng()
+            if saved_rng is not None:
+                rng.bit_generator.state = deepcopy(saved_rng)
+        else:
+            rng = np.random.default_rng(config.get("seed"))
+        self._control = control
         try:
             fields = self._run(snapshot, config, rng)
             solution = {int(k): int(v) for k, v in fields["solution"].items()}
@@ -172,7 +203,7 @@ class BaseSolver:
                 schema_version=1,
                 algorithm_type=self.algorithm_type,
                 package_version=__version__,
-                run_id=str(uuid4()),
+                run_id=self._run_id,
                 config=config,
                 graph=snapshot.snapshot(),
                 node_order=list(snapshot.nodes),
@@ -208,7 +239,7 @@ class BaseSolver:
                     "schema_version": 1,
                     "algorithm_type": self.algorithm_type,
                     "package_version": __version__,
-                    "run_id": str(uuid4()),
+                    "run_id": self._run_id,
                     "status": "failed",
                     "termination_reason": type(error).__name__,
                     "error": str(error),
@@ -223,6 +254,11 @@ class BaseSolver:
             raise
         finally:
             self._active = False
+            if resume_mode:
+                self._resume_mode = False
+            if self._checkpoint_manager is not None:
+                self._checkpoint_manager.release()
+                self._checkpoint_manager = None
         if output["report"]:
             from ..tools.reporting import print_report
 

@@ -14,6 +14,8 @@
 |---|---|---|
 | Core | `core.graph`, `core.records`, `core.saving`, `core.factory` | Общие типы, результат, сериализация, сборка. Не зависит от алгоритмов. |
 | Solvers | `solvers.base`, CPU/GPU QAOA, RQAOA/LS, QAOA-in-QAOA, GW/SA, `RefinedSolver` | Полные алгоритмы и их вычислительные компоненты. Могут использовать Core и численные функции Tools. |
+| Experiments | `core.experiment_spec`, `core.runner`, `core.references`, `core.profile`, `core.measurement`, `core.series_analysis` | Общий план, независимые trials, эталоны, measurement protocol и профиль; циклы солверов не копируются. |
+| Checkpoint | `core.checkpoint`, `core.checkpoint_capabilities`, `tools/checkpoints` | Immutable JSON/NPY generations, RunControl, durable journal, inspect/restore/resume; capability matrix отклоняет неизвестные codecs. |
 | Generators | `generators.graphs` | Рецепты графов, подграфы, разбиения. Не зависит от солверов. |
 | Tools | `tools.numerics`, `tools.plotting`, `tools.reporting`, `tools.landscape`, `tools.demo` | Численные функции, анализ, визуализация, отчёты, демонстрации. Численные функции не импортируют графику и солверы. |
 | Laboratory | `laboratory` | Экспериментальные сборки. Может использовать все слои; базовые слои не импортируют Laboratory. |
@@ -47,7 +49,7 @@
 | Сохранение JSON, NPY, выбор `atts`, `save_original_data`, защита от перезаписи | есть | `core/saving.py` |
 | Уровни `report` и `logs` 0/1/2, цвет | есть | `solvers/base.py`, `tools/reporting.py` |
 | Статические графики: граф, решение, информация, вероятности, оптимизация, карта p=1 | есть | `tools/plotting.py`, `tools/landscape.py` |
-| Ноутбуки 01–09: API, редукции, RQAOA, LS, GPU, QAOA-in-QAOA, GW/SA/refinement | есть, исполняются | `notebooks/` |
+| Ноутбуки 01–10: API, редукции, RQAOA, LS, GPU, QAOA-in-QAOA, GW/SA/refinement, серии/профиль | есть, исполняются | `notebooks/` |
 | Sphinx-справочник и NumPy-docstrings | есть | `docs/`, `src` |
 | CPU-профиль без обязательного CuPy | есть (структурно) | `pyproject.toml`, `requirements/` |
 | GPU-профиль CuPy CUDA 13 | реализован и локально проверен | `cupy-cuda13x 14.2.0`, RTX 3050 |
@@ -80,7 +82,7 @@
 - Аналитический оцениватель p=1 и локальный аналитический источник есть.
 - Базовый источник корреляций и селектор для RQAOA есть; LS использует
   индуцированные локальные задачи и параллельные процессы.
-- `ExactBlockRefiner` и `RefinedSolver` реализованы; общие Benchmark/Profiler остаются отдельными.
+- `ExactBlockRefiner` и `RefinedSolver` реализованы; общий Benchmark/Profiler реализован в `core`/`tools`.
 - GPU QAOA/семплер и GPU-композиции реализованы; multi-GPU не входит.
 
 ### 3.3. Генераторы

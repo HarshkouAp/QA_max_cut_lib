@@ -45,6 +45,15 @@ __all__ = [
     "ReductionState",
     "IsingProblem",
     "SpinConstraint",
+    "BenchmarkSpec",
+    "ExperimentRunner",
+    "ExperimentSeries",
+    "ParallelismProfiler",
+    "ProfileSpec",
+    "ReferencePolicy",
+    "RunControl",
+    "restore",
+    "inspect_checkpoint",
 ]
 
 _EXPORTS = {
@@ -97,6 +106,15 @@ _EXPORTS = {
     "ReductionState": (".core.reduction", "ReductionState"),
     "IsingProblem": (".core.reduction", "IsingProblem"),
     "SpinConstraint": (".core.reduction", "SpinConstraint"),
+    "BenchmarkSpec": (".core.experiment_spec", "BenchmarkSpec"),
+    "ExperimentRunner": (".core.runner", "ExperimentRunner"),
+    "ExperimentSeries": (".core.runner", "ExperimentSeries"),
+    "ParallelismProfiler": (".core.profile", "ParallelismProfiler"),
+    "ProfileSpec": (".core.profile", "ProfileSpec"),
+    "ReferencePolicy": (".core.references", "ReferencePolicy"),
+    "RunControl": (".core.checkpoint", "RunControl"),
+    "restore": (".core.checkpoint", "restore"),
+    "inspect_checkpoint": (".core.checkpoint", "inspect_checkpoint"),
 }
 
 

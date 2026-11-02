@@ -1,8 +1,22 @@
 # QA_max_cut_lib
 
-Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a8**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1, LS-RQAOA с процессами, NVIDIA CUDA QAOA/семплер, иерархический QAOA-in-QAOA и классические методы GW/SA с точным улучшением блоков.
+Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a10**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1, LS-RQAOA с процессами, NVIDIA CUDA QAOA/семплер, иерархический QAOA-in-QAOA, классические методы GW/SA с точным улучшением блоков, общий `ExperimentRunner`, `ReferencePolicy` и `ParallelismProfiler`.
 
-Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, `GoemansWilliamsonCPU`, `SimulatedAnnealingCPU`, `ExactBlockRefiner`, `RefinedSolver`, два построителя подграфов и `GraphReducer`. Классические эталоны GW/SA работают на CPU; CVXPY/SCS и dimod/dwave-samplers являются отдельным профилем `classical`. Laboratory, общие серии экспериментов, `ParallelismProfiler` и control-point resume остаются следующими этапами.
+Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, `GoemansWilliamsonCPU`, `SimulatedAnnealingCPU`, `ExactBlockRefiner`, `RefinedSolver`, два построителя подграфов и `GraphReducer`. Классические эталоны GW/SA работают на CPU; CVXPY/SCS и dimod/dwave-samplers являются отдельным профилем `classical`. Laboratory и control-point resume остаются следующими этапами; общие серии экспериментов и `ParallelismProfiler` реализованы в `0.1.0a9`.
+
+## Checkpoint/resume
+
+```python
+from QA_max_cut_lib import RunControl, restore
+
+solver = tools.SolverFactory.from_config(config)
+solver.solve(graph, control=RunControl(pause_after={"optimizer_iterations": 2}))
+path = solver.last_checkpoint.path
+continued = restore(path)
+final = continued.resume()
+```
+
+Подробности и capability matrix — в [руководстве](docs/CHECKPOINTS_RU.md).
 
 ## Установка
 
@@ -11,7 +25,7 @@ Python 3.10 или новее. Проверенная среда этой сбо
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install -e ".[cpu,notebooks]"
+python -m pip install -e ".[cpu,classical,notebooks]"
 ```
 
 В Windows активация окружения: `.venv\Scripts\activate`.
@@ -27,7 +41,9 @@ python -m pip install -e ".[cpu,notebooks]"
 [VALIDATION_0.1.0a5.md](docs/VALIDATION_0.1.0a5.md), отчёт этапа 06 — в
 [VALIDATION_0.1.0a6.md](docs/VALIDATION_0.1.0a6.md), отчёт этапа 07 — в
 [VALIDATION_0.1.0a7.md](docs/VALIDATION_0.1.0a7.md), отчёт этапа 08 — в
-[VALIDATION_0.1.0a8.md](docs/VALIDATION_0.1.0a8.md).
+[VALIDATION_0.1.0a8.md](docs/VALIDATION_0.1.0a8.md), отчёт этапа 09 — в
+[VALIDATION_0.1.0a9.md](docs/VALIDATION_0.1.0a9.md), отчёт этапа 10 — в
+[VALIDATION_0.1.0a10.md](docs/VALIDATION_0.1.0a10.md).
 
 CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные extras `gpu-cu12`/`gpu-cu13` и файлы `requirements/gpu-nvidia-cu12.in`, `requirements/gpu-nvidia-cu13.in`; GPU-путь проверен с `cupy-cuda13x 14.2.0`. См. [описание зависимостей](docs/INSTALLATION.md) и [GPU-руководство](docs/GPU.md).
 
@@ -62,6 +78,26 @@ optimization = tools.plot_optimization(algorithm)
 ```
 
 Один экземпляр солвера принимает разные графы. Каждый `solve()` начинает новый запуск с заново установленным `seed`. В солвере остаётся последний запуск; ранее сохранённый `last_run` не меняется. Инструментам можно передавать солвер, `RunRecord` или полный `algorithm.result`. Для графов также допустим непосредственно `WeightedGraph`.
+
+## Серии экспериментов
+
+```python
+from QA_max_cut_lib import tools
+
+spec = tools.load_json("experiments/benchmark_small.json")
+plan = tools.plan_experiments(spec)
+print(plan.summary)
+series = tools.ExperimentRunner(spec).run()
+print(series.analysis["by_solver"])
+
+profile = tools.profile_parallelism(
+    spec, config=tools.load_json("tools/parallelism_sweep.json")
+)
+print(profile.recommended_num_treads)
+print(profile.analysis["uncertainty"])
+```
+
+Подробности — в [руководстве по экспериментам](docs/EXPERIMENTS_RU.md).
 
 ## Точная редукция
 

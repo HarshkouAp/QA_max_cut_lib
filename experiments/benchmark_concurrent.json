@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "trial_seeds": [17, 23],
+  "graph_cases": [
+    {
+      "name": "concurrent_signed",
+      "recipe": {
+        "schema_version": 1,
+        "type": "complete",
+        "parameters": {"n_vertices": 8},
+        "seed": 3100,
+        "weights": {
+          "type": "signed_discrete",
+          "parameters": {"values": [-3, -1, 1, 3]},
+          "seed": 3101
+        }
+      }
+    }
+  ],
+  "solver_cases": [
+    {
+      "name": "sa",
+      "config": {
+        "schema_version": 1,
+        "type": "simulated_annealing_cpu",
+        "parameters": {
+          "num_reads": 8,
+          "num_sweeps": 48,
+          "beta_range": [0.1, 4.0],
+          "beta_schedule_type": "geometric"
+        }
+      }
+    },
+    {
+      "name": "refined_sa",
+      "config": {
+        "schema_version": 1,
+        "type": "refined",
+        "base_solver": {
+          "type": "simulated_annealing_cpu",
+          "parameters": {
+            "num_reads": 4,
+            "num_sweeps": 32,
+            "beta_range": [0.1, 4.0],
+            "beta_schedule_type": "geometric"
+          }
+        },
+        "refiner": {
+          "type": "exact_block",
+          "parameters": {
+            "max_size": 4,
+            "batch_size": 16,
+            "max_passes": 1,
+            "max_blocks_total": 4,
+            "improvement_atol": 1e-10,
+            "improvement_rtol": 1e-12
+          },
+          "selector": {
+            "type": "pair_greedy_abs_weight",
+            "parameters": {"max_seed_pairs": 4}
+          }
+        },
+        "limits": {"refinement_states_total": 128},
+        "collect": {"base_run": false, "refinement_history": false}
+      }
+    }
+  ],
+  "references": {
+    "type": "tiered",
+    "exact": {"max_vertices": 12, "include_minimum": false},
+    "gw": {"max_vertices": 64, "config": {"type": "gw_cpu", "parameters": {"num_hyperplanes": 4}}, "seed": 5100},
+    "best_known": {"sources": []}
+  },
+  "execution": {
+    "mode": "concurrent_batch",
+    "cpu_slots": 4,
+    "solver_num_treads": 1,
+    "gpu_policy": "exclusive_one_owner",
+    "backend": "process",
+    "max_concurrent_trials": 2
+  },
+  "measurement": {
+    "timing_scope": "end_to_end",
+    "solver_lifecycle": "fresh",
+    "synchronize_gpu": true,
+    "trial_output": {"report": 0, "logs": 0},
+    "trial_save": false
+  },
+  "series_limits": {"max_runs_total": 20, "shots_total": null},
+  "metrics": {
+    "fields": ["cut_value", "energy", "optimality_gap", "success"],
+    "success": {"type": "fraction_of_exact_max", "fraction": 0.9}
+  },
+  "failure_policy": {"on_trial_error": "continue", "retry_failed": false},
+  "collect": {"trial_records": true, "raw_measurements": true},
+  "save": {
+    "path": "results/concurrent",
+    "atts": ["expanded_plan", "trials", "references", "summary", "errors"],
+    "filename": "concurrent_cpu",
+    "save_original_data": [],
+    "makedir": true,
+    "savedir": true
+  }
+}

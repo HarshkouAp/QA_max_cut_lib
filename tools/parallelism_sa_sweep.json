@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "num_treads_values": [1, 2, 4],
+  "parameter_coverage": "full_grid",
+  "seed_index": 0,
+  "warmup_runs": 1,
+  "repetitions": 5,
+  "execution_mode": "isolated",
+  "timing_scope": "benchmark",
+  "measurement_order": "shuffle_within_case_repetition",
+  "measurement_order_seed": 3001,
+  "models": ["amdahl", "karp_flatt"],
+  "uncertainty": {"method": "paired_block_bootstrap", "resamples": 200, "confidence": 0.95, "seed": 3002},
+  "recommendation": {"criterion": "total_time", "tolerance_rel": 0.05, "prefer_lower_resource": true},
+  "series_limits": {"max_runs_total": 100, "shots_total": null},
+  "save": {
+    "path": "results/parallelism",
+    "atts": ["expanded_plan", "measurements", "per_solver", "aggregate", "recommended_num_treads", "errors"],
+    "filename": "sa_thread_sweep",
+    "save_original_data": [],
+    "makedir": true,
+    "savedir": true
+  }
+}

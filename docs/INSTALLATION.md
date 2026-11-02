@@ -32,7 +32,8 @@ uv venv --python 3.12 .venv
 uv pip install --python .venv/Scripts/python.exe -e ".[cpu,notebooks,dev,docs]"
 ```
 
-Для Jupyter добавить `[notebooks]`, для Sphinx — `[docs]`. Исходные списки
+Для Jupyter добавить `[notebooks]`, для Sphinx — `[docs]`. Для GW/SA и
+серий с классическими эталонами нужен профиль `[classical]`. Исходные списки
 находятся в `requirements/cpu.in`, `requirements/notebooks.in`,
 `requirements/dev.in` и `requirements/docs.in`. Точные версии локальной
 Windows-сборки — в `requirements/lock-cpu-py312-win.txt`.
@@ -81,8 +82,9 @@ LaTeX, его форматы и пакеты, а для растрового Agg
 версия допускает только `1`; значение больше единицы вызывает ошибку. Это не
 ограничивает автоматически внутренние потоки системного BLAS. Для строгих
 измерений окружение должно отдельно контролировать `OMP_NUM_THREADS`,
-`OPENBLAS_NUM_THREADS` и `MKL_NUM_THREADS` до запуска Python. Профилировщик и
-общий бенчмарк пока не реализованы.
+`OPENBLAS_NUM_THREADS` и `MKL_NUM_THREADS` до запуска Python. Профилировщик и общий бенчмарк реализованы в `0.1.0a9`; для строгого
+ограничения нативных потоков используется `threadpoolctl`, а фактическая
+библиотека сохраняется в measurement environment.
 
 ## Файловая система
 

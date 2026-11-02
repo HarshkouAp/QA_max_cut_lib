@@ -16,6 +16,22 @@ from .qaoa_state import state_at_angles
 __all__ = ["train_statevector"]
 
 
+def _jsonable(value):
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, dict):
+        return {str(key): _jsonable(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_jsonable(item) for item in value]
+    if isinstance(value, float):
+        if not math.isfinite(value):
+            raise ValueError("Non-finite training history value.")
+        return float(value)
+    return value
+
+
 def train_statevector(
     cuts,
     layers,
@@ -32,6 +48,9 @@ def train_statevector(
     collect_optimizer_history=False,
     collect_objective_history=False,
     log=None,
+    state=None,
+    control=None,
+    checkpoint_callback=None,
 ):
     """Train QAOA at fixed cuts and return the best evaluated angles.
 
@@ -83,6 +102,11 @@ def train_statevector(
     theta = np.asarray(initial_angles, dtype=float).copy()
     if theta.shape != (2 * layers,) or not np.isfinite(theta).all():
         raise ValueError("initial_angles must contain 2*layers finite values.")
+    restored = dict(state or {})
+    if restored:
+        theta = np.asarray(restored.get("theta", theta), dtype=float).copy()
+        if theta.shape != (2 * layers,) or not np.isfinite(theta).all():
+            raise ValueError("Restored theta has the wrong shape.")
     op = optimizer["parameters"]
     step_size = optimizer["gradient"]["parameters"]["step"]
     shots_each = int(shots_per_evaluation) if estimation_mode == "shots" else 0
@@ -91,22 +115,54 @@ def train_statevector(
     if shots_each < 0:
         raise ValueError("shots_per_evaluation must be positive.")
 
-    best_theta = theta.copy()
-    best_loss = None
-    evaluations = 0
-    shots = 0
-    history = []
-    evaluation_history = []
-    moment = np.zeros_like(theta)
-    variance = np.zeros_like(theta)
-    reason = "max_steps"
+    best_theta = np.asarray(restored.get("best_theta", theta), dtype=float).copy()
+    best_loss = restored.get("best_loss")
+    best_evaluation_id = restored.get("best_evaluation_id")
+    evaluations = int(restored.get("evaluations", 0))
+    shots = int(restored.get("shots", 0))
+    history = list(restored.get("optimizer_history") or []) if collect_optimizer_history else []
+    evaluation_history = list(restored.get("objective_history") or []) if collect_objective_history else []
+    moment = np.asarray(restored.get("moment", np.zeros_like(theta)), dtype=float).copy()
+    variance = np.asarray(restored.get("variance", np.zeros_like(theta)), dtype=float).copy()
+    optimizer_steps = int(restored.get("optimizer_steps", 0))
+    reason = restored.get("reason", "max_steps")
+    next_iteration = int(restored.get("next_iteration", 1))
+    if next_iteration < 1:
+        raise ValueError("Restored next_iteration must be positive.")
+    phase = restored.get("phase", "training")
+    paused = False
+    if phase == "training_done":
+        next_iteration = op["max_steps"] + 1
+
+    def make_state():
+        return {
+            "theta": theta.tolist(),
+            "moment": moment.tolist(),
+            "variance": variance.tolist(),
+            "best_theta": np.asarray(best_theta, dtype=float).tolist(),
+            "best_loss": None if best_loss is None else float(best_loss),
+            "best_evaluation_id": best_evaluation_id,
+            "evaluations": int(evaluations),
+            "shots": int(shots),
+            "optimizer_steps": int(optimizer_steps),
+            "optimizer_history": _jsonable(history) if collect_optimizer_history else None,
+            "objective_history": _jsonable(evaluation_history) if collect_objective_history else None,
+            "next_iteration": int(next_iteration),
+            "reason": reason,
+            "phase": phase,
+            "rng_state": rng.bit_generator.state,
+        }
+
+    def checkpoint(kind):
+        if checkpoint_callback is not None:
+            checkpoint_callback(make_state(), kind)
 
     def emit(message, detail):
         if log is not None:
             log(message, detail)
 
     def evaluate(angles, kind, iteration):
-        nonlocal evaluations, shots, best_theta, best_loss
+        nonlocal evaluations, shots, best_theta, best_loss, best_evaluation_id
         _, probabilities = state_at_angles(cuts, angles, layers, dtype)
         if shots_each:
             indices = rng.choice(len(cuts), size=shots_each, p=probabilities)
@@ -123,6 +179,7 @@ def train_statevector(
         if best_loss is None or loss < best_loss:
             best_loss = loss
             best_theta = np.asarray(angles, dtype=float).copy()
+            best_evaluation_id = evaluations
         if collect_objective_history:
             evaluation_history.append(
                 {
@@ -138,13 +195,18 @@ def train_statevector(
         return loss
 
     emit("QAOA training starts.", False)
-    for iteration in range(1, op["max_steps"] + 1):
+    for iteration in range(next_iteration, op["max_steps"] + 1):
         # Reserve all probes and the central evaluation as one stage.
         # The caller's reserved shots stay untouched.
         needed = (2 * len(theta) + 1) * shots_each
         if not budget.can_spend(needed, reserved=reserved_shots):
             reason = "shot_budget"
+            phase = "training_done"
+            next_iteration = iteration
+            checkpoint("phase")
             break
+        if checkpoint_callback is not None:
+            checkpoint_callback(make_state(), "stage_begin")
         gradient = np.zeros_like(theta)
         for index in range(len(theta)):
             delta = np.zeros_like(theta)
@@ -169,6 +231,9 @@ def train_statevector(
         )
         if op["gradient_tolerance"] and row["gradient_norm"] <= op["gradient_tolerance"]:
             reason = "gradient_tolerance"
+            phase = "training_done"
+            next_iteration = iteration + 1
+            checkpoint("phase")
             break
         moment = op["beta1"] * moment + (1 - op["beta1"]) * gradient
         variance = op["beta2"] * variance + (1 - op["beta2"]) * gradient**2
@@ -179,6 +244,21 @@ def train_statevector(
             * corrected_m
             / (np.sqrt(corrected_v) + op["epsilon"])
         )
+        optimizer_steps += 1
+        next_iteration = iteration + 1
+        if checkpoint_callback is not None:
+            checkpoint_callback(make_state(), "stage_commit")
+        if control is not None and control.should_pause("optimizer_iterations", iteration):
+            phase = "training"
+            reason = "checkpoint_pause"
+            paused = True
+            checkpoint("pause")
+            break
+        checkpoint("periodic")
+    else:
+        phase = "training_done"
+        reason = reason if reason != "checkpoint_pause" else "max_steps"
+        checkpoint("phase")
 
     state, probabilities = state_at_angles(cuts, best_theta, layers, dtype)
     return {
@@ -193,7 +273,10 @@ def train_statevector(
         ),
         "evaluations": evaluations,
         "shots": shots,
-        "optimizer_steps": len(history),
+        "optimizer_steps": optimizer_steps,
         "reason": reason,
+        "paused": paused,
+        "phase": phase,
+        "state_record": make_state(),
         "initial_angles": np.asarray(initial_angles, dtype=float).copy(),
     }
