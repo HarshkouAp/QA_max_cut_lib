@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+from .._version import __version__
+
 
 def load_json(path):
     """Read a JSON configuration from a UTF-8 file."""
@@ -25,6 +27,6 @@ class SolverFactory:
         types = {"exact_cpu": ExactCPU, "qaoa_cpu": QAOACPU}
         if config.get("type") not in types:
             raise ValueError(
-                f"Solver {config.get('type')!r} is not implemented in 0.1.0a1. Available: {tuple(types)}"
+                f"Solver {config.get('type')!r} is not implemented in {__version__}. Available: {tuple(types)}"
             )
         return types[config["type"]](config)

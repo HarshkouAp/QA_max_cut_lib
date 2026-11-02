@@ -1,8 +1,8 @@
-QA_max_cut_lib 0.1.0a1
+QA_max_cut_lib 0.1.0a2
 ========================
 
-Первый рабочий CPU-этап научной библиотеки взвешенного Max-Cut.
-Реализованы ExactCPU и QAOACPU, общий результат и инструменты.
+Второй CPU-этап научной библиотеки взвешенного Max-Cut.
+Реализованы ExactCPU, QAOACPU и точное ядро парных редукций Max-Cut → Изинг.
 Полный перенос архива продолжается; отсутствующие алгоритмы перечислены
 в :download:`статусе переноса <MIGRATION_STATUS.md>`.
 
@@ -30,8 +30,10 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Карта архитектуры и состояния переноса <ARCHITECTURE_MAP_RU.md>`
 * :download:`Рабочее окружение проекта <PROJECT_SETUP_RU.md>`
 * :download:`Локальная проверка Windows <VALIDATION_LOCAL.md>`
+* :download:`Проверка этапа 02 <VALIDATION_0.1.0a2.md>`
 * :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
 Два выполненных учебных ноутбука находятся в папке notebooks исходного
-проекта. Они используют только реализованный API.
+проекта. Третий ноутбук проверяет ядро редукций. Все они используют только
+реализованный API.

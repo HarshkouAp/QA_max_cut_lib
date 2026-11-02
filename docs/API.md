@@ -1,4 +1,4 @@
-# API версии 0.1.0a1
+# API версии 0.1.0a2
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -7,10 +7,12 @@
 ```python
 from QA_max_cut_lib import (
     WeightedGraph, GraphFactory, SolverFactory, RunRecord, ExactCPU, QAOACPU,
+    GraphReducer, ReductionState, IsingProblem, SpinConstraint,
 )
 from QA_max_cut_lib import tools
 from QA_max_cut_lib.generators import partition
 from QA_max_cut_lib.solvers.objectives import validate_objective, objective_value
+from QA_max_cut_lib._version import __version__
 ```
 
 `SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
@@ -49,6 +51,129 @@ from QA_max_cut_lib.solvers.objectives import validate_objective, objective_valu
 | `copy()` | WeightedGraph | Независимая копия |
 
 Fingerprint учитывает содержимое задачи (метки, пары, веса), а не порядок вставки. Порядок отдельно фиксируется в `node_order`; его необходимо учитывать при интерпретации состояний и корреляций.
+
+## Редукция Max-Cut и Изинга
+
+Ядро не выбирает корреляции и пару. Оно принимает явное ограничение
+`s_removed = sign * s_retained` и выполняет точное алгебраическое
+преобразование. Исходный `WeightedGraph` не изменяется.
+
+```python
+from QA_max_cut_lib import GraphReducer, IsingProblem
+
+reducer = GraphReducer()
+state = reducer.start(graph)
+event = reducer.reduce(state, removed=10, retained=30, sign=-1,
+                       correlation=-0.6)
+solution = reducer.restore(state, {30: 1, 80: -1, 101: 1})
+snapshot = reducer.snapshot(state)
+restored_state = reducer.from_snapshot(snapshot)
+```
+
+`GraphReducer` не хранит состояние. Все изменяемые данные находятся в
+`ReductionState`. Один объект `ReductionState` описывает один рабочий процесс.
+Для независимых процессов нужны разные состояния.
+
+### IsingProblem
+
+Сигнатура: `IsingProblem(constant=0.0, fields=None, couplings=None, nodes=())`.
+
+| Аргумент/атрибут | Тип | Смысл |
+|---|---|---|
+| `constant` | float | Полная константа `c`; не сдвиг Max-Cut |
+| `fields` | mapping int → float | Локальные поля `h_i`; отсутствующее поле равно 0 |
+| `couplings` | mapping (int,int) → float | Пары `J_ij`, каждая неориентированная пара один раз |
+| `nodes` | iterable int | Все вершины, включая изолированные; порядок сохраняется |
+| `.nodes` | tuple[int] | Порядок вершин |
+| `.fields` | dict[int,float] | Только ненулевые поля |
+| `.couplings` | dict[(int,int),float] | Только ненулевые пары |
+| `.edge_count` | int | Число ненулевых пар |
+| `.sum_abs_couplings` | float | Сумма модулей ненулевых пар |
+| `.energy(solution)` | float | Прямая сумма полинома для полного назначения |
+
+`IsingProblem.from_maxcut(graph)` задаёт `J_ij=w_ij/2`, `h_i=0`,
+`c=-Σw/2`. `to_weighted_graph()` возвращает граф `w=2J` только при нулевых
+полях; иначе `ValueError`. Нулевые пары не хранятся. Малые ненулевые пары
+сохраняются без скрытого порога.
+
+### SpinConstraint
+
+`SpinConstraint(removed, retained, sign)` — неизменяемая запись ограничения.
+`sign` принимает только целые `+1` или `-1`. `removed` и `retained` — исходные
+целые номера, не равные друг другу.
+
+### ReductionState
+
+| Атрибут/метод | Смысл |
+|---|---|
+| `.original_nodes` | Все исходные номера в порядке вставки |
+| `.original_graph` | Независимая копия исходного графа для Max-Cut |
+| `.original_ising` | Независимая копия исходной задачи для общего Изинга |
+| `.ising` | Текущая рабочая задача; рассматривать как read-only |
+| `.current_nodes` | Текущие номера |
+| `.constraints` | Ограничения в порядке применения |
+| `.trace` | События редукций в порядке применения |
+| `.cut_offset` | Накопленный `b_t`; `None` для общего Изинга |
+| `.version` | Число применённых редукций |
+| `.current_graph()` | Текущий граф `w=2J` для Max-Cut-состояния |
+| `.current_cut_value(residual)` | `b_t + C_current(residual)` |
+| `.original_cut_value(solution)` | `C` на исходном графе |
+| `.original_energy(solution)` | `E=-C` или исходный полином Изинга |
+| `.current_energy(residual)` | Текущий полином Изинга |
+| `.apply_pair(...)` | Применить одну редукцию и вернуть событие |
+| `.restore(residual)` | Восстановить все исходные спины в обратном порядке |
+| `.snapshot()` | JSON-совместимый снимок математического состояния |
+| `ReductionState.from_snapshot(data)` | Восстановить состояние |
+
+`GraphReducer.start(graph)` и `start_from_ising(problem)` создают состояние.
+`GraphReducer.reduce(state, ...)` делегирует `apply_pair`.
+`GraphReducer.restore(state, residual)` делегирует восстановление.
+`GraphReducer.snapshot/from_snapshot` сохраняют и читают состояние.
+
+### Событие редукции
+
+Каждый вызов `reduce` добавляет одно событие в `state.trace`.
+
+| Поле | Значение |
+|---|---|
+| `step`, `task_version_before/after` | Номер шага и версии рабочей задачи |
+| `removed_node`, `retained_node`, `sign` | Исходные номера и ограничение |
+| `selected_coupling` | `J_uv` до преобразования |
+| `selected_weight` | `w_uv=2J_uv` для Max-Cut-происхождения; иначе `None` |
+| `physical_correlation`, `correlation_reason` | Переданный `c_uv` или причина отсутствия |
+| `selection_score`, `selection_score_reason` | Отдельная оценка выбора, не корреляция |
+| `fixed_energy` | `-w_uv(1-sign)/2` для Max-Cut |
+| `expected_fixed_energy` | `-w_uv(1-c_uv)/2`, если есть корреляция |
+| `constraint_probability` | `(1+sign*c_uv)/2`, если есть корреляция |
+| `cut_offset`, `cut_offset_delta` | `b_t` и `Δb` |
+| `ising_constant`, `ising_constant_before`, `ising_constant_delta` | Полная константа Изинга |
+| `vertices_after`, `edges_after` | Структура после шага; рёбра — ненулевые пары |
+| `sum_abs_weight`, `mean_abs_weight` | Область ненулевых рёбер после шага |
+| `sum_abs_coupling`, `mean_abs_coupling` | То же для `J` |
+| `mean_abs_weight_reason` | Причина `None` для пустой области |
+| `maxcut_metrics_applicable`, `maxcut_metrics_reason` | Применимость графовых метрик |
+
+Для общего Изинга с ненулевыми полями `selected_weight`, `fixed_energy`,
+`cut_offset` и `mean_abs_weight` равны `None` с причиной
+`maxcut_metrics_reason`. Поля сохраняются в рабочей задаче и учитываются в
+`ising_constant` и `.current_energy`.
+
+### Снимок состояния
+
+Снимок содержит `schema_version=1`, `state_type="reduction_state"`,
+`energy_convention`, `version`, `maxcut_origin`, `original_nodes`,
+`original_graph`, `original_ising`, `ising`, `cut_offset`, `constraints` и
+`trace`. Он JSON-совместим, но не является checkpoint/resume оптимизатора.
+После `json.dumps`/`json.loads` снимок продолжает принимать редукции и
+восстанавливать решение.
+
+### Ошибки редукции
+
+`TypeError` — номер не целый, вес не действительный, передан bool.
+`ValueError` — самопара, отсутствующая или повторно удалённая вершина,
+`sign` не ±1, корреляция вне `[-1,1]`, неполный остаток.
+`ArithmeticError` — новая константа, поле или пара не конечны. Ошибочный
+запрос не изменяет состояние.
 
 ## Generators
 

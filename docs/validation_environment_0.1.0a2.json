@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-02",
+  "package_version": "0.1.0a2",
+  "stage": "02: exact pair-reduction core",
+  "python": "3.12.14",
+  "platform": "Windows-10-10.0.19043-SP0",
+  "virtual_environment": ".venv-stage02",
+  "cpu_physical": 4,
+  "cpu_logical": 8,
+  "ram_gb": 15.7,
+  "versions": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pandas": "3.1.0",
+    "matplotlib": "3.11.2",
+    "seaborn": "0.13.2",
+    "plotly": "7.1.0",
+    "networkx": "3.7",
+    "cvxpy": "1.9.3",
+    "scs": "3.3.1",
+    "pytest": "9.2.0",
+    "sphinx": "9.1.1",
+    "numpydoc": "1.11.0",
+    "nbformat": "5.11.1",
+    "nbclient": "0.11.0",
+    "ipykernel": "7.4.0"
+  },
+  "automated_tests": {
+    "passed": 56,
+    "failed": 0,
+    "runtime": "editable source in .venv-stage02"
+  },
+  "notebooks": [
+    {
+      "notebook": "01_quickstart.ipynb",
+      "code_cells": 8,
+      "images": 5,
+      "errors": 0,
+      "execution": "clean qa-stage02 kernel"
+    },
+    {
+      "notebook": "02_current_api_guide.ipynb",
+      "code_cells": 14,
+      "images": 6,
+      "errors": 0,
+      "execution": "clean qa-stage02 kernel"
+    },
+    {
+      "notebook": "03_reduction_core.ipynb",
+      "code_cells": 8,
+      "images": 0,
+      "errors": 0,
+      "execution": "clean qa-stage02 kernel"
+    }
+  ],
+  "wheel_check": {
+    "environment": ".venv-wheelcheck",
+    "source_import": false,
+    "import_from_site_packages": true,
+    "version": "0.1.0a2",
+    "reduction_example": "passed",
+    "exact_and_qaoa": "passed",
+    "save_and_load": "passed"
+  },
+  "sphinx": {
+    "command": "sphinx -W -b html docs docs/_build/html",
+    "warnings_as_errors": true,
+    "result": "passed"
+  },
+  "gpu": {
+    "used_in_stage": false,
+    "separate_environment": ".venv",
+    "cupy": "14.2.0",
+    "cuda_runtime": "13.0",
+    "raw_kernel": "passed earlier"
+  },
+  "limitations": [
+    "GPU solvers not implemented",
+    "num_treads > 1 rejected",
+    "checkpoint/resume optimizer not implemented",
+    "RQAOA and LS-RQAOA not implemented",
+    "notebooks use MathText; real LaTeX not part of stage acceptance",
+    "ASD-STE100 not formally certified"
+  ]
+}

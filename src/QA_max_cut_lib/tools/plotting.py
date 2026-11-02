@@ -6,6 +6,7 @@ import io
 import json
 import textwrap
 import numpy as np
+from .._version import __version__
 from ..core.graph import WeightedGraph
 from ..core.records import RunRecord, resolve_record
 from ..core.saving import publish_files, _result_payloads, utc_now
@@ -92,7 +93,7 @@ def _finish(fig, config, source, kind, plot_data=None):
         {
             "schema_version": 1,
             "algorithm_type": kind,
-            "package_version": "0.1.0a1",
+            "package_version": __version__,
             "status": "completed",
             "finished_at": utc_now(),
             "config": deepcopy(config),

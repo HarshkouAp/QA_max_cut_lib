@@ -4,6 +4,7 @@ from copy import deepcopy
 from time import perf_counter
 from uuid import uuid4
 import numpy as np
+from .._version import __version__
 from ..core.records import RunRecord
 from ..core.saving import utc_now, save_result
 from ..solvers.qaoa_cpu import cut_diagonal, state_at_angles
@@ -68,7 +69,7 @@ def scan_landscape(graph, config):
         {
             "schema_version": 1,
             "algorithm_type": "landscape_scanner_cpu",
-            "package_version": "0.1.0a1",
+            "package_version": __version__,
             "run_id": str(uuid4()),
             "status": "completed",
             "termination_reason": "grid_complete",

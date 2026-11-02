@@ -4,6 +4,7 @@ from copy import deepcopy
 from time import perf_counter
 from uuid import uuid4
 import numpy as np
+from .._version import __version__
 from ..core.graph import WeightedGraph
 from ..core.records import RunRecord
 from ..core.saving import save_result, utc_now
@@ -74,7 +75,7 @@ class BaseSolver:
             raise ValueError("Unsupported configuration schema.")
         if self._config.get("checkpoint", {}).get("enabled", False):
             raise ValueError(
-                "Checkpoint/resume is planned, not implemented in milestone 0.1.0a1."
+                f"Checkpoint/resume is planned, not implemented in {__version__}."
             )
         self._last_run = None
         self._active = False
@@ -168,7 +169,7 @@ class BaseSolver:
             fields.update(
                 schema_version=1,
                 algorithm_type=self.algorithm_type,
-                package_version="0.1.0a1",
+                package_version=__version__,
                 run_id=str(uuid4()),
                 config=config,
                 graph=snapshot.snapshot(),
@@ -201,7 +202,7 @@ class BaseSolver:
                 {
                     "schema_version": 1,
                     "algorithm_type": self.algorithm_type,
-                    "package_version": "0.1.0a1",
+                    "package_version": __version__,
                     "run_id": str(uuid4()),
                     "status": "failed",
                     "termination_reason": type(error).__name__,

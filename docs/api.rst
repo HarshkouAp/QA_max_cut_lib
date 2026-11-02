@@ -41,6 +41,21 @@
 
 .. autofunction:: QA_max_cut_lib.solvers.qaoa_cpu.state_at_angles
 
+Редукции
+--------
+
+.. autoclass:: QA_max_cut_lib.core.reduction.IsingProblem
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.SpinConstraint
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.ReductionState
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.GraphReducer
+   :members:
+
 Инструменты
 -----------
 
