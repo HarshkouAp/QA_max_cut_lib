@@ -23,6 +23,27 @@ CAPABILITIES = {
         "phases": ["training", "training_done", "readout_done"],
         "notes": "CPU full-state warm-start codec; source preparation is frozen in the checkpoint.",
     },
+    "laboratory.conditional_qaoa_cpu": {
+        "supports_checkpoint": False,
+        "boundaries": [],
+        "state": "not implemented",
+        "phases": [],
+        "notes": "Conditional local problem and external reference are not yet in a versioned codec; no resume is claimed.",
+    },
+    "laboratory.environment_ls_rqaoa_cpu": {
+        "supports_checkpoint": False,
+        "boundaries": [],
+        "state": "not implemented",
+        "phases": [],
+        "notes": "Parent/environment epochs and conditional child tasks need a task codec; no resume is claimed.",
+    },
+    "laboratory.warm_start_rqaoa_cpu": {
+        "supports_checkpoint": False,
+        "boundaries": [],
+        "state": "not implemented",
+        "phases": [],
+        "notes": "Ensemble child aggregation and warm-start source are not yet in a versioned codec.",
+    },
     "qaoa_gpu": {
         "supports_checkpoint": False,
         "boundaries": [],
