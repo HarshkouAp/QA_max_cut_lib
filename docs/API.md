@@ -1,4 +1,4 @@
-# API версии 0.1.0a11
+# API версии 0.1.0a12
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -765,3 +765,24 @@ python -m QA_max_cut_lib.laboratory show --id warm_start_product_qaoa_cpu_v1
 ```
 
 `list/show` не требуют CuPy/CVXPY. Полный обзор — `LABORATORY_RU.md`.
+
+
+## Warm-start ensemble RQAOA
+
+`WarmStartRQAOACPU` (`type="laboratory.warm_start_rqaoa_cpu"`) использует
+`correlation_source.type="warm_start_ensemble_cpu"`. Source принимает
+`candidate_source` `gw_rounds_cpu` или `provided_by_graph`, дискретные
+старты, `warm_start`, objective/estimation/optimizer/initialization и
+`correlations` с `aggregation="uniform_components"`.
+
+```python
+from QA_max_cut_lib.laboratory import WarmStartRQAOACPU
+solver = WarmStartRQAOACPU(config)
+solution = solver.solve(graph)
+print(solver.warm_start_history)
+```
+
+Результат дополнительно содержит `warm_start_history`, `variant_id`,
+`aggregate_statevector=None` и статус `not_applicable_statistical_mixture`.
+`source_cost` classical preprocessing находится в `resources.source_cost`.
+Checkpoint/resume для этой сборки в a12 не заявлен.

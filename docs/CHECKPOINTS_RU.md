@@ -37,6 +37,7 @@ CUDA-контекст.
 |---|---|---|
 | `QAOACPU` / `qaoa_cpu` | completed ADAM iteration, `training_done`, `readout_done` | реализован |
 | `WarmStartQAOACPU` / `laboratory.warm_start_qaoa_cpu` | те же границы; frozen source/q/mixer | реализован |
+| `WarmStartRQAOACPU` / `laboratory.warm_start_rqaoa_cpu` | multi-start parent/child state и source receipts | не реализован в a12 |
 | `QAOAGPU` / `qaoa_gpu` | требуется переносимый CuPy sampler protocol | отклоняется |
 | `RQAOACPU`, `RQAOAGPU` | source/reduction codec | отклоняется |
 | `LSRQAOACPU`, `LSRQAOAGPU` | parent/child task codec | отклоняется |

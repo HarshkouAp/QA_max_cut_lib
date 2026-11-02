@@ -36,6 +36,8 @@ def __getattr__(name):
         "AnalyticP1Evaluator": ".analytic_p1",
         "AnalyticP1CorrelationSource": ".analytic_p1",
         "WarmStartQAOACPU": ".warm_start_qaoa_cpu",
+        "WarmStartRQAOACPU": ".warm_start_rqaoa_cpu",
+        "WarmStartEnsembleCorrelationSource": ".warm_start_ensemble",
     }
     if name not in modules:
         raise AttributeError(name)

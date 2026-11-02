@@ -1,4 +1,4 @@
-# Статус 0.1.0a11
+# Статус 0.1.0a12
 
 Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
 ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
@@ -20,7 +20,7 @@ ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бе�
 | GPU | `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`; CuPy 14.2.0, RTX 3050 Laptop CC 8.6, 4 GiB; CPU-импорт без CUDA | RTX 5060/V100 и другие карты требуют отдельной проверки; multi-GPU |
 | Generators | Complete, G(n,m), G(n,p), три генератора весов, индуцированные подграфы, случайное разбиение, `random_partition`, `greedy_abs_weight_partition` | Исследовательские генераторы и стратегии подграфов из архива |
 | Tools | Корреляции, качество, статические графики, карта p=1, веса/энергия редукций, покрытие LS, траектории `binomial(2p,2)`, иерархические overview/3D/tree, GW/SA/refinement, coverage/quality серий, parallelism-панели и автономный HTML | Гистограммы больших распределений, интерактивный профиль |
-| Laboratory | 89 file records и variant cards; `WarmStartQAOACPU` CPU full-state; source aliases/deferred backlog; `laboratory list/show` | Warm-start RQAOA, LS/MK-семейства, поля/окружение, MI-стратегии |
+| Laboratory | 89 file records и 7 variant cards; два CPU-переноса: `WarmStartQAOACPU` и `WarmStartRQAOACPU` ensemble; source aliases/deferred backlog; `laboratory list/show` | Warm-start RQAOA resume, LS/MK-семейства, поля/окружение, MI-стратегии |
 | Серии | `BenchmarkSpec`, стабильные graph/case/trial ID, полный product, rejected records, isolated/concurrent runner, exact/GW/best-known references, write-once records | Checkpoint/resume, распределённые кампании |
 | Параллелизм | `LSRQAOACPU` и `QAOAInQAOACPU`; общий `ParallelismProfiler` с 1/2/4, warmups/repetitions, work counters, Amdahl/Karp–Flatt, paired bootstrap и global recommendation | Concurrent profile на одном GPU, более сложные scheduler policies |
 | Бюджеты | Строгий общий бюджет QAOA/RQAOA/LS; резерв корреляций шага и round-robin квоты | Иерархия бюджетов QAOA-in-QAOA |

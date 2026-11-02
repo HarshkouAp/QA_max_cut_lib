@@ -180,3 +180,12 @@ warm-start всегда лучше base/GW/SA. Exact reference считаетс�
 - Нет автоматического выбора источника по всем GW rounding.
 - Нет обещания улучшения качества; endpoint-инварианты не являются
   доказательством качества конечного ADAM.
+
+## 11. Warm-start ensemble RQAOA (a12)
+
+Добавлена карточка `warm_start_ensemble_rqaoa_cpu_v1` и публичный
+`WarmStartRQAOACPU` (`type=laboratory.warm_start_rqaoa_cpu`). Это
+component-recomposition исторического `Solvers/WS_RQAOA.py`, а не
+побитовое воспроизведение legacy trajectory. Подробности, source
+`gw_rounds_cpu`/`provided_by_graph`, смесь корреляций и ограничения — в
+`WARM_START_RQAOA_RU.md`.

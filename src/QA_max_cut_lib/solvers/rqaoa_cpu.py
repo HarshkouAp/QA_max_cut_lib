@@ -200,6 +200,12 @@ class RQAOACPU(BaseSolver):
             source = QAOAGPUCorrelationSource(
                 config["correlation_source"], seed=config.get("seed")
             )
+        elif config["correlation_source"]["type"] == "warm_start_ensemble_cpu":
+            from .warm_start_ensemble import WarmStartEnsembleCorrelationSource
+
+            source = WarmStartEnsembleCorrelationSource(
+                config["correlation_source"], seed=config.get("seed")
+            )
         else:
             raise ValueError("Unknown correlation source type.")
         selector = self._injected_selector or MaxAbsCorrelationSelector(
@@ -228,6 +234,7 @@ class RQAOACPU(BaseSolver):
         parameter_trajectory = []
         local_optimizer_history = []
         correlation_tables = []
+        source_records = []
         status = "completed"
         termination_reason = "completed"
         solution_source = None
@@ -320,6 +327,7 @@ class RQAOACPU(BaseSolver):
                 classical_seconds += float(
                     source_resources.get("classical_seconds", 0.0)
                 )
+                source_records.append(deepcopy(correlations.training))
                 if collect["local_optimizer_history"]:
                     local_optimizer_history.append(
                         {
@@ -479,6 +487,7 @@ class RQAOACPU(BaseSolver):
             "correlation_tables": (
                 correlation_tables if collect["correlation_tables"] else None
             ),
+            "source_records": source_records,
             "final_reduction_state": (
                 state.snapshot() if collect["final_reduction_state"] else None
             ),

@@ -45,6 +45,10 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.warm_start_qaoa_cpu.WarmStartQAOACPU
 
+.. autoclass:: QA_max_cut_lib.solvers.warm_start_rqaoa_cpu.WarmStartRQAOACPU
+
+.. autoclass:: QA_max_cut_lib.solvers.warm_start_ensemble.WarmStartEnsembleCorrelationSource
+
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
 

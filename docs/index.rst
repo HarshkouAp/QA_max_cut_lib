@@ -1,10 +1,10 @@
-QA_max_cut_lib 0.1.0a11
+QA_max_cut_lib 0.1.0a12
 ========================
 
-Одиннадцатый этап научной библиотеки взвешенного Max-Cut.
+Двенадцатый этап научной библиотеки взвешенного Max-Cut.
 Реализованы CPU-солверы, RQAOA, LS-RQAOA, NVIDIA GPU QAOA, QAOA-in-QAOA,
 GW/SA, точное улучшение блоков, ExperimentRunner, ParallelismProfiler и
-checkpoint/resume `QAOACPU`, Laboratory-каталог и warm-start CPU.
+checkpoint/resume `QAOACPU`, Laboratory-каталог и warm-start CPU и warm-start RQAOA.
 Полный перенос архива продолжается; отсутствующие алгоритмы перечислены
 в :download:`статусе переноса <MIGRATION_STATUS.md>`.
 
@@ -42,6 +42,8 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка этапа 09 <VALIDATION_0.1.0a9.md>`
 * :download:`Проверка этапа 10 <VALIDATION_0.1.0a10.md>`
 * :download:`Проверка этапа 11 <VALIDATION_0.1.0a11.md>`
+* :download:`Проверка этапа 12 <VALIDATION_0.1.0a12.md>`
+* :download:`Warm-start RQAOA <WARM_START_RQAOA_RU.md>`
 * :download:`Laboratory: каталог и warm-start <LABORATORY_RU.md>`
 * :download:`Контрольные точки и resume <CHECKPOINTS_RU.md>`
 * :download:`Серии экспериментов и профилирование <EXPERIMENTS_RU.md>`
@@ -49,9 +51,9 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
-Двенадцать выполненных учебных ноутбуков находятся в папке notebooks исходного
+Тринадцать выполненных учебных ноутбуков находятся в папке notebooks исходного
 проекта. Третий ноутбук проверяет ядро редукций, четвёртый — RQAOA на CPU,
 пятый — аналитический p=1, шестой — LS-RQAOA, седьмой — NVIDIA GPU QAOA,
 восьмой — QAOA-in-QAOA, девятый — GW/SA и refinement, десятый — серии,
-эталоны и профилирование параллелизма, одиннадцатый — checkpoint/resume, двенадцатый — Laboratory-каталог и warm-start.
+эталоны и профилирование параллелизма, одиннадцатый — checkpoint/resume, двенадцатый — Laboratory-каталог и warm-start, тринадцатый — warm-start RQAOA ensemble.
 Все они используют только реализованный API.

@@ -116,7 +116,7 @@ class GoemansWilliamsonCPU(BaseSolver):
             if not np.isfinite(value) or value <= 0:
                 raise ValueError("sdp_time_limit must be finite and positive.")
         collect = config.setdefault("collect", {})
-        allowed_collect = {"candidate_history", "sdp_matrix", "sdp_factor"}
+        allowed_collect = {"candidate_history", "sdp_matrix", "sdp_factor", "roundings"}
         if set(collect) - allowed_collect:
             raise ValueError("Unknown GW collect field.")
         for key in allowed_collect:
@@ -141,6 +141,7 @@ class GoemansWilliamsonCPU(BaseSolver):
         best_cut = 0.0
         chosen_origin = "all_plus_incumbent"
         candidates = [] if config["collect"]["candidate_history"] else None
+        roundings = [] if config["collect"].get("roundings") else None
         sdp_matrix = None
         sdp_factor = None
         if n == 0:
@@ -170,7 +171,8 @@ class GoemansWilliamsonCPU(BaseSolver):
                     "num_treads": 1,
                     "solve_seconds": perf_counter() - started,
                 },
-                "data_status": {"sdp_matrix": "not_applicable", "sdp_factor": "not_applicable"},
+                "candidate_roundings": [],
+                "data_status": {"sdp_matrix": "not_applicable", "sdp_factor": "not_applicable", "roundings": "not_applicable"},
             }
         try:
             import cvxpy as cp
@@ -275,15 +277,23 @@ class GoemansWilliamsonCPU(BaseSolver):
                 best = spins
                 best_cut = candidate_cut
                 chosen_origin = origin
+            candidate_record = {
+                "trial_id": trial,
+                "origin": origin,
+                "cut_value": float(candidate_cut),
+                "running_best": float(best_cut),
+                "selected": bool(selected),
+                "num_positive_projection": int(np.count_nonzero(projection >= 0.0)),
+            }
             if candidates is not None:
-                candidates.append(
+                candidates.append(candidate_record)
+            if roundings is not None:
+                roundings.append(
                     {
-                        "trial_id": trial,
-                        "origin": origin,
+                        "round_id": f"round:{trial}",
+                        "source_id": f"gw_round:{trial}",
+                        "solution": {int(node): int(spin) for node, spin in spins.items()},
                         "cut_value": float(candidate_cut),
-                        "running_best": float(best_cut),
-                        "selected": bool(selected),
-                        "num_positive_projection": int(np.count_nonzero(projection >= 0.0)),
                     }
                 )
         log_message(config, "GW SDP and hyperplane rounding completed.", detail=False)
@@ -318,6 +328,7 @@ class GoemansWilliamsonCPU(BaseSolver):
                 "row_norm_max": float(np.max(norms)),
             },
             "candidate_history": candidates,
+            "candidate_roundings": roundings,
             "sdp_matrix": sdp_matrix,
             "sdp_factor": sdp_factor,
             "resources": {
@@ -331,6 +342,7 @@ class GoemansWilliamsonCPU(BaseSolver):
             "data_status": {
                 "sdp_matrix": "collected" if sdp_matrix is not None else "not_collected",
                 "sdp_factor": "collected" if sdp_factor is not None else "not_collected",
+                "roundings": "collected" if roundings is not None else "not_collected",
             },
         }
 

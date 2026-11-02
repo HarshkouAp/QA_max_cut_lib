@@ -25,6 +25,10 @@ def __getattr__(name):
         from .warm_start_qaoa_cpu import WarmStartQAOACPU
         globals()[name] = WarmStartQAOACPU
         return WarmStartQAOACPU
+    if name == "WarmStartRQAOACPU":
+        from .warm_start_rqaoa_cpu import WarmStartRQAOACPU
+        globals()[name] = WarmStartRQAOACPU
+        return WarmStartRQAOACPU
     raise AttributeError(name)
 
 
@@ -33,6 +37,7 @@ __all__ = [
     "UnknownVariant",
     "UnavailableVariant",
     "WarmStartQAOACPU",
+    "WarmStartRQAOACPU",
     "IMPLEMENTED_VARIANTS",
     "catalog_summary",
     "get_file",

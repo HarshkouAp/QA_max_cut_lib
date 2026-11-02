@@ -193,6 +193,10 @@ def validate_correlation_source_config(config):
         from .qaoa_gpu import validate_gpu_source_config
 
         return validate_gpu_source_config(config)
+    if config.get("type") == "warm_start_ensemble_cpu":
+        from .warm_start_ensemble import validate_warm_ensemble_source_config
+
+        return validate_warm_ensemble_source_config(config)
     allowed = {
         "type",
         "parameters",

@@ -56,6 +56,61 @@
     },
     {
       "schema_version": 1,
+      "variant_id": "warm_start_ensemble_rqaoa_cpu_v1",
+      "display_name": "Warm-start ensemble RQAOA (CPU, full state)",
+      "family": "warm_start_rqaoa",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Solvers/WS_RQAOA.py",
+          "sha256": "e02a7beb0c39807eb382dae5a0f8ea4cd47bd8c9b015625282dcbff9f3c9f4b9",
+          "role": "historical_recursive_source"
+        },
+        {
+          "path": "Solvers/WS_QAOA.py",
+          "sha256": "7beaba04c7f37e9bcc0393273c4ff8ec2f292ed27ecf295aae14d78497a5c2e5",
+          "role": "historical_warm_ansatz_source"
+        }
+      ],
+      "role": "standalone_solver",
+      "algorithm_signature": {
+        "initial_state": "ensemble_of_clipped_product_states",
+        "candidate_source": [
+          "gw_rounds_cpu",
+          "provided_by_graph"
+        ],
+        "mixer_options": [
+          "warm_aligned",
+          "rounded_modified",
+          "x"
+        ],
+        "aggregation": "uniform_components",
+        "controller": "shared_recursive_rqaoa",
+        "bit_order": "little_endian_node_order"
+      },
+      "status": {
+        "source_review": "partially_reviewed",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_supported"
+      },
+      "historical_relation": "component_recomposition",
+      "declared_differences": [
+        "explicit_node_index_and_spin_bit_mapping",
+        "shared_adam_instead_of_legacy_layerwise_lbfgsb",
+        "bounded_gw_rounding_batch_and_global_flip_dedup",
+        "multiple_independent_warm_children_with_equal_weights",
+        "graph_reducer_and_exact_finisher_contract",
+        "one_root_shot_budget_instead_of_per_child_limits"
+      ],
+      "backlog": [
+        "Resume codec is not claimed in a12."
+      ]
+    },
+    {
+      "schema_version": 1,
       "variant_id": "legacy_ls_rqaoa_fast_alias",
       "display_name": "Legacy fast LS-RQAOA alias pair (source only)",
       "family": "laboratory_ls_rqaoa",
@@ -271,7 +326,8 @@
     }
   ],
   "implemented_variant_ids": [
-    "warm_start_product_qaoa_cpu_v1"
+    "warm_start_product_qaoa_cpu_v1",
+    "warm_start_ensemble_rqaoa_cpu_v1"
   ],
   "deferred_variant_ids": [
     "legacy_ls_rqaoa_fast_alias",
@@ -358,7 +414,7 @@
     "Solvers/QAOA_GPU.py": "deferred_environment_and_generators",
     "Solvers/RQAOA.py": "deferred_environment_and_generators",
     "Solvers/WS_QAOA.py": "deferred_environment_and_generators",
-    "Solvers/WS_RQAOA.py": "warm_start_rqaoa",
+    "Solvers/WS_RQAOA.py": "warm_start_ensemble_rqaoa_cpu_v1",
     "Tools/Densest_sub.py": "deferred_environment_and_generators",
     "Tools/Graph_part_interception.py": "deferred_environment_and_generators",
     "Tools/Graph_partition.py": "deferred_environment_and_generators",

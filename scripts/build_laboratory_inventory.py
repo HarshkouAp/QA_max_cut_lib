@@ -88,7 +88,7 @@ def variant_for(rel: str) -> str:
     if rel in ("Diplom/Mk_5.py", "Laboratory/LS_RQAOA_fast_5.py"):
         return "legacy_ls_rqaoa_fast_alias"
     if rel.startswith("Solvers/WS_RQAOA"):
-        return "warm_start_rqaoa"
+        return "warm_start_ensemble_rqaoa_cpu_v1"
     if rel.startswith("Tools/MI_"):
         return "mutual_information_diagnostics"
     if rel.startswith("Laboratory/"):

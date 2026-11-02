@@ -3407,7 +3407,7 @@
         }
       ],
       "role": "legacy_solver_source",
-      "variant_id": "warm_start_rqaoa",
+      "variant_id": "warm_start_ensemble_rqaoa_cpu_v1",
       "review_status": "inventoried",
       "runtime_status": "not_run",
       "note": "Catalogued from source text; scientific audit deferred."

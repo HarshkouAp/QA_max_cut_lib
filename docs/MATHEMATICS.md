@@ -532,3 +532,29 @@ basis state с фазой; это не относится к `x`.
 Source cut и `E[C]` product state — разные величины:
 `source_cut=C(s_seed)`, `initial_expected_cut=C^T P0`. Полный бюджет
 p=1, max_steps=3, M_train=32, M_readout=64 равен 544 shots.
+
+## 12. Warm-start RQAOA ensemble (0.1.0a12)
+
+На каждом текущем графе `G_t` выбирается конечный batch округлений или
+явных назначений. После global-flip dedup уникальные старты сортируются по
+`C_t`; multiplicity не меняет вес. Для `K_t` детей:
+
+```
+P_bar(b) = 1/K_t sum_l |<b|psi_l>|^2
+c_bar_uv = 1/K_t sum_l <Z_u Z_v>_l
+```
+
+Это статистическая смесь; `rho_t` не материализуется, общего чистого
+statevector нет. Физические корреляции смешиваются до выбора пары.
+Один reducer применяет `s_u = sigma s_v`; для `b_t`:
+
+```
+Delta b = (1-sigma)/2 * sum_{k in N(u)} w_uk
+E_original = -b_t - C_t
+```
+
+Для бюджета `R_corr=K_t M_corr`, `a=(4p+1)M_train`: training quotas
+распределяются round-robin в canonical child order; `K_t` не уменьшается
+из-за нехватки training-ресурса. Control A: A=(+,+,−,+), B=(+,−,+,+),
+U=2, A имеет multiplicity 3; средние c дают (30,80) с sigma=-1, b=8,
+C=8, E_Ising=-7.5.
