@@ -18,7 +18,6 @@ INCLUDE_EXTRA = [
     "dist/qa_max_cut_lib-0.1.0a16-py3-none-any.whl",
     "dist/qa_max_cut_lib-0.1.0a16.tar.gz",
     "dist/SHA256SUMS.txt",
-    "docs/notebook_previews/17_mutual_information_diagnostics.html",
 ]
 
 
