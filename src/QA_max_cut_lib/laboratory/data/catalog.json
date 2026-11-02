@@ -378,12 +378,136 @@
         "gpu_field_backend",
         "field_analytic_p1"
       ]
+    },
+    {
+      "schema_version": 1,
+      "family": "block_mean_field",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Laboratory/Distributed_QAOA_CF.py",
+          "sha256": "12149bd5409bd36872359d18f84b65123b848c4bfd3a61ecc5fa83571fc3097c",
+          "role": "distributed_controller_review"
+        },
+        {
+          "path": "Laboratory/DistQAOA.py",
+          "sha256": "58d2842062434ceeabf46150a8b394fbd0e1aceebac707825a7beb1dd1e88b2c",
+          "role": "jacobi_message_bank_review"
+        },
+        {
+          "path": "Laboratory/QAOA_F_M_D.py",
+          "sha256": "f949d03758809cdf810584862ca87901aeea0686d81c9837d8a12533d904322d",
+          "role": "mean_field_local_update_review"
+        }
+      ],
+      "role": "iterative_block_cpu_solver",
+      "algorithm_signature": {
+        "initial_state": "equal_superposition_per_local_block",
+        "cost_convention": "energy_equals_negative_affected_cut",
+        "messages": "first_moments_and_internal_zz",
+        "parameter_order": "gammas_then_betas",
+        "bit_order": "little_endian_block_order",
+        "update": "angle_damping_then_applied_angle_moments",
+        "damping": "single_lambda_for_m_and_q",
+        "rounding": "sign_means",
+        "schedule": "gauss_seidel"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "component_recomposition",
+      "declared_differences": [
+        "explicit_spin_and_mean_types",
+        "checked_field_conventions",
+        "full_local_statevector",
+        "single_shared_adam",
+        "consistent_internal_zz_damping",
+        "no_legacy_half_state_or_layerwise_lbfgsb"
+      ],
+      "backlog": [
+        "checkpoint_resume",
+        "overlapping_blocks",
+        "adaptive_damping",
+        "nonlinear_fields",
+        "gpu_field_backend",
+        "global_readout"
+      ],
+      "variant_id": "block_mean_field_gauss_seidel_cpu_v1",
+      "display_name": "Block mean-field QAOA (CPU, Gauss-Seidel)"
+    },
+    {
+      "schema_version": 1,
+      "family": "block_mean_field",
+      "source_archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+      "source_members": [
+        {
+          "path": "Laboratory/Distributed_QAOA_CF.py",
+          "sha256": "12149bd5409bd36872359d18f84b65123b848c4bfd3a61ecc5fa83571fc3097c",
+          "role": "distributed_controller_review"
+        },
+        {
+          "path": "Laboratory/DistQAOA.py",
+          "sha256": "58d2842062434ceeabf46150a8b394fbd0e1aceebac707825a7beb1dd1e88b2c",
+          "role": "jacobi_message_bank_review"
+        },
+        {
+          "path": "Laboratory/QAOA_F_M_D.py",
+          "sha256": "f949d03758809cdf810584862ca87901aeea0686d81c9837d8a12533d904322d",
+          "role": "mean_field_local_update_review"
+        }
+      ],
+      "role": "iterative_block_cpu_solver",
+      "algorithm_signature": {
+        "initial_state": "equal_superposition_per_local_block",
+        "cost_convention": "energy_equals_negative_affected_cut",
+        "messages": "first_moments_and_internal_zz",
+        "parameter_order": "gammas_then_betas",
+        "bit_order": "little_endian_block_order",
+        "update": "angle_damping_then_applied_angle_moments",
+        "damping": "single_lambda_for_m_and_q",
+        "rounding": "sign_means",
+        "schedule": "jacobi"
+      },
+      "status": {
+        "source_review": "reviewed_subset",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
+        "gpu_validation": "not_supported",
+        "resume_validation": "not_implemented"
+      },
+      "historical_relation": "component_recomposition",
+      "declared_differences": [
+        "explicit_spin_and_mean_types",
+        "checked_field_conventions",
+        "full_local_statevector",
+        "single_shared_adam",
+        "consistent_internal_zz_damping",
+        "no_legacy_half_state_or_layerwise_lbfgsb"
+      ],
+      "backlog": [
+        "checkpoint_resume",
+        "overlapping_blocks",
+        "adaptive_damping",
+        "nonlinear_fields",
+        "gpu_field_backend",
+        "global_readout"
+      ],
+      "variant_id": "block_mean_field_jacobi_cpu_v1",
+      "display_name": "Block mean-field QAOA (CPU, Jacobi)"
     }
   ],
   "implemented_variant_ids": [
     "warm_start_product_qaoa_cpu_v1",
     "warm_start_ensemble_rqaoa_cpu_v1",
-    "conditional_fields_cpu_v1"
+    "conditional_fields_cpu_v1",
+    "block_mean_field_gauss_seidel_cpu_v1",
+    "block_mean_field_jacobi_cpu_v1"
   ],
   "deferred_variant_ids": [
     "legacy_ls_rqaoa_fast_alias",

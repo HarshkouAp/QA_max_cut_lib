@@ -39,6 +39,7 @@ def __getattr__(name):
         "WarmStartRQAOACPU": ".warm_start_rqaoa_cpu",
         "WarmStartEnsembleCorrelationSource": ".warm_start_ensemble",
         "ConditionalQAOACPU": ".conditional_qaoa_cpu",
+        "BlockMeanFieldQAOACPU": ".block_mean_field_qaoa_cpu",
         "EnvironmentLSRQAOACPU": ".environment_ls_rqaoa_cpu",
     }
     if name not in modules:

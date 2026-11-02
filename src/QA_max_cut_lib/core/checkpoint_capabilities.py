@@ -44,6 +44,13 @@ CAPABILITIES = {
         "phases": [],
         "notes": "Ensemble child aggregation and warm-start source are not yet in a versioned codec.",
     },
+    "laboratory.block_mean_field_qaoa_cpu": {
+        "supports_checkpoint": True,
+        "boundaries": ["complete sweep commit"],
+        "state": "graph/partition, current m/q/theta bank, budget, RNG, history and next sweep",
+        "phases": ["initialized", "gauss_seidel_sweep_commit", "jacobi_sweep_commit", "paused"],
+        "notes": "Compact model-bank codec; mid-sweep child checkpoints are not claimed in this codec.",
+    },
     "qaoa_gpu": {
         "supports_checkpoint": False,
         "boundaries": [],

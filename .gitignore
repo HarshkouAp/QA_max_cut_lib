@@ -29,6 +29,7 @@ notebooks/_outputs/
 
 # Local experiment output (save protocol writes here)
 results/
+checkpoints/
 
 # Temporary export staging
 .qa_export_*

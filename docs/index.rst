@@ -1,7 +1,7 @@
-QA_max_cut_lib 0.1.0a13
+QA_max_cut_lib 0.1.0a14
 ========================
 
-Тринадцатый этап научной библиотеки взвешенного Max-Cut.
+Четырнадцатый этап научной библиотеки взвешенного Max-Cut.
 Реализованы CPU-солверы, RQAOA, LS-RQAOA, NVIDIA GPU QAOA, QAOA-in-QAOA,
 GW/SA, точное улучшение блоков, ExperimentRunner, ParallelismProfiler и
 checkpoint/resume `QAOACPU`, Laboratory-каталог и warm-start CPU, warm-start RQAOA, условный QAOA с фиксированными внешними спинами и environment LS-RQAOA.
@@ -44,18 +44,20 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка этапа 11 <VALIDATION_0.1.0a11.md>`
 * :download:`Проверка этапа 12 <VALIDATION_0.1.0a12.md>`
 * :download:`Проверка этапа 13 <VALIDATION_0.1.0a13.md>`
+* :download:`Проверка этапа 14 <VALIDATION_0.1.0a14.md>`
 * :download:`Warm-start RQAOA <WARM_START_RQAOA_RU.md>`
 * :download:`Laboratory: каталог и warm-start <LABORATORY_RU.md>`
 * :download:`Условные поля и environment LS <CONDITIONAL_RU.md>`
+* :download:`Блочный mean-field QAOA <BLOCK_MEAN_FIELD_RU.md>`
 * :download:`Контрольные точки и resume <CHECKPOINTS_RU.md>`
 * :download:`Серии экспериментов и профилирование <EXPERIMENTS_RU.md>`
 * :download:`NVIDIA GPU QAOA <GPU.md>`
 * :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
-Четырнадцать выполненных учебных ноутбуков находятся в папке notebooks исходного
+Пятнадцать выполненных учебных ноутбуков находятся в папке notebooks исходного
 проекта. Третий ноутбук проверяет ядро редукций, четвёртый — RQAOA на CPU,
 пятый — аналитический p=1, шестой — LS-RQAOA, седьмой — NVIDIA GPU QAOA,
 восьмой — QAOA-in-QAOA, девятый — GW/SA и refinement, десятый — серии,
-эталоны и профилирование параллелизма, одиннадцатый — checkpoint/resume, двенадцатый — Laboratory-каталог и warm-start, тринадцатый — warm-start RQAOA ensemble, четырнадцатый — условные поля и environment LS.
+эталоны и профилирование параллелизма, одиннадцатый — checkpoint/resume, двенадцатый — Laboratory-каталог и warm-start, тринадцатый — warm-start RQAOA ensemble, четырнадцатый — условные поля и environment LS, пятнадцатый — блочный mean-field обмен.
 Все они используют только реализованный API.

@@ -574,3 +574,23 @@ with `J_ik=w_ik/2` and `h_i=1/2 sum_{j in T} w_ij r_j`. The three constants
 `c_aff`, `C_TT(r_T)`, and the accumulated reduction offset `b_t` are distinct.
 The active state is a full `2^{|S|}` CPU state; external spins are classical
 data, not an X-mixed subsystem. Local fields never enter the global reducer.
+
+
+## 14. Block mean-field exchange (0.1.0a14)
+
+For a disjoint block cover and compact first/internal moments, the product
+model has
+
+\[
+\mathcal C(m,q)=rac12\sum_{a(i)=a(j)}w_{ij}(1-q_{ij})+
+rac12\sum_{a(i)
+e a(j)}w_{ij}(1-m_im_j).
+\]
+
+For one block, `h_i=1/2 sum_{j outside} w_ij m_j`, `J_ik=w_ik/2`, and
+`c_aff=-1/2(sum internal w + sum cross w)`.  A local full CPU QAOA state is
+trained with the shared trainer.  After angle damping, one moment operation
+returns all `Z` and internal `ZZ`; both `m` and `q` then use the same convex
+damping.  Gauss-Seidel commits each block immediately; Jacobi commits one
+complete sweep at a barrier.  The public answer is sign-rounded messages and
+is checked by a full cut on the original graph.

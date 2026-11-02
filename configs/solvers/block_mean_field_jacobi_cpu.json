@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "type": "laboratory.block_mean_field_qaoa_cpu",
+  "seed": 20261102,
+  "num_treads": 2,
+  "parameters": {
+    "layers": 1,
+    "max_sweeps": 3,
+    "max_block_vertices": 18,
+    "dtype": "complex128"
+  },
+  "partition": {
+    "type": "explicit_partition",
+    "parameters": {
+      "blocks": [
+        [
+          -7,
+          10
+        ],
+        [
+          30,
+          80
+        ],
+        [
+          101,
+          200
+        ]
+      ]
+    }
+  },
+  "initial_messages": {
+    "type": "biased_spins",
+    "parameters": {
+      "amplitude": 0.1,
+      "spins": {
+        "type": "all_plus"
+      }
+    }
+  },
+  "initialization": {
+    "type": "fixed_angles",
+    "parameters": {
+      "values": [
+        0.4,
+        0.2
+      ]
+    }
+  },
+  "schedule": {
+    "type": "jacobi",
+    "block_order": "as_given"
+  },
+  "updates": {
+    "moment_damping": 0.5,
+    "angle_damping": 0.5,
+    "acceptance": "always",
+    "optimizer_state_policy": "restart_each_update"
+  },
+  "local_solver": {
+    "type": "qaoa_ising_statevector_cpu",
+    "objective": {
+      "type": "mean_cut",
+      "parameters": {}
+    },
+    "objective_reference": "local_surrogate",
+    "estimation": {
+      "mode": "shots",
+      "shots_per_evaluation": 8
+    },
+    "optimizer": {
+      "type": "adam",
+      "parameters": {
+        "max_steps": 2,
+        "learning_rate": 0.05,
+        "gradient_tolerance": 0.0
+      },
+      "gradient": {
+        "type": "central_difference",
+        "parameters": {
+          "step": 0.01
+        }
+      }
+    }
+  },
+  "moments": {
+    "mode": "shots",
+    "shots": 16,
+    "statistics": [
+      "z_all",
+      "zz_internal_edges"
+    ],
+    "shared_sample": true
+  },
+  "rounding": {
+    "type": "sign_means",
+    "zero_sign": 1
+  },
+  "stopping": {
+    "type": "max_sweeps"
+  },
+  "execution": {
+    "backend": "process",
+    "start_method": "spawn",
+    "native_threads": 1
+  },
+  "budget_policy": {
+    "type": "sweep_round_robin"
+  },
+  "limits": {
+    "shots_total": 864,
+    "max_block_updates_total": 9
+  },
+  "checkpoint": {
+    "enabled": true,
+    "path": "checkpoints/block_mean_field",
+    "every": {
+      "optimizer_iterations": 1
+    },
+    "durable_resource_journal": true
+  },
+  "collect": {
+    "message_history": true,
+    "model_history": true,
+    "parameter_trajectory": true,
+    "local_optimizer_history": true,
+    "raw_candidate_probabilities": false
+  },
+  "output": {
+    "report": 1,
+    "logs": 0,
+    "color": "auto"
+  }
+}

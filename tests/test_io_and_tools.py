@@ -151,6 +151,7 @@ def test_no_silent_unimplemented_features():
         "laboratory.warm_start_rqaoa_cpu",
         "laboratory.conditional_qaoa_cpu",
         "laboratory.environment_ls_rqaoa_cpu",
+        "laboratory.block_mean_field_qaoa_cpu",
     )
 
 
