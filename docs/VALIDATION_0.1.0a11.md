@@ -91,3 +91,10 @@ quantum budget = 42 × 544 = 22 848 shots
 - Нет warm-start RQAOA, LS/hierarchy, fields/environment, MI strategies.
 - Нет автоматического multiple-start/aggregation.
 - H не является доказательством алгоритмического преимущества.
+
+## Замечание об архиве
+
+В рабочем дереве нет самого RAR; инвентаризация построена по извлечённому
+`reference/RQAOA_main` (89 файлов). Значение SHA-256 архива взято из задания;
+все 89 member hashes записаны в inventory. Проверка RAR-контейнера целиком
+не выполнялась, поскольку контейнер отсутствует.
