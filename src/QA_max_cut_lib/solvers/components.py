@@ -59,13 +59,16 @@ def _mapping(value, name):
     return value
 
 
-def validate_adam_config(config):
+def validate_adam_config(config, *, allow_adjoint=False):
     """Resolve and validate one ADAM optimizer section.
 
     Parameters
     ----------
     config : dict
         The ``optimizer`` section of a QAOA source configuration.
+    allow_adjoint : bool, optional
+        Permit the exact Mean-Cut GPU adjoint gradient.  CPU paths leave it
+        false.
 
     Returns
     -------
@@ -114,14 +117,24 @@ def validate_adam_config(config):
     gradient = config.setdefault(
         "gradient", {"type": "central_difference", "parameters": {"step": 0.01}}
     )
-    if set(gradient) - {"type", "parameters"} or gradient.get("type") != "central_difference":
-        raise ValueError("Only central_difference is implemented.")
+    if set(gradient) - {"type", "parameters"} or gradient.get("type") not in (
+        ("central_difference", "adjoint") if allow_adjoint else ("central_difference",)
+    ):
+        raise ValueError(
+            "Only central_difference is implemented"
+            + (" or the exact GPU adjoint" if allow_adjoint else "")
+            + "."
+        )
     gp = gradient.setdefault("parameters", {})
-    if set(gp) != {"step"}:
+    if gradient["type"] == "adjoint":
+        if set(gp):
+            raise ValueError("The adjoint gradient has no parameters.")
+    elif set(gp) != {"step"}:
         raise ValueError("The gradient section needs only a step.")
-    step = _finite(gp["step"], "gradient step")
-    if step <= 0:
-        raise ValueError("The gradient step must be positive.")
+    if gradient["type"] == "central_difference":
+        step = _finite(gp["step"], "gradient step")
+        if step <= 0:
+            raise ValueError("The gradient step must be positive.")
     return config
 
 
@@ -176,6 +189,10 @@ def validate_correlation_source_config(config):
         from .analytic_p1 import validate_analytic_p1_source_config
 
         return validate_analytic_p1_source_config(config)
+    if config.get("type") == "qaoa_statevector_gpu":
+        from .qaoa_gpu import validate_gpu_source_config
+
+        return validate_gpu_source_config(config)
     allowed = {
         "type",
         "parameters",

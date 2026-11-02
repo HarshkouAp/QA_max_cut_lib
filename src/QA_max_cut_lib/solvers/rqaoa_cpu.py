@@ -123,6 +123,13 @@ class RQAOACPU(BaseSolver):
         if "correlation_source" not in config:
             raise ValueError("correlation_source is required.")
         source_config = validate_correlation_source_config(config["correlation_source"])
+        if (
+            source_config["type"] == "qaoa_statevector_gpu"
+            and getattr(self, "algorithm_type", None) != "rqaoa_gpu"
+        ):
+            raise ValueError(
+                "A GPU correlation source requires RQAOAGPU (rqaoa_gpu)."
+            )
         config["correlation_source"] = source_config
         if "selection" not in config:
             raise ValueError("selection is required.")
@@ -157,7 +164,7 @@ class RQAOACPU(BaseSolver):
         source_max = source_config["parameters"].get("max_vertices")
         has_interactions = any(weight != 0.0 for _, _, weight in graph.edges)
         if (
-            source_config["type"] == "qaoa_statevector_cpu"
+            source_config["type"] in ("qaoa_statevector_cpu", "qaoa_statevector_gpu")
             and source_max is not None
             and len(graph) > source_max
             and has_interactions
@@ -187,6 +194,12 @@ class RQAOACPU(BaseSolver):
             source = AnalyticP1CorrelationSource(
                 config["correlation_source"], seed=config.get("seed")
             )
+        elif config["correlation_source"]["type"] == "qaoa_statevector_gpu":
+            from .qaoa_gpu import QAOAGPUCorrelationSource
+
+            source = QAOAGPUCorrelationSource(
+                config["correlation_source"], seed=config.get("seed")
+            )
         else:
             raise ValueError("Unknown correlation source type.")
         selector = self._injected_selector or MaxAbsCorrelationSelector(
@@ -204,6 +217,9 @@ class RQAOACPU(BaseSolver):
         correlation_shots = 0
         objective_evaluations = 0
         optimizer_steps = 0
+        gradient_evaluations = 0
+        state_evaluations = 0
+        gpu_plan = None
         gamma_points = 0
         coefficient_passes = 0
         pair_correlators = 0
@@ -290,6 +306,12 @@ class RQAOACPU(BaseSolver):
                     source_resources.get("objective_evaluations", 0)
                 )
                 optimizer_steps += int(source_resources.get("optimizer_steps", 0))
+                gradient_evaluations += int(
+                    source_resources.get("gradient_evaluations", 0)
+                )
+                state_evaluations += int(source_resources.get("state_evaluations", 0))
+                if source_resources.get("gpu_plan") is not None:
+                    gpu_plan = deepcopy(source_resources["gpu_plan"])
                 gamma_points += int(source_resources.get("gamma_points", 0))
                 coefficient_passes += int(
                     source_resources.get("coefficient_passes", 0)
@@ -404,6 +426,8 @@ class RQAOACPU(BaseSolver):
             "readout_shots": 0,
             "objective_evaluations": objective_evaluations,
             "optimizer_steps": optimizer_steps,
+            "gradient_evaluations": gradient_evaluations,
+            "state_evaluations": state_evaluations,
             "source_attempts": source_attempts,
             "source_calls": source_calls,
             "reductions_completed": reductions,
@@ -420,6 +444,9 @@ class RQAOACPU(BaseSolver):
                     "classical_seconds": classical_seconds,
                 }
             )
+        if gpu_plan is not None:
+            resources["gpu_plan"] = gpu_plan
+            resources["backend"] = "cupy"
         finisher_type = getattr(finisher, "type", type(finisher).__name__)
         data_status = {
             key: ("collected" if collect[key] else "not_collected")

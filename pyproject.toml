@@ -59,3 +59,6 @@ version = {attr = "QA_max_cut_lib._version.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "gpu: requires a real CUDA device and CuPy",
+]

@@ -49,6 +49,28 @@
 .. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_cpu.LSRQAOACPU
    :members: solve
 
+.. autoclass:: QA_max_cut_lib.solvers.qaoa_gpu.QAOAGPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.qaoa_gpu.QAOAGPUCorrelationSource
+   :members: estimate
+
+.. autoclass:: QA_max_cut_lib.solvers.rqaoa_gpu.RQAOAGPU
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_gpu.LSRQAOAGPU
+
+.. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_cpu.QAOAInQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_gpu.QAOAInQAOAGPU
+   :members: solve
+
+.. automodule:: QA_max_cut_lib.tools.hierarchy_plots
+   :members: plot_hierarchy_overview, plot_hierarchy_parameters, plot_hierarchy_parameters_3d, plot_hierarchy_tree
+
+.. automodule:: QA_max_cut_lib.solvers.gpu_state
+   :members: gpu_available, gpu_device_info, cut_diagonal_gpu, state_at_angles_gpu, restore_full_gpu, correlations_gpu, objective_value_gpu, sample_full_indices_gpu, adjoint_mean_cut_gradient_gpu
+
 .. autoclass:: QA_max_cut_lib.solvers.ls_components.MeanCorrelationAggregator
    :members: aggregate, make_table
 

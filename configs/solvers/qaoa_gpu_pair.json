@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "type": "qaoa_gpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {
+    "layers": 1,
+    "max_vertices": 30,
+    "dtype": "complex64",
+    "representation": "spin_flip_pairs"
+  },
+  "gpu": {
+    "device_id": 0,
+    "diagonal_dtype": "float64",
+    "accumulation_dtype": "float64",
+    "memory": {"fraction_of_available": 0.8, "reserve_bytes": 268435456},
+    "kernels": {"mixer": "pairwise", "cuda_graphs": false},
+    "state_batch_size": 1
+  },
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "estimation": {"mode": "exact"},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {"max_steps": 20, "learning_rate": 0.05},
+    "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+  },
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.7, -0.3]}},
+  "readout": {"mode": "most_probable"},
+  "limits": {"shots_total": 0},
+  "collect": {
+    "optimizer_history": true,
+    "objective_history": false,
+    "statevector": false,
+    "probabilities": false,
+    "compressed_statevector": false,
+    "pair_probabilities": false,
+    "correlations": true
+  },
+  "output": {"report": 1, "logs": 1, "color": "auto"},
+  "save": {
+    "path": "results/qaoa_gpu",
+    "atts": ["solution", "optimal_angles", "optimizer_history", "correlations", "state_representation"],
+    "filename": "gpu_pair_example",
+    "save_original_data": [],
+    "makedir": true,
+    "savedir": true
+  }
+}

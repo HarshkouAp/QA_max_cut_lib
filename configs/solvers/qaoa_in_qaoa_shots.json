@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "type": "qaoa_in_qaoa_cpu",
+  "seed": 20261102,
+  "num_treads": 2,
+  "parameters": {"finish_at": 4, "max_levels": null},
+  "partitioner": {
+    "type": "greedy_abs_weight_partition",
+    "parameters": {"max_size": 8, "rounds": 1, "full_graph_when_fits": false}
+  },
+  "local_solver": {
+    "type": "qaoa_cpu",
+    "parameters": {"layers": 1, "max_vertices": 20, "dtype": "complex128"},
+    "objective": {"type": "mean_cut", "parameters": {}},
+    "estimation": {"mode": "exact"},
+    "optimizer": {
+      "type": "adam",
+      "parameters": {"max_steps": 0},
+      "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+    },
+    "initialization": {"type": "fixed_angles", "parameters": {"values": [0.7, -0.3]}},
+    "readout": {"mode": "best_of_shots", "shots": 64}
+  },
+  "execution": {"backend": "process", "start_method": "spawn", "native_threads": 1},
+  "budget_policy": {"type": "level_round_robin"},
+  "finisher": {"type": "exact_cpu", "parameters": {"max_vertices": 16}},
+  "limits": {"shots_total": 512, "max_local_tasks_total": null},
+  "collect": {"hierarchy_history": true, "block_patterns": true, "parameter_trajectory": true},
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

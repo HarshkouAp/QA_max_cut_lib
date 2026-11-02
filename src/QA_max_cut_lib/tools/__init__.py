@@ -24,6 +24,10 @@ __all__ = [
     "plot_ls_coverage",
     "plot_parameter_trajectories",
     "plot_parameter_trajectories_3d",
+    "plot_hierarchy_overview",
+    "plot_hierarchy_parameters",
+    "plot_hierarchy_parameters_3d",
+    "plot_hierarchy_tree",
     "TrajectoryPanelCollection",
 ]
 
@@ -37,7 +41,15 @@ def __getattr__(name):
         "plot_ls_coverage",
         "plot_parameter_trajectories",
         "plot_parameter_trajectories_3d",
+        "plot_hierarchy_overview",
+        "plot_hierarchy_parameters",
+        "plot_hierarchy_parameters_3d",
+        "plot_hierarchy_tree",
     }:
+        if name.startswith("plot_hierarchy_"):
+            from . import hierarchy_plots
+
+            return getattr(hierarchy_plots, name)
         from . import reduction_plots
 
         return getattr(reduction_plots, name)

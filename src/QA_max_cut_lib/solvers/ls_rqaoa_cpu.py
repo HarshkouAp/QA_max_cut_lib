@@ -238,6 +238,13 @@ class LSRQAOACPU(BaseSolver):
                 "correlations": {"mode": "exact"},
             }
         source_config = validate_correlation_source_config(config["correlation_source"])
+        if (
+            source_config["type"] == "qaoa_statevector_gpu"
+            and getattr(self, "algorithm_type", None) != "ls_rqaoa_gpu"
+        ):
+            raise ValueError(
+                "A GPU correlation source requires LSRQAOAGPU (ls_rqaoa_gpu)."
+            )
         if source_config.get("objective_reference") != "working_graph":
             raise ValueError("LS local objectives must use objective_reference='working_graph'.")
         config["correlation_source"] = source_config
@@ -270,8 +277,8 @@ class LSRQAOACPU(BaseSolver):
         execution.setdefault("backend", "process")
         execution.setdefault("start_method", "spawn")
         execution.setdefault("native_threads", 1)
-        if execution["backend"] != "process":
-            raise ValueError("Only execution.backend='process' is implemented.")
+        if execution["backend"] not in ("process", "gpu_owner"):
+            raise ValueError("execution.backend must be process or gpu_owner.")
         if execution["start_method"] != "spawn":
             raise ValueError("Only execution.start_method='spawn' is implemented.")
         if positive_int(execution["native_threads"], "native_threads") != 1:
@@ -314,9 +321,13 @@ class LSRQAOACPU(BaseSolver):
             if type(collect[key]) is not bool:
                 raise ValueError(f"collect.{key} must be boolean.")
 
-        if source_config["type"] == "qaoa_statevector_cpu":
-            local_limit = source_config["parameters"]["max_vertices"]
-            if builder.max_size > local_limit and len(graph) > parameters["finish_at"]:
+        if source_config["type"] in ("qaoa_statevector_cpu", "qaoa_statevector_gpu"):
+            local_limit = source_config["parameters"].get("max_vertices")
+            if (
+                local_limit is not None
+                and builder.max_size > local_limit
+                and len(graph) > parameters["finish_at"]
+            ):
                 raise ValueError(
                     "The state-vector source limit is smaller than the builder max_size."
                 )
@@ -378,7 +389,10 @@ class LSRQAOACPU(BaseSolver):
 
     def _make_payload(self, task, state, config, steps, quota):
         source_config = deepcopy(config["correlation_source"])
-        if source_config["type"] == "qaoa_statevector_cpu":
+        if source_config["type"] in (
+            "qaoa_statevector_cpu",
+            "qaoa_statevector_gpu",
+        ):
             source_config["optimizer"]["parameters"]["max_steps"] = int(steps)
         return {
             "task_id": task["task_id"],
@@ -442,6 +456,7 @@ class LSRQAOACPU(BaseSolver):
         last_mandatory = []
         last_quotas = []
         unknown_worker_spend = False
+        gpu_plan = None
 
         def fallback(reason, state_status="stopped"):
             nonlocal residual_solution, reduced_cut_value, solution_source
@@ -555,6 +570,8 @@ class LSRQAOACPU(BaseSolver):
                     applied_threads = max(
                         1, min(requested_threads, os.cpu_count() or 1, active_count)
                     )
+                    if config["execution"]["backend"] == "gpu_owner":
+                        applied_threads = 1
                     max_applied_threads = max(max_applied_threads, applied_threads)
                     payloads = [
                         self._make_payload(task, state, config, steps[index], quotas[index])
@@ -615,6 +632,8 @@ class LSRQAOACPU(BaseSolver):
                         gamma_points += int(result["resources"].get("gamma_points", 0))
                         coefficient_passes += int(result["resources"].get("coefficient_passes", 0))
                         pair_correlators += int(result["resources"].get("pair_correlators", 0))
+                        if result["resources"].get("gpu_plan") is not None:
+                            gpu_plan = deepcopy(result["resources"]["gpu_plan"])
                         classical_seconds += float(result["resources"].get("classical_seconds", 0.0))
                         angles = list(result.get("angles", []))
                         if collect["parameter_trajectory"]:
@@ -806,6 +825,9 @@ class LSRQAOACPU(BaseSolver):
             "unknown_worker_spend": bool(unknown_worker_spend),
             "shots_upper_bound": budget.used + (sum(last_quotas) if unknown_worker_spend else 0),
         }
+        if gpu_plan is not None:
+            resources["gpu_plan"] = gpu_plan
+            resources["gpu_backend"] = "cupy"
         data_status = {key: ("collected" if collect[key] else "not_collected") for key in collect}
         report = {
             "algorithm_type": self.algorithm_type,

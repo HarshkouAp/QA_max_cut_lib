@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "type": "qaoa_gpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {
+    "layers": 1,
+    "max_vertices": 28,
+    "dtype": "complex128",
+    "representation": "full"
+  },
+  "gpu": {
+    "device_id": 0,
+    "diagonal_dtype": "float64",
+    "accumulation_dtype": "float64",
+    "memory": {"fraction_of_available": 0.75, "reserve_bytes": 268435456},
+    "kernels": {"mixer": "pairwise", "cuda_graphs": false}
+  },
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "estimation": {"mode": "exact"},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {"max_steps": 2, "learning_rate": 0.05}
+  },
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.5, 0.3]}},
+  "readout": {"mode": "most_probable"},
+  "limits": {"shots_total": 0},
+  "collect": {
+    "optimizer_history": true,
+    "statevector": true,
+    "probabilities": true,
+    "correlations": true
+  },
+  "output": {"report": 1, "logs": 1, "color": "auto"},
+  "save": {
+    "path": "results/qaoa_gpu",
+    "atts": ["solution", "optimal_angles", "state_representation"],
+    "filename": "gpu_full_example",
+    "save_original_data": ["statevector", "probabilities"],
+    "makedir": true,
+    "savedir": true
+  }
+}

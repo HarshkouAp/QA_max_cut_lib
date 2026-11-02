@@ -16,7 +16,17 @@ class SolverFactory:
 
     @staticmethod
     def available():
-        return ("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu")
+        return (
+            "exact_cpu",
+            "qaoa_cpu",
+            "rqaoa_cpu",
+            "ls_rqaoa_cpu",
+            "qaoa_gpu",
+            "rqaoa_gpu",
+            "ls_rqaoa_gpu",
+            "qaoa_in_qaoa_cpu",
+            "qaoa_in_qaoa_gpu",
+        )
 
     @staticmethod
     def from_config(config):
@@ -25,12 +35,22 @@ class SolverFactory:
         from ..solvers.qaoa_cpu import QAOACPU
         from ..solvers.rqaoa_cpu import RQAOACPU
         from ..solvers.ls_rqaoa_cpu import LSRQAOACPU
+        from ..solvers.qaoa_gpu import QAOAGPU
+        from ..solvers.rqaoa_gpu import RQAOAGPU
+        from ..solvers.ls_rqaoa_gpu import LSRQAOAGPU
+        from ..solvers.qaoa_in_qaoa_cpu import QAOAInQAOACPU
+        from ..solvers.qaoa_in_qaoa_gpu import QAOAInQAOAGPU
 
         types = {
             "exact_cpu": ExactCPU,
             "qaoa_cpu": QAOACPU,
             "rqaoa_cpu": RQAOACPU,
             "ls_rqaoa_cpu": LSRQAOACPU,
+            "qaoa_gpu": QAOAGPU,
+            "rqaoa_gpu": RQAOAGPU,
+            "ls_rqaoa_gpu": LSRQAOAGPU,
+            "qaoa_in_qaoa_cpu": QAOAInQAOACPU,
+            "qaoa_in_qaoa_gpu": QAOAInQAOAGPU,
         }
         if config.get("type") not in types:
             raise ValueError(

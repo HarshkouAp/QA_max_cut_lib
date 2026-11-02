@@ -1,8 +1,8 @@
 # QA_max_cut_lib
 
-Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a5**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1 и первый LS-RQAOA с настоящими процессами.
+Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a7**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, CPU RQAOA, аналитический CPU-вычислитель моментов p=1, LS-RQAOA с процессами, NVIDIA CUDA QAOA/семплер и иерархический QAOA-in-QAOA с точной блоковой проекцией.
 
-Это ещё не перенос всего исследовательского архива. Сейчас доступны `ExactCPU`, `QAOACPU`, `RQAOACPU`, `LSRQAOACPU`, `AnalyticP1Evaluator`, два построителя подграфов и `GraphReducer`; GPU, QAOA-in-QAOA, Laboratory, серии экспериментов, общий профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
+Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, два построителя подграфов и `GraphReducer`; GPU-путь использует CuPy и явно выбранный backend. Классические эталоны GW, FineTuning, Laboratory, серии экспериментов, общий профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
 
 ## Установка
 
@@ -24,9 +24,11 @@ python -m pip install -e ".[cpu,notebooks]"
 [описании проекта](docs/PROJECT_SETUP_RU.md). Локальная проверка Windows — в
 [VALIDATION_LOCAL.md](docs/VALIDATION_LOCAL.md), отчёт этапа 04 — в
 [VALIDATION_0.1.0a4.md](docs/VALIDATION_0.1.0a4.md), отчёт этапа 05 — в
-[VALIDATION_0.1.0a5.md](docs/VALIDATION_0.1.0a5.md).
+[VALIDATION_0.1.0a5.md](docs/VALIDATION_0.1.0a5.md), отчёт этапа 06 — в
+[VALIDATION_0.1.0a6.md](docs/VALIDATION_0.1.0a6.md), отчёт этапа 07 — в
+[VALIDATION_0.1.0a7.md](docs/VALIDATION_0.1.0a7.md).
 
-CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные файлы `requirements/gpu-nvidia-cu12.in` и `requirements/gpu-nvidia-cu13.in`; они подготовлены для будущего GPU-этапа и не добавляют работающий GPU-солвер в эту версию. См. [описание зависимостей](docs/INSTALLATION.md).
+CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные extras `gpu-cu12`/`gpu-cu13` и файлы `requirements/gpu-nvidia-cu12.in`, `requirements/gpu-nvidia-cu13.in`; GPU-путь проверен с `cupy-cuda13x 14.2.0`. См. [описание зависимостей](docs/INSTALLATION.md) и [GPU-руководство](docs/GPU.md).
 
 ## Первый расчёт
 
@@ -150,6 +152,57 @@ Threshold Probability, поля и `p>1` этим источником не по
 Проверка формул и ограничений находится в `tests/test_analytic_p1.py`;
 локальный профиль времени и памяти — в
 [PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt](docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt).
+
+## NVIDIA GPU QAOA
+
+`QAOAGPU` (`qaoa_gpu`) реализует полный и сокращённый режимы:
+
+- `parameters.representation="full"` — физический вектор длины `2**N`;
+- `parameters.representation="spin_flip_pairs"` — нормированные пары
+  `chi_r = sqrt(2) * psi_r`, представитель с последним битом `node_order`
+  равным нулю; `q_r=P(r)+P(bar r)`, а отдельная физическая вероятность
+  равна `q_r/2`.
+
+GPU-путь использует CuPy, точную диагональ `C`, прямой mixer и все пять
+критериев: Mean Cut, CVaR, Gibbs, Best-of-K и Threshold Probability. Семплер
+выполняется на устройстве и возвращает обе ориентации пары. Для exact Mean Cut
+доступен `gradient.type="adjoint"`; остальные критерии используют центральные
+разности. `gpu.memory` задаёт preflight бюджета VRAM, а `max_vertices` —
+пользовательский предел, не обещание размещения.
+
+```bash
+python -m QA_max_cut_lib.solvers.qaoa_gpu --help
+python -m QA_max_cut_lib.solvers.rqaoa_gpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/rqaoa_gpu.json --report 1
+python -m QA_max_cut_lib.solvers.ls_rqaoa_gpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/ls_rqaoa_gpu.json --report 1
+```
+
+CPU-импорт, CPU-солверы, сохранённые GPU-результаты и их отрисовка не требуют
+CuPy. `QAOAGPUCorrelationSource` (`qaoa_statevector_gpu`) подключается к
+`RQAOAGPU`; `LSRQAOAGPU` использует одну последовательность обслуживания
+`gpu_owner`, а не CUDA-контекст в каждом worker. Подробности — в
+[GPU-руководстве](docs/GPU.md).
+
+## QAOA-in-QAOA
+
+`QAOAInQAOACPU` (`qaoa_in_qaoa_cpu`) и `QAOAInQAOAGPU` (`qaoa_in_qaoa_gpu`)
+реализуют базовую иерархию: локальный рисунок спинов блока, одна свободная
+ориентация блока, точная метазадача и восстановление исходных вершин. Это не
+LS-RQAOA и не выбор одной пары по корреляции.
+
+```bash
+python -m QA_max_cut_lib.solvers.qaoa_in_qaoa_cpu \
+  --graph configs/graphs/erdos_signed_64.json \
+  --config configs/solvers/qaoa_in_qaoa_cpu.json --report 1
+python -m QA_max_cut_lib.solvers.qaoa_in_qaoa_gpu \
+  --graph configs/graphs/complete_signed_7.json \
+  --config configs/solvers/qaoa_in_qaoa_gpu.json --report 1
+```
+
+Используются готовые `qaoa_cpu`/`qaoa_gpu`/`exact_cpu` локальные адаптеры,
+`GraphReducer` для `s_u=r_u s_anchor`, общий `ShotBudget` и `level_round_robin`
+квоты. `best_of_shots` резервирует реальный readout каждого блока. GPU-вариант
+имеет одного владельца устройства. См. [API](docs/API.md) и
+[математику](docs/MATHEMATICS.md).
 
 ## LS-RQAOA на CPU
 

@@ -1,4 +1,4 @@
-# API версии 0.1.0a5
+# API версии 0.1.0a7
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -8,7 +8,8 @@
 from QA_max_cut_lib import (
     WeightedGraph, GraphFactory, SolverFactory, RunRecord, ExactCPU, QAOACPU,
     RQAOACPU, AnalyticP1Evaluator, AnalyticP1CorrelationSource,
-    LSRQAOACPU,
+    LSRQAOACPU, QAOAGPU, QAOAGPUCorrelationSource, RQAOAGPU, LSRQAOAGPU,
+    QAOAInQAOACPU, QAOAInQAOAGPU,
     GraphReducer, ReductionState, IsingProblem, SpinConstraint,
     QAOAStatevectorCorrelationSource, MaxAbsCorrelationSelector, ExactCPUFinisher,
 )
@@ -21,7 +22,7 @@ from QA_max_cut_lib.solvers.objectives import validate_objective, objective_valu
 from QA_max_cut_lib._version import __version__
 ```
 
-`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
+`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu", "qaoa_gpu", "rqaoa_gpu", "ls_rqaoa_gpu", "qaoa_in_qaoa_cpu", "qaoa_in_qaoa_gpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
 
 Общий конструктор солвера — `ClassName(config=None)`. Он копирует конфигурацию. `solve(graph, *, report=None, logs=None, num_treads=None)` принимает новый граф и возвращает `dict[int, int]`. Аргументы уровня вывода и числа потоков переопределяют конфигурацию данного запуска. Один экземпляр рассчитан на один активный запуск. Для одновременных расчётов нужны разные экземпляры.
 
@@ -624,6 +625,38 @@ tasks = builder.build(graph, version=0)
 ```
 
 `build()` возвращает `round`, `block`, `nodes`, `task_id` и `boundary`; он не меняет граф и не вызывает QAOA.
+
+## QAOA-in-QAOA (`qaoa_in_qaoa_cpu`, `qaoa_in_qaoa_gpu`)
+
+`QAOAInQAOACPU` и `QAOAInQAOAGPU` принимают `parameters.finish_at`, `parameters.max_levels`, `partitioner`, `local_solver`, `execution`, `budget_policy`, `finisher`, `limits` и `collect`. Блоки текущего уровня не пересекаются и покрывают все его вершины. Внутри блока фиксируется рисунок спинов; anchor каждого блока становится вершиной следующего метаграфа. `GraphReducer` применяет точные ограничения `s_u=r_u s_anchor` ко всему графу.
+
+`local_solver` — один из явных адаптеров:
+
+- `qaoa_cpu` (`QAOACPU`), с `most_probable` или `best_of_shots`;
+- `qaoa_gpu` (`QAOAGPU`), только в `qaoa_in_qaoa_gpu`;
+- `exact_cpu` — явный тестовый компонент, не квантовый запуск.
+
+Локальный solver не содержит собственного корневого `limits`, `save`, `output` или `seed`. Координатор передаёт ему стабильный seed и фиксированную квоту. `execution.backend="process"` использует общий CPU-пул; `backend="gpu_owner"` обслуживает блоки одним устройством. `best_of_shots` резервирует M каждого readout; `level_round_robin` сначала покрывает все минимумы уровня, затем распределяет полные итерации.
+
+`hierarchy_history` содержит уровень, блоки, anchor, ID задач, raw/normalized рисунки, `Delta b`, `b`, квоты и времена. `hierarchy_tree` использует составные ID `L{level}:A{anchor}`; листья исходных вершин имеют `leaf:{node}`. Углы хранятся по локальным задачам в `parameter_trajectory`; они не усредняются в глобальный вектор.
+
+`limits.max_local_tasks_total` и `parameters.max_levels` дают полный `hierarchy_all_plus_fallback` со статусом `stopped`; ошибки partition, projection, worker или GPU не маскируются как лимит. `finish_at` решается `ExactCPUFinisher`; при `finish_at=0` малый остаток не обещается.
+
+## NVIDIA GPU QAOA (`qaoa_gpu`)
+
+`QAOAGPU` принимает `parameters.layers`, `parameters.max_vertices`, `parameters.dtype` и `parameters.representation` (`full` или `spin_flip_pairs`). `gpu` содержит `device_id`, `diagonal_dtype`, `accumulation_dtype`, `memory.fraction_of_available`, `memory.reserve_bytes`, `kernels.mixer="pairwise"` и `kernels.cuda_graphs=false`.
+
+GPU-путь не импортирует CuPy при импорте пакета. Без CuPy/устройства вызов завершается `RuntimeError`; CPU-солверы не переключаются скрыто на NumPy. Preflight памяти выполняется до создания диагонали и состояния. `state_representation` содержит `type`, `n_vertices`, `node_order`, `dtype`, `amplitude_kind`, `probability_kind`, `representative_rule`, `normalization` и сведения об устройстве.
+
+Сборы в pair-режиме:
+
+- `collect.compressed_statevector=true` — `chi`;
+- `collect.pair_probabilities=true` — `q`;
+- `collect.statevector=true` или `collect.probabilities=true` отклоняются, пока пользователь не выбрал full-представление. Это не позволяет молча вернуть `chi` как физический `psi`.
+
+`gradient.type="central_difference"` поддерживает все критерии и exact/shots. `gradient.type="adjoint"` поддерживает только exact Mean Cut; для остальных критериев или shots конфигурация отклоняется. Adjoint считает обратный проход по состоянию и не выдаёт себя за `4p+1` измерений.
+
+`QAOAGPUCorrelationSource` (`qaoa_statevector_gpu`) использует собственный `gpu`-раздел и возвращает обычный `CorrelationResult` с исходными номерами и версией задачи. `RQAOAGPU` использует тот же редуктор и финишёр; `LSRQAOAGPU` требует `execution.backend="gpu_owner"` и обслуживает локальные задачи последовательно одним устройством.
 
 ## Запуск модулей
 

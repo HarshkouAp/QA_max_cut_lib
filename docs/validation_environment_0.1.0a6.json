@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "package_version": "0.1.0a6",
+  "date": "2026-11-02",
+  "platform": "Windows 10.0.19043",
+  "python": "3.12.14",
+  "cpu_environment": {
+    "path": ".venv-stage02",
+    "cupy": null,
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pytest": "9.2.0",
+    "sphinx": "9.1.1"
+  },
+  "gpu_environment": {
+    "path": ".venv",
+    "cupy": "14.2.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "device": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "compute_capability": [8, 6],
+    "memory_total_bytes": 4294508544,
+    "driver_version": 13010,
+    "cuda_runtime_version": 13020,
+    "nvrtc": "available through CuPy",
+    "system_cuda_toolkit": "13.0",
+    "cupy_extra": "cupy-cuda13x (no ctk)"
+  },
+  "tests": {
+    "cpu_command": ".venv-stage02/Scripts/python.exe -m pytest -q -m \"not gpu\"",
+    "cpu_result": "109 passed, 1 skipped, 1 warning",
+    "gpu_command": ".venv/Scripts/python.exe -m pytest -q -m gpu",
+    "gpu_result": "9 passed",
+    "gpu_skips_in_cpu_run": 9,
+    "warning": "tight_layout warning for 15 panels in an existing p=3 plot"
+  },
+  "reported_errors": {
+    "full_state_max_abs": 2.0014830212433607e-16,
+    "pair_restored_max_abs": 1.6653345369377348e-16,
+    "five_criteria_max_abs": 4.440892098500626e-16,
+    "correlation_matrix_max_abs": 2.7755575615628914e-16,
+    "adjoint_vs_central_difference_max_abs": 1.6441331629479805e-10,
+    "sampler_physical_mass_max_abs_at_20000_shots": 0.004204169755833806
+  },
+  "unverified": [
+    "RTX 5060 Laptop (8 GiB) was not available; only RTX 3050 Laptop was measured.",
+    "V100 and CUDA 12 profiles were not tested.",
+    "Compute Sanitizer was not run.",
+    "CUDA Graphs, Walsh/grouped mixer, and batch greater than one are not implemented."
+  ]
+}
