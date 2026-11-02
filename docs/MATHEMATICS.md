@@ -644,3 +644,30 @@ S_{prod}=wc.
 Для `min_signed_edge_product` выбирается минимум `S_prod`, но
 \(\sigma=\operatorname{sign}(c)\), а не `sign(wc)`. Направление
 редукции по умолчанию — удалить меньший label, оставить больший.
+
+## 18. Typed plans и coverage (a18)
+
+Для полного edge partition `{E_a}` и одного глобального назначения `s`:
+
+\[
+C_G(s)=\sum_a C_{(S_a,E_a)}(s|_{S_a}).
+\]
+
+Это тождество разложения функции по рёбрам, но независимо
+оптимизированные local assignments на shared vertices не обязаны
+согласоваться. `edge_partition` хранит explicit `E_a`; induced
+membership `S_a` не восстанавливает эту задачу, если из `G[S_a]`
+добавляются неназначенные рёбра.
+
+Coverage edges считается по unique parent edges:
+\(|\bigcup_a E_a|/|E|\). Abs-weight coverage:
+\(\sum_{e\in covered}|w_e|/\sum_{e\in E}|w_e|\). Signed total
+публикуется отдельно; он не является допустимым denominator.
+
+Hop metric использует BFS по числу рёбер:
+\[
+L_{\rm reachable}=\frac{\sum_{\{u,v\}\in R}d(u,v)}{|R|},\quad
+E_{\rm global}=\frac1T\sum_{\{u,v\}\in R}\frac1{d(u,v)}.
+\]
+Для disconnected graph all-pairs mean = null; reachable mean и
+reachability fraction остаются отдельными полями.

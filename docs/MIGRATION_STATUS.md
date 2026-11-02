@@ -1,4 +1,4 @@
-# Статус 0.1.0a17
+# Статус 0.1.0a18
 
 Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
 ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
@@ -169,3 +169,11 @@ quantum-state lift и GPU MI.
 survivor-center cover, epoch mean bank, freshness policies, four scores
 and one CPU assembly. Не перенесены batch MK_3, odds-fusion fast_2,
 round-max LS_exp, CorrelationExtractor rollback, Mk_6/7/8 и GPU.
+
+## 0.1.0a18 — generators, structured weights, typed plans
+
+Добавлены schema2 graph families, BenchGraph16/Benchmark297 resolvers,
+Wishart/Hebbian candidates, typed vertex/induced/edge plans, corrected
+builders and independent coverage/topology analyzer. Не перенесены
+GraphDecomposer_light truss/repair branches, pattern-recovery oracle и
+полный edge-subset LS controller.

@@ -2,6 +2,7 @@
 
 from .numerics import correlation_matrix, quality_score
 from .mi_plots import plot_mutual_information_map, plot_mutual_information_frames, plot_mutual_information_distance
+from .partition_analysis import analyze_plan, topology_descriptors, hop_metrics, plan_to_graph
 from .mutual_information import (
     MutualInformationError, classical_from_counts, classical_from_moments,
     classical_from_probabilities, classical_mutual_information, hop_distances,
@@ -71,6 +72,10 @@ __all__ = [
     "pair_scope",
     "map_summary",
     "hop_distances",
+    "analyze_plan",
+    "topology_descriptors",
+    "hop_metrics",
+    "plan_to_graph",
     "partial_trace",
     "entropy",
     "quantum_mi",
@@ -97,6 +102,10 @@ def __getattr__(name):
     "pair_scope",
     "map_summary",
     "hop_distances",
+    "analyze_plan",
+    "topology_descriptors",
+    "hop_metrics",
+    "plan_to_graph",
     "partial_trace",
     "entropy",
     "quantum_mi",

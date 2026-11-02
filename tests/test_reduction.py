@@ -388,10 +388,10 @@ def test_ising_snapshot_and_field_rejection():
 
 
 def test_version_is_consistent_in_results_and_package():
-    assert QA_max_cut_lib.__version__ == "0.1.0a17"
+    assert QA_max_cut_lib.__version__ == "0.1.0a18"
     solver = ExactCPU()
     solver.solve(WeightedGraph([(0, 1, 1.0)]))
-    assert solver.result["package_version"] == "0.1.0a17"
+    assert solver.result["package_version"] == "0.1.0a18"
     assert SpinConstraint(1, 2, -1).to_dict() == {
         "removed_node": 1,
         "retained_node": 2,

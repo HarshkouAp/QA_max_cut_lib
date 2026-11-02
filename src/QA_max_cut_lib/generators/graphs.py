@@ -26,6 +26,9 @@ class GraphFactory:
             A graph with explicit weights, including for the unit case.
         """
         recipe = deepcopy(recipe)
+        if recipe.get("schema_version", 1) == 2:
+            from .recipes import build_extended_recipe
+            return build_extended_recipe(recipe)
         if set(recipe) - {"type", "parameters", "seed", "weights", "schema_version"}:
             raise ValueError("Unknown graph recipe field.")
         if recipe.get("schema_version", 1) != 1:
