@@ -35,6 +35,8 @@ Observer добавляет MI frames, но не второй readout и не н
 Для p=2/two iterations/M_train=16/readout=64 фактический расход — 352
 shots, 3 prefix snapshots, 15 all-pairs на snapshot.
 
+Контроль p=1/three iterations/M_train=32/readout=64: baseline и observer дают одинаковый solution/angles и **544 shots**.
+
 RQAOA observer: full-state CPU source, frames до reducer commit, 2
 reduction steps, `max_abs_correlation` не изменён. Correlation/reuse
 provenance сохраняется отдельно.
