@@ -1,4 +1,4 @@
-# API версии 0.1.0a2
+# API версии 0.1.0a4
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -7,7 +7,9 @@
 ```python
 from QA_max_cut_lib import (
     WeightedGraph, GraphFactory, SolverFactory, RunRecord, ExactCPU, QAOACPU,
+    RQAOACPU, AnalyticP1Evaluator, AnalyticP1CorrelationSource,
     GraphReducer, ReductionState, IsingProblem, SpinConstraint,
+    QAOAStatevectorCorrelationSource, MaxAbsCorrelationSelector, ExactCPUFinisher,
 )
 from QA_max_cut_lib import tools
 from QA_max_cut_lib.generators import partition
@@ -15,7 +17,7 @@ from QA_max_cut_lib.solvers.objectives import validate_objective, objective_valu
 from QA_max_cut_lib._version import __version__
 ```
 
-`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
+`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
 
 Общий конструктор солвера — `ClassName(config=None)`. Он копирует конфигурацию. `solve(graph, *, report=None, logs=None, num_treads=None)` принимает новый граф и возвращает `dict[int, int]`. Аргументы уровня вывода и числа потоков переопределяют конфигурацию данного запуска. Один экземпляр рассчитан на один активный запуск. Для одновременных расчётов нужны разные экземпляры.
 
@@ -174,6 +176,197 @@ restored_state = reducer.from_snapshot(snapshot)
 `sign` не ±1, корреляция вне `[-1,1]`, неполный остаток.
 `ArithmeticError` — новая константа, поле или пара не конечны. Ошибочный
 запрос не изменяет состояние.
+
+## RQAOA на CPU
+
+`RQAOACPU` — первый полный рекурсивный солвер. Он обучает QAOA на текущем
+рабочем графе, получает физические корреляции `⟨Z_uZ_v⟩`, выбирает одну
+разрешённую пару, применяет точное ограничение `s_u=σs_v` ядром этапа 02,
+повторяет цикл и решает остаток `ExactCPU`. Исходные спины восстанавливаются в
+обратном порядке. Это эвристика, а не точный солвер исходной задачи.
+
+```python
+from QA_max_cut_lib import SolverFactory, tools
+
+config = tools.load_json("configs/solvers/rqaoa_cpu.json")
+algorithm = SolverFactory.from_config(config)
+solution = algorithm.solve(graph, report=1, logs=0)
+result = algorithm.result
+trajectory = algorithm.parameter_trajectory
+history = algorithm.reduction_history
+```
+
+### Конфигурация
+
+| Поле | Значение |
+|---|---|
+| `parameters.finish_at` | Целое ≥1; остаток такого размера решает точный финишёр |
+| `parameters.max_reductions` | `null` или целое ≥0; 0 запрещает редукции |
+| `correlation_source.type` | В этой версии только `qaoa_statevector_cpu` |
+| `correlation_source.parameters.layers` | Глубина `p≥1`; порядок углов γ₀…γₚ₋₁,β₀…βₚ₋₁ |
+| `correlation_source.parameters.max_vertices` | Защитный предел полного вектора, не более 24 |
+| `correlation_source.objective` | Один из пяти критериев QAOA |
+| `correlation_source.objective_reference` | `working_graph` или `original_graph` |
+| `correlation_source.estimation` | `exact` или `shots` для критерия обучения |
+| `correlation_source.optimizer` | ADAM и центральные разности |
+| `correlation_source.initialization` | `fixed_angles` или `random_angles` |
+| `correlation_source.step_initialization` | `restart` или `previous_step` |
+| `correlation_source.correlations` | `exact` или `shots`; в shots обязателен `shots` |
+| `selection.parameters.pairs` | `edges` или `all_pairs` |
+| `selection.parameters.zero_sign` | `+1` или `-1` для точной нулевой корреляции |
+| `finisher.type` | `exact_cpu` |
+| `finisher.parameters.max_vertices` | Не меньше `finish_at` |
+| `limits.shots_total` | `null` или строгий общий лимит шотов |
+| `collect.reduction_history` | Компактные события редукций |
+| `collect.parameter_trajectory` | Углы перед каждым слиянием |
+| `collect.local_optimizer_history` | Истории локального ADAM |
+| `collect.correlation_tables` | Полные таблицы корреляций |
+| `collect.final_reduction_state` | JSON-снимок математического состояния |
+
+Источник не имеет собственного `save`, публичного readout или отдельного
+`shots_total`. Неизвестные поля и несовместимые сочетания отклоняются.
+`num_treads` в этой версии принимает только 1. Значения `finish_at` и
+`max_vertices` проверяются до выделения полного вектора.
+
+### Результатные поля
+
+Помимо общих полей `RunRecord` доступны:
+
+| Поле | Смысл |
+|---|---|
+| `reductions_completed` | Число применённых ограничений |
+| `remaining_node_order` | Внешние номера финального остатка |
+| `cut_offset` | Накопленный сдвиг `b_t` |
+| `ising_constant` | Полная константа `c_t` рабочей задачи |
+| `reduced_solution`, `reduced_cut_value` | Решение и разрез остатка |
+| `solution_source` | `exact_finisher`, zero-interaction или `all_plus_reduced_fallback` |
+| `termination_reason` | `finish_at`, `no_interactions`, `max_reductions`, `shot_budget` |
+| `reduction_history` | События с весом, корреляцией, `σ`, score, энергиями |
+| `parameter_trajectory` | Углы до соответствующего слияния |
+| `local_optimizer_history` | Локальные истории оптимизации |
+| `correlation_tables` | Таблицы с покрытием и версией |
+| `final_reduction_state` | Снимок математического состояния |
+| `resources` | Шоты, оценки, шаги, этапы, `num_treads` |
+
+Для отсутствующего ребра `selected_weight=0`. `fixed_energy=-w(1-σ)/2`;
+`expected_fixed_energy=-w(1-c)/2`. Суммы этих вкладов не заменяют полную
+энергию решения или константу редукции. `score=abs(c)` хранится отдельно от
+знаковой корреляции.
+
+При `status="stopped"` возвращается полное допустимое решение
+`all_plus_reduced_fallback`, а не частичный словарь. Глобальная оптимальность
+не заявляется.
+
+### Инструменты RQAOA
+
+| Функция | Назначение |
+|---|---|
+| `tools.plot_reduction_weights(source, config)` | Вес выбранной пары и средний модуль ненулевого веса |
+| `tools.plot_reduction_energy(source, config)` | `fixed`, `expected`, накопленные суммы, `cut_offset`, `ising_constant` |
+| `tools.plot_parameter_trajectories(source, config)` | Все `binomial(2p,2)` плоских траекторий; при `layout.panels_per_page` — детерминированные страницы `filename_page_001` |
+| `tools.plot_parameter_trajectories_3d(source, config)` | Автономный HTML; Z — номер редукции |
+| `tools.plot_analytic_gamma_profile(source, config)` | `min_beta E(gamma,beta)` и `beta_star(gamma)` для выбранного шага |
+
+`source` — солвер, `RunRecord` или `result`. Графики читают сохранённую запись
+и не запускают солвер, оптимизатор или новые измерения. При `save.format="html"`
+3D-график встраивает Plotly.js и данные; файл открывается без сервера и сети.
+Пустая история даёт явную ошибку с указанием включить соответствующий `collect`.
+
+## Аналитический источник p=1
+
+`AnalyticP1Evaluator` вычисляет моменты одного слоя без полного вектора
+состояния. `AnalyticP1CorrelationSource` с типом `qaoa_analytic_p1_cpu`
+организует поиск углов и возвращает общий `CorrelationResult` этапа 03.
+
+```python
+from QA_max_cut_lib import AnalyticP1Evaluator, SolverFactory, tools
+
+evaluator = AnalyticP1Evaluator(graph)
+correlations = evaluator.correlations(0.3, 0.2, pair_domain="all_pairs")
+profile = evaluator.energy_min_beta(0.3)
+print(profile["beta_star"], profile["energy_min"])
+
+config = tools.load_json("configs/solvers/rqaoa_analytic_p1_cpu.json")
+algorithm = SolverFactory.from_config(config)
+solution = algorithm.solve(graph)
+```
+
+### Формулы и область
+
+Для `E=-C`, `J=w/2`, `|+>` и одного слоя
+
+\[
+c_{uv}=a_{uv}\sin(4\beta)+d_{uv}\sin^2(2\beta),
+\]
+
+где `a_{uv}=0.5 sin(gamma w_uv)(P_{u\setminus v}+P_{v\setminus u})`,
+`d_{uv}=0.5(P^-_{uv}-P^+_{uv})`. Произведения берутся по всем `k`, кроме `u,v`.
+Несмежная пара может иметь ненулевой коррелятор из-за общих соседей.
+
+Средняя энергия:
+
+\[
+E(\gamma,\beta)=E_0+A\sin(4\beta)+B\sin^2(2\beta),
+\]
+
+\[
+\min_\beta E=F_0-\operatorname{hypot}(F_s,F_c),\qquad
+\beta_*=\frac14\operatorname{atan2}(-F_s,-F_c)\bmod\frac{\pi}{2}.
+\]
+
+`E0=-0.5 Σw`, `F0=E0+B/2`, `Fs=A`, `Fc=-B/2`. При `R=0` выбирается
+`beta_star=0`. Минимум по gamma — лучшая точка явной конечной сетки, не
+доказанный непрерывный глобальный оптимум.
+
+### Параметры вычислителя
+
+| Аргумент/поле | Значение |
+|---|---|
+| `AnalyticP1Evaluator(graph, pair_batch_size=2048)` | Плотная матрица `N×N`; пакеты пар `O(pair_batch_size*N)` |
+| `parameters.layers` | Только 1 |
+| `parameters.dtype` | Только `float64` |
+| `parameters.pair_batch_size` | Положительное целое |
+| `optimizer.type` | `gamma_grid_exact_beta` |
+| `optimizer.parameters.gamma_bounds` | Две возрастающие конечные границы, включительно |
+| `optimizer.parameters.points` | Целое ≥2 |
+| `optimizer.parameters.gamma_batch_size` | Положительный размер планировочной группы |
+| `estimation.mode` | Только `exact` |
+| `correlations.mode` | Только `exact` |
+| `objective.type` | Только `mean_cut` |
+
+Поля `initialization`, `step_initialization`, ADAM, `shots`, полное
+распределение, `readout`, CVaR/Gibbs/Best-of-K/Threshold Probability, локальные
+поля и `p>1` отклоняются. Источник не строит `2**N`; он не поддерживает
+дискретный readout. Аналитический запуск не расходует шоты, поэтому
+`limits.shots_total=0` допустим.
+
+### Результат источника и RQAOA
+
+`CorrelationResult` содержит `node_order`, версию задачи, покрытие, физические
+корреляции, `[gamma,beta]`, `layers=1` и `training`:
+
+| Поле `training` | Смысл |
+|---|---|
+| `gamma_profile.type` | `analytic_gamma_grid` |
+| `gamma_profile.gamma_values` | Полная сетка, включая границы |
+| `gamma_profile.profile_energy` | `min_beta E` на сетке |
+| `gamma_profile.profile_energy_original` | То же со сдвигом `-b_t` при `original_graph` |
+| `gamma_profile.beta_star` | Точный beta для каждой gamma |
+| `gamma_profile.A`, `B`, `E0` | Коэффициенты энергии |
+| `gamma_profile.best_index`, `best_gamma`, `best_beta` | Детерминированная лучшая точка |
+| `classical_counters` | `gamma_points`, `coefficient_passes`, `pair_correlators`, `classical_seconds` |
+
+Корневой `RQAOA` сохраняет `shots_used=0`, `training_shots=0`,
+`correlation_shots=0`, `readout_shots=0`, а также `gamma_points`,
+`coefficient_passes`, `pair_correlators` и `classical_seconds`. Профиль входит
+в `local_optimizer_history` с `profile_type="analytic_gamma_grid"`.
+
+### Инструмент профиля
+
+`tools.plot_analytic_gamma_profile(source, config)` строит `min_beta E(gamma,beta)`
+и `beta_star(gamma)` для выбранного шага редукции. Он читает
+`local_optimizer_history` и не запускает новый поиск. При отсутствии профиля
+выдаётся ошибка с указанием включить `collect.local_optimizer_history`.
 
 ## Generators
 

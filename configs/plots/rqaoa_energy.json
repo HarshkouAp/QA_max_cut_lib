@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "type": "reduction_energy",
+  "style": {
+    "theme": "latex_scientific",
+    "font_family": "Computer Modern",
+    "font_size_pt": 11,
+    "figsize": [12, 8],
+    "text_engine": "mathtext"
+  },
+  "output": {"show": false}
+}

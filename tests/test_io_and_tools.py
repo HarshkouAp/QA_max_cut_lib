@@ -134,7 +134,7 @@ def test_no_silent_unimplemented_features():
         QAOACPU({"checkpoint": {"enabled": True}})
     with pytest.raises(ValueError):
         SolverFactory.from_config({"type": "qaoa_gpu"})
-    assert SolverFactory.available() == ("exact_cpu", "qaoa_cpu")
+    assert SolverFactory.available() == ("exact_cpu", "qaoa_cpu", "rqaoa_cpu")
 
 
 def test_import_is_inert_and_solver_module_examples_run():

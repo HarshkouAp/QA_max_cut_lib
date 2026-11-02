@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "type": "rqaoa_cpu",
+  "seed": 20261102,
+  "num_treads": 1,
+  "parameters": {
+    "finish_at": 4,
+    "max_reductions": null
+  },
+  "correlation_source": {
+    "type": "qaoa_analytic_p1_cpu",
+    "parameters": {
+      "layers": 1,
+      "dtype": "float64",
+      "pair_batch_size": 2048
+    },
+    "objective": {"type": "mean_cut", "parameters": {}},
+    "objective_reference": "working_graph",
+    "estimation": {"mode": "exact"},
+    "optimizer": {
+      "type": "gamma_grid_exact_beta",
+      "parameters": {
+        "gamma_bounds": [-3.141592653589793, 3.141592653589793],
+        "points": 41,
+        "gamma_batch_size": 4
+      }
+    },
+    "correlations": {"mode": "exact"}
+  },
+  "selection": {
+    "type": "max_abs_correlation",
+    "parameters": {"pairs": "edges", "zero_sign": 1}
+  },
+  "finisher": {
+    "type": "exact_cpu",
+    "parameters": {"max_vertices": 16, "batch_size": 65536}
+  },
+  "limits": {"shots_total": 0},
+  "collect": {
+    "reduction_history": true,
+    "parameter_trajectory": true,
+    "local_optimizer_history": true,
+    "correlation_tables": false,
+    "final_reduction_state": false
+  },
+  "output": {"report": 1, "logs": 1, "color": "auto"},
+  "save": {
+    "path": "results/analytic_rqaoa",
+    "atts": [
+      "solution",
+      "reduction_history",
+      "parameter_trajectory",
+      "local_optimizer_history"
+    ],
+    "filename": "analytic_p1_example",
+    "save_original_data": [],
+    "makedir": true,
+    "savedir": true
+  }
+}

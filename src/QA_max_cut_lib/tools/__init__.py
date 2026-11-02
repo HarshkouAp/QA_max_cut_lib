@@ -18,10 +18,27 @@ __all__ = [
     "plot_optimization",
     "scan_landscape",
     "plot_landscape",
+    "plot_reduction_weights",
+    "plot_reduction_energy",
+    "plot_analytic_gamma_profile",
+    "plot_parameter_trajectories",
+    "plot_parameter_trajectories_3d",
+    "TrajectoryPanelCollection",
 ]
 
 
 def __getattr__(name):
+    if name in {
+        "TrajectoryPanelCollection",
+        "plot_reduction_weights",
+        "plot_reduction_energy",
+        "plot_analytic_gamma_profile",
+        "plot_parameter_trajectories",
+        "plot_parameter_trajectories_3d",
+    }:
+        from . import reduction_plots
+
+        return getattr(reduction_plots, name)
     if name.startswith("plot_") and name in __all__:
         from . import plotting
 

@@ -1,8 +1,8 @@
 # QA_max_cut_lib
 
-Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a2**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение и точное ядро парных редукций Max-Cut → Изинг.
+Научная библиотека для взвешенного Max-Cut. Версия **0.1.0a4**: изменяемый граф, общий жизненный цикл солвера, полный результат, инструменты анализа, визуализация, безопасное сохранение, точное ядро парных редукций Max-Cut → Изинг, первый полный CPU RQAOA и аналитический CPU-вычислитель моментов p=1.
 
-Это ещё не перенос всего исследовательского архива. Сейчас доступны `ExactCPU`, `QAOACPU` и `GraphReducer`; LS, RQAOA, QAOA-in-QAOA, GPU, Laboratory, серии экспериментов, профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
+Это ещё не перенос всего исследовательского архива. Сейчас доступны `ExactCPU`, `QAOACPU`, `RQAOACPU`, `AnalyticP1Evaluator` и `GraphReducer`; аналитический источник p=1 подключён к RQAOA, но GPU, LS-RQAOA, QAOA-in-QAOA, Laboratory, серии экспериментов, профилировщик потоков и контрольные точки перечислены как следующие этапы в [статусе переноса](docs/MIGRATION_STATUS.md).
 
 ## Установка
 
@@ -18,10 +18,12 @@ python -m pip install -e ".[cpu,notebooks]"
 
 В этом рабочем проекте окружение уже подготовлено: `.venv-stage02` на Python
 3.12.14 с CPU-профилем, ноутбуками и Sphinx; `.venv` с CuPy сохранено отдельно
-для будущих GPU-этапов. Подробности, версии пакетов и команды проверки — в
+для будущих GPU-этапов. Для этапа 03 то же CPU-окружение прошло полный набор
+проверок; чистая установка wheel проверена в отдельном `.venv-wheelcheck`.
+Подробности, версии пакетов и команды проверки — в
 [описании проекта](docs/PROJECT_SETUP_RU.md). Локальная проверка Windows — в
-[VALIDATION_LOCAL.md](docs/VALIDATION_LOCAL.md), отчёт этапа 02 — в
-[VALIDATION_0.1.0a2.md](docs/VALIDATION_0.1.0a2.md).
+[VALIDATION_LOCAL.md](docs/VALIDATION_LOCAL.md), отчёт этапа 04 — в
+[VALIDATION_0.1.0a4.md](docs/VALIDATION_0.1.0a4.md).
 
 CPU-профиль не устанавливает и не импортирует CUDA или CuPy. NVIDIA-зависимости вынесены в отдельные файлы `requirements/gpu-nvidia-cu12.in` и `requirements/gpu-nvidia-cu13.in`; они подготовлены для будущего GPU-этапа и не добавляют работающий GPU-солвер в эту версию. См. [описание зависимостей](docs/INSTALLATION.md).
 
@@ -87,6 +89,67 @@ print(state.original_energy(solution))  # -7.0
 checkpoint оптимизатора. Подробные поля и ошибки — в [API](docs/API.md), вывод
 формул — в [математике](docs/MATHEMATICS.md).
 
+## RQAOA на CPU
+
+`RQAOACPU` обучает QAOA на текущем графе, получает физические ZZ-корреляции,
+выбирает одну пару, применяет точную редукцию и повторяет цикл до `finish_at`.
+Остаток решает `ExactCPU`; исходные спины восстанавливаются ядром этапа 02.
+Алгоритм эвристический: точное решение остатка не доказывает глобальный оптимум
+исходного графа.
+
+```python
+from QA_max_cut_lib import SolverFactory, tools
+
+config = tools.load_json("configs/solvers/rqaoa_cpu.json")
+algorithm = SolverFactory.from_config(config)
+solution = algorithm.solve(graph)
+result = algorithm.result
+trajectory = algorithm.parameter_trajectory
+history = algorithm.reduction_history
+
+figure = tools.plot_reduction_energy(algorithm, {"style": {"text_engine": "mathtext"}})
+trajectory_figure = tools.plot_parameter_trajectories(algorithm)
+interactive = tools.plot_parameter_trajectories_3d(algorithm)
+```
+
+Полный вектор состояния ограничивает размер исходного графа. Для этой версии
+источник рассчитан на небольшие задачи, а не на ориентир в 1000 вершин.
+Шотовый пример находится в `configs/solvers/rqaoa_cpu_shots.json`; общий лимит
+`limits.shots_total` соблюдается строго, а при остановке возвращается полное
+допустимое решение с явным `status="stopped"`.
+
+## Аналитический p=1
+
+`AnalyticP1Evaluator` вычисляет среднюю энергию и физические ZZ-корреляции для
+стандартного `|+>`, X-миксера и одного слоя без вектора `2**N`. Источник
+`qaoa_analytic_p1_cpu` перебирает конечную сетку gamma и точно исключает beta:
+
+```python
+from QA_max_cut_lib import AnalyticP1Evaluator, SolverFactory, tools
+
+evaluator = AnalyticP1Evaluator(graph)
+print(evaluator.correlations(0.3, 0.2, pair_domain="all_pairs"))
+print(evaluator.energy_min_beta(0.3))
+
+config = tools.load_json("configs/solvers/rqaoa_analytic_p1_cpu.json")
+config.pop("save", None)
+algorithm = SolverFactory.from_config(config)
+solution = algorithm.solve(graph)       # the same RQAOACPU coordinator.
+```
+
+Поддерживаются Mean Cut и точные корреляции для существующих или всех пар,
+включая несмежные. Шоты, полное распределение, CVaR, Gibbs, Best-of-K,
+Threshold Probability, поля и `p>1` этим источником не поддерживаются; такие
+запросы отклоняются до вычисления. Аналитический запуск использует
+`shots_used=0`; `limits.shots_total=0` допустим. Для графа из 30 вершин
+ноутбук `05_analytic_p1_rqaoa.ipynb` выполняет короткий полный RQAOA без
+объекта `2**30`. Ориентир 1000 вершин относится к подготовке/пакетному
+вычислению, а не к обещанию полной цепочки RQAOA.
+
+Проверка формул и ограничений находится в `tests/test_analytic_p1.py`;
+локальный профиль времени и памяти — в
+[PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt](docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.txt).
+
 ## Сохранение
 
 Без `save` автоматической записи нет. Имена и параметры задаются через JSON-совместимый словарь.
@@ -122,6 +185,8 @@ figure = tools.plot_probabilities(restored, {
 - [Быстрый старт](notebooks/01_quickstart.ipynb): запуск, конфигурация, графики, сохранение и загрузка.
 - [Подробное руководство текущей версии](notebooks/02_current_api_guide.ipynb): все реализованные компоненты, пять критериев, шоты, повторные запуски, карты и экспорт.
 - [Ядро редукций](notebooks/03_reduction_core.ipynb): контрольный пример, цепочка, восстановление и снимок состояния.
+- [RQAOA на CPU](notebooks/04_rqaoa_cpu.ipynb): обучение, корреляции, редукции, восстановление, графики, сохранение и остановка по бюджету.
+- [Аналитический p=1 и RQAOA](notebooks/05_analytic_p1_rqaoa.ipynb): формула, точная beta-минимизация, профиль gamma, подключение к RQAOA и задача из 30 вершин.
 - [Математика](docs/MATHEMATICS.md): энергетическая нотация, QAOA, критерии и численные ограничения.
 - [Полный API текущей версии](docs/API.md): аргументы, конфигурационные поля, атрибуты, формы массивов и ошибки.
 - [Карта архитектуры и состояния переноса](docs/ARCHITECTURE_MAP_RU.md): что уже есть, чего нет и какие контракты вводить.
@@ -135,6 +200,8 @@ figure = tools.plot_probabilities(restored, {
 ```bash
 python -m QA_max_cut_lib.solvers.exact_cpu --report 1 --logs 0
 python -m QA_max_cut_lib.solvers.qaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/qaoa_cpu.json --report 1
+python -m QA_max_cut_lib.solvers.rqaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/rqaoa_cpu.json --report 1
+python -m QA_max_cut_lib.solvers.rqaoa_cpu --graph configs/graphs/complete_signed_7.json --config configs/solvers/rqaoa_analytic_p1_cpu.json --report 1
 python examples/quickstart.py
 ```
 

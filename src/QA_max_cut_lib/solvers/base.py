@@ -32,6 +32,7 @@ class BaseSolver:
     """
 
     algorithm_type = None
+    extra_config_fields = ()
     optional_fields = (
         "solution",
         "cut_value",
@@ -68,7 +69,7 @@ class BaseSolver:
             "output",
             "save",
             "checkpoint",
-        }
+        } | set(self.extra_config_fields)
         if set(self._config) - allowed:
             raise ValueError(f"Unknown solver fields: {set(self._config) - allowed}")
         if self._config.get("schema_version", 1) != 1:
@@ -186,6 +187,7 @@ class BaseSolver:
             fields.setdefault("status", "completed")
             fields.setdefault("termination_reason", "completed")
             fields.setdefault("resources", {"shots_used": 0, "num_treads": 1})
+            extra_report = fields.pop("report", None)
             fields["report"] = {
                 "status": fields["status"],
                 "termination_reason": fields["termination_reason"],
@@ -194,6 +196,8 @@ class BaseSolver:
                 "compute_seconds": elapsed,
                 "resources": deepcopy(fields["resources"]),
             }
+            if isinstance(extra_report, dict):
+                fields["report"].update(deepcopy(extra_report))
             for key in self.optional_fields:
                 fields.setdefault(key, None)
             self._last_run = RunRecord(fields)

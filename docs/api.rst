@@ -35,6 +35,28 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_cpu.QAOACPU
 
+.. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.components.QAOAStatevectorCorrelationSource
+   :members: estimate
+
+.. autoclass:: QA_max_cut_lib.solvers.components.MaxAbsCorrelationSelector
+   :members: select
+
+.. autoclass:: QA_max_cut_lib.solvers.components.ExactCPUFinisher
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.components.CorrelationResult
+
+.. autoclass:: QA_max_cut_lib.solvers.components.SelectionResult
+
+.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1Evaluator
+   :members: correlations, correlation_matrix, energy_min_beta, expected_energy, expected_cut, scan_gamma
+
+.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1CorrelationSource
+   :members: estimate
+
 .. autofunction:: QA_max_cut_lib.solvers.objectives.validate_objective
 
 .. autofunction:: QA_max_cut_lib.solvers.objectives.objective_value
@@ -67,3 +89,6 @@
 
 .. automodule:: QA_max_cut_lib.tools.plotting
    :members: plot_graph, plot_graph_solution, plot_graph_info, plot_probabilities, plot_optimization, plot_landscape
+
+.. automodule:: QA_max_cut_lib.tools.reduction_plots
+   :members: plot_reduction_weights, plot_reduction_energy, plot_parameter_trajectories, plot_parameter_trajectories_3d, plot_analytic_gamma_profile

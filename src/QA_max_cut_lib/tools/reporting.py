@@ -32,8 +32,18 @@ def print_report(source, level=1, color="auto"):
         "37",
     )
     print("Resources:", json.dumps(record.resources, sort_keys=True))
+    if "reductions_completed" in record.field_names:
+        print(
+            "RQAOA:",
+            f"reductions={record.get('reductions_completed')}",
+            f"source={record.get('solution_source')}",
+            f"cut_offset={record.get('cut_offset')}",
+            f"ising_constant={record.get('ising_constant')}",
+        )
     if level == 2:
         print("Termination:", record.termination_reason)
+        if "remaining_node_order" in record.field_names:
+            print("Remaining nodes:", record.get("remaining_node_order"))
         print("Solution:", record.solution)
         print(
             "Configuration:",

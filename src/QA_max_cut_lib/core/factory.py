@@ -16,15 +16,20 @@ class SolverFactory:
 
     @staticmethod
     def available():
-        return ("exact_cpu", "qaoa_cpu")
+        return ("exact_cpu", "qaoa_cpu", "rqaoa_cpu")
 
     @staticmethod
     def from_config(config):
         """Return the selected implemented solver. Never change backend."""
         from ..solvers.exact_cpu import ExactCPU
         from ..solvers.qaoa_cpu import QAOACPU
+        from ..solvers.rqaoa_cpu import RQAOACPU
 
-        types = {"exact_cpu": ExactCPU, "qaoa_cpu": QAOACPU}
+        types = {
+            "exact_cpu": ExactCPU,
+            "qaoa_cpu": QAOACPU,
+            "rqaoa_cpu": RQAOACPU,
+        }
         if config.get("type") not in types:
             raise ValueError(
                 f"Solver {config.get('type')!r} is not implemented in {__version__}. Available: {tuple(types)}"
