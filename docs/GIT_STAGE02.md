@@ -4,8 +4,14 @@
 
 ## Коммиты
 ```
+5d7cd11 Record input artifact hashes in stage 02 report
+457f20e Add stage 02 git summary and patch
 1b5833b Stage 02: add exact Max-Cut to Ising reduction core (0.1.0a2)
 ```
+
+Основной diff `docs/STAGE02_DIFF.patch` соответствует коммиту `1b5833b`
+(исходный код, тесты, документация и выполненные ноутбуки). Коммиты
+`457f20e` и `5d7cd11` добавляют только отчётные материалы.
 
 ## Изменённые файлы
 ```
