@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "type": "qaoa_cpu",
+  "seed": 42,
+  "num_treads": 1,
+  "parameters": {"layers": 1, "max_vertices": 20, "dtype": "complex128"},
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "estimation": {"mode": "exact", "shots_per_evaluation": 256},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {"max_steps": 30, "learning_rate": 0.05},
+    "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+  },
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.5, 0.3]}},
+  "readout": {"mode": "best_of_shots", "shots": 256},
+  "limits": {"shots_total": 256},
+  "collect": {"optimizer_history": true, "objective_history": false, "probabilities": true, "statevector": false, "correlations": false},
+  "output": {"report": 0, "logs": 0, "color": "auto"}
+}

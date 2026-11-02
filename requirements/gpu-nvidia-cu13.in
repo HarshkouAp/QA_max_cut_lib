@@ -1,0 +1,7 @@
+# NVIDIA GPU profile for CUDA 13.x.
+# Install exactly one GPU profile. Do not combine it with gpu-nvidia-cu12.in.
+# CUDA 13 drops support for Maxwell, Pascal and Volta GPUs.
+# Check the device and a compiled kernel, not only "import cupy".
+
+-r cpu.in
+cupy-cuda13x[ctk]

@@ -1,0 +1,62 @@
+# Локальная проверка окружения
+
+**Дата:** 2 ноября 2026 года.
+**Машина:** Windows 10 (10.0.19043), 4 физических / 8 логических ядер, 15.7 ГБ RAM.
+**Python:** 3.12.14 в `.venv`.
+**Проверяемая сборка:** `QA_max_cut_lib 0.1.0a1`.
+
+## Выполненные проверки
+
+| Проверка | Команда | Результат |
+|---|---|---|
+| Автоматические тесты | `python -m pytest -q` | **42 passed** за 16.06 с |
+| ExactCPU, CLI | `python -m QA_max_cut_lib.solvers.exact_cpu --report 1 --logs 0` | `completed`, Cut = 5 |
+| QAOACPU, CLI | `python -m QA_max_cut_lib.solvers.qaoa_cpu --report 1 --logs 0` | `completed`, 20 шагов ADAM |
+| Quickstart | `python examples/quickstart.py` | Exact и QAOA дали энергию −6, quality = 1.000 |
+| Ноутбук 01 | `jupyter nbconvert --execute notebooks/01_quickstart.ipynb` | выполнен целиком, 5 изображений, сохранённые JSON/NPY |
+| Ноутбук 02 | `jupyter nbconvert --execute notebooks/02_current_api_guide.ipynb` | выполнен целиком, 6 изображений, карта и графики |
+| Сборка wheel | `python -m build` | созданы wheel и sdist `0.1.0a1` |
+| Сборка Sphinx | `python -m sphinx -W -b html docs docs/_build/html` | успешно, без предупреждений |
+| GPU | `cupy.cuda.runtime`, elementwise, `RawKernel` | CuPy 14.2.0, CUDA runtime 13020, ядро скомпилировано |
+| Импорт профиля | `import QA_max_cut_lib, cvxpy, plotly, dimod, dwave.samplers, community` | успешно |
+
+## Версии основных пакетов
+
+| Пакет | Версия |
+|---|---|
+| NumPy | 2.5.4 |
+| SciPy | 1.18.1 |
+| pandas | 3.1.0 |
+| Matplotlib | 3.11.2 |
+| Seaborn | 0.13.2 |
+| Plotly | 7.1.0 |
+| CVXPY | 1.9.3 |
+| SCS | 3.3.1 |
+| NetworkX | 3.7 |
+| dimod | 0.12.23 |
+| dwave-samplers | 1.8.0 |
+| pytest | 9.2.0 |
+| Sphinx | 9.1.1 |
+| CuPy | 14.2.0 (`cupy-cuda13x`) |
+
+Полный список: `requirements/lock-cpu-py312-win.txt` (CPU-профиль) и
+`requirements/lock-gpu-cu13-py312-win.txt` (текущее окружение с CuPy).
+
+## Что подтверждено
+
+- Пакет устанавливается в отдельное окружение в режиме `-e`.
+- 42 проверки исходной сборки проходят на Windows и Python 3.12 без изменения кода.
+- Импорт пакета не загружает Matplotlib и CuPy.
+- Модульные CLI-примеры работают без запуска вычислений при импорте.
+- Графики строятся в локальной теме и не меняют глобальные `matplotlib.rcParams`.
+- Сохранение JSON/NPY, защита от перезаписи и одновременные экспорты проходят тесты.
+
+## Что не проверялось этой командой
+
+- Полный GPU-солвер: проверены только CuPy, устройство и компиляция ядра.
+- Сборка Sphinx и wheel проверены; их содержимое не сверялось с исходным
+  `ARTIFACTS.json` прежней сборки.
+- Численное качество QAOA на больших графах: стартовая сборка ограничена
+  полным вектором состояния и небольшими задачами.
+- Режим `style.text_engine="latex"`: MiKTeX установлен, но отдельный рендер
+  этим режимом ещё не подтверждён.

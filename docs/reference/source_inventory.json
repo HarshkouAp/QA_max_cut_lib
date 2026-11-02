@@ -1,0 +1,2014 @@
+[
+  {
+    "path": "Diplom/Bench_mod.py",
+    "lines": 14,
+    "classes": [
+      {
+        "name": "mod",
+        "line": 5,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Benchmark.py",
+    "lines": 166,
+    "classes": [
+      {
+        "name": "Benchmark",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "file_preparing",
+          "run_single_benchmark",
+          "run_benchmark",
+          "generate_configs_grid"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_1.py",
+    "lines": 216,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk1",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_2.py",
+    "lines": 244,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk2",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_2_1.py",
+    "lines": 239,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk2v1",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_2_2.py",
+    "lines": 239,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk2v2",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_3.py",
+    "lines": 251,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk3",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_3_1.py",
+    "lines": 248,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk3",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_remove_zero_weight_edges",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_6_1.py",
+    "lines": 266,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk6v1",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_6_2.py",
+    "lines": 280,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk6v2",
+        "line": 14,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_7_1.py",
+    "lines": 268,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk7v1",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/MK_7_2.py",
+    "lines": 280,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk7v2",
+        "line": 14,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_4.py",
+    "lines": 277,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk4",
+        "line": 13,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_5.py",
+    "lines": 344,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA",
+        "line": 13,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_5_1.py",
+    "lines": 283,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk5",
+        "line": 14,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_5_2.py",
+    "lines": 306,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk5",
+        "line": 14,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "connected_subgraph",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_5_3(8_3).py",
+    "lines": 310,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk5",
+        "line": 13,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_energy_prediction_disc",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_8.py",
+    "lines": 205,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk5",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_8_1.py",
+    "lines": 257,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk8v1",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_2d_array",
+          "_dict_to_1d_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_8_2.py",
+    "lines": 261,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk8v1",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_2d_array",
+          "_dict_to_1d_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/Mk_8_3.py",
+    "lines": 287,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_mk8v1",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_remove_zero_weight_edges",
+          "_dict_to_2d_array",
+          "_dict_to_1d_array",
+          "_graph_reduction",
+          "_solution_encoder",
+          "_cut_value",
+          "_energy_prediction_disc",
+          "_recursive_step",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA2_CE_fixed.py",
+    "lines": 451,
+    "classes": [
+      {
+        "name": "QAOAinQAOA",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_edge_key",
+          "_as_edge_attr_dict",
+          "solve",
+          "_local_QAOA",
+          "_reformulate_QAOA",
+          "_merge_solution",
+          "_classical_solution",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA2_Dip.py",
+    "lines": 156,
+    "classes": [
+      {
+        "name": "QAOAinQAOA",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve",
+          "_local_QAOA",
+          "_reformulate_QAOA",
+          "_merge_solution",
+          "_classical_solution",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA2_СE.py",
+    "lines": 283,
+    "classes": [
+      {
+        "name": "QAOAinQAOA",
+        "line": 14,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve",
+          "_local_QAOA",
+          "_reformulate_QAOA",
+          "_merge_solution",
+          "_classical_solution",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA_DF.py",
+    "lines": 508,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 16,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA_F.py",
+    "lines": 343,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA_СF.py",
+    "lines": 491,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 16,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Diplom/QAOA_СFR.py",
+    "lines": 495,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 16,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "ENV/GoemansWilliamson.py",
+    "lines": 93,
+    "classes": [
+      {
+        "name": "GoemansWilliamsonMaxcut",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "calculate_cut_value",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "ENV/ProblemGenerator.py",
+    "lines": 118,
+    "classes": [
+      {
+        "name": "ProblemGenerator",
+        "line": 5,
+        "bases": [],
+        "methods": [
+          "_cut_value",
+          "_correlation",
+          "recover_binary_vector_soft_fast"
+        ]
+      },
+      {
+        "name": "HebbianMaxCutGenerator",
+        "line": 48,
+        "bases": [
+          "ProblemGenerator"
+        ],
+        "methods": [
+          "__init__",
+          "generate"
+        ]
+      },
+      {
+        "name": "WishartMaxCutGenerator",
+        "line": 75,
+        "bases": [
+          "ProblemGenerator"
+        ],
+        "methods": [
+          "__init__",
+          "generate"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "ENV/QAOA.py",
+    "lines": 348,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 15,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "mean_map",
+          "_init_approximation",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Generators/GraphGenerator.py",
+    "lines": 224,
+    "classes": []
+  },
+  {
+    "path": "Generators/Nonlocality_Gen.py",
+    "lines": 120,
+    "classes": []
+  },
+  {
+    "path": "Generators/maxcut_benchmark_generator.py",
+    "lines": 368,
+    "classes": []
+  },
+  {
+    "path": "Laboratory/CorrelationExtractor.py",
+    "lines": 353,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA",
+        "line": 13,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/DistQAOA.py",
+    "lines": 283,
+    "classes": [
+      {
+        "name": "LocalQAOA",
+        "line": 15,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_mix_operator_preset",
+          "build_hamiltonian",
+          "_cost_function",
+          "optimize",
+          "spin_means",
+          "bit_means",
+          "most_probable_state"
+        ]
+      },
+      {
+        "name": "DistributedQAOA",
+        "line": 121,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_external_field",
+          "_update_solution",
+          "cut_value",
+          "solve",
+          "plot_convergence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/Distributed_QAOA_CF.py",
+    "lines": 425,
+    "classes": [
+      {
+        "name": "QAOA_CF",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_prepare_subgraphs",
+          "_to_spin_bit",
+          "_init_spins",
+          "_init_local_data",
+          "_field",
+          "_hamiltonian",
+          "_qaoa_state",
+          "_cost_function",
+          "_local_step",
+          "solve",
+          "_solution_from_spins",
+          "_cut_value",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/EdgeExtender.py",
+    "lines": 225,
+    "classes": []
+  },
+  {
+    "path": "Laboratory/GraphDecomposer_light.py",
+    "lines": 759,
+    "classes": [
+      {
+        "name": "FastConfig",
+        "line": 22,
+        "bases": [],
+        "methods": []
+      },
+      {
+        "name": "FastDenseSubgraphGenerator",
+        "line": 68,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_precompute",
+          "_mark_edges",
+          "_unmark_edges",
+          "_edges_conflict",
+          "_audit_edge_exclusivity",
+          "_multi_bfs_distances",
+          "_select_start_node",
+          "_node_rating",
+          "_select_adaptive",
+          "generate_dense_candidate",
+          "_multi_bfs",
+          "_attach_uncovered",
+          "_grow_from_seed",
+          "_greedy_repair",
+          "generate_multiple_subgraphs"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/GraphScanning.py",
+    "lines": 100,
+    "classes": [
+      {
+        "name": "GraphScanner",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS-DistQAOA.py",
+    "lines": 325,
+    "classes": [
+      {
+        "name": "LocalBlockQAOA",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_build_mix_operator",
+          "build_hamiltonian",
+          "_objective",
+          "solve",
+          "spin_means",
+          "edge_correlations",
+          "most_probable_spins"
+        ]
+      },
+      {
+        "name": "DistLSRQAOA",
+        "line": 93,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_adjacency_map",
+          "_subgraphs",
+          "_external_field",
+          "_distributed_pass",
+          "_graph_reduction",
+          "_recursive_step",
+          "_solve_small_graph_exactly",
+          "_decode_solution",
+          "cut_value",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_QAOA_field.py",
+    "lines": 256,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOAF",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_exp.py",
+    "lines": 233,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_fast_1.py",
+    "lines": 362,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_1",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_fast_2.py",
+    "lines": 342,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_2",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_fast_3.py",
+    "lines": 342,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_3",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_fast_4.py",
+    "lines": 334,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_1",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/LS_RQAOA_fast_5.py",
+    "lines": 347,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA",
+        "line": 13,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/NodeExtender.py",
+    "lines": 198,
+    "classes": []
+  },
+  {
+    "path": "Laboratory/QAOA_ADAM.py",
+    "lines": 521,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "mean_map",
+          "_init_approximation",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED",
+          "_ground_overlap"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/QAOA_F.py",
+    "lines": 349,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/QAOA_F2.py",
+    "lines": 372,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "sigmoid",
+          "field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/QAOA_F_M.py",
+    "lines": 549,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_field",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED",
+          "_ground_overlap"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/QAOA_F_M_D.py",
+    "lines": 107,
+    "classes": [
+      {
+        "name": "DistQAOA",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_cut_value",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/correct_mean.py",
+    "lines": 347,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA_1",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist",
+          "plot_correlations"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Laboratory/test_partition.py",
+    "lines": 40,
+    "classes": []
+  },
+  {
+    "path": "Other/WS_QAOA_correct.py",
+    "lines": 428,
+    "classes": [
+      {
+        "name": "WSQAOA",
+        "line": 43,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_get_gw_solution",
+          "_prepare_warm_start_state",
+          "_apply_warm_start_mixer",
+          "_maxcut_classical_solver",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_callback",
+          "plot_convergence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Other/WS_QAOA_no_GW.py",
+    "lines": 513,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 48,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_prepare_warm_start_state",
+          "_apply_warm_start_mixer",
+          "_maxcut_classical_solver",
+          "_cost_function",
+          "_layerwise_optimization",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "RQAOA_exp/QAOA.py",
+    "lines": 491,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "mean_map",
+          "_init_approximation",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convegence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "RQAOA_exp/RQAOA.py",
+    "lines": 325,
+    "classes": [
+      {
+        "name": "RecursiveQAOA",
+        "line": 15,
+        "bases": [
+          "QAOA"
+        ],
+        "methods": [
+          "__init__",
+          "_expand_correlations",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "draw_convegence",
+          "draw_param_evolution"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/AnalyticalQAOA.py",
+    "lines": 255,
+    "classes": [
+      {
+        "name": "AnalyticalQAOA",
+        "line": 22,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_reset_results",
+          "cost_function",
+          "solve",
+          "_require_solved",
+          "reconstructed_cost",
+          "summary",
+          "_callback",
+          "__str__",
+          "plot_convergence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/AnalyticalRQAOA.py",
+    "lines": 447,
+    "classes": [
+      {
+        "name": "AnalyticalRQAOA",
+        "line": 30,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_reset",
+          "_edge_terms",
+          "cost_function",
+          "_optimize_angles",
+          "_build_correlation_map",
+          "mean_map",
+          "_reduce_graph",
+          "_remove_isolates",
+          "_recursive_step",
+          "_solve_residual",
+          "_restore_solution",
+          "solve",
+          "summary",
+          "_callback",
+          "__str__",
+          "draw_convegence",
+          "draw_param_evolution"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/AutoTest.py",
+    "lines": 227,
+    "classes": [
+      {
+        "name": "Benchmark",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "file_preparing",
+          "run_single_benchmark",
+          "run_benchmark",
+          "generate_configs_grid"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/ClassicSolver.py",
+    "lines": 58,
+    "classes": [
+      {
+        "name": "ClassicSolver",
+        "line": 8,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/DLS_RQAOA.py",
+    "lines": 250,
+    "classes": [
+      {
+        "name": "DiscLargeScaleRQAOA",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/D_QAOA.py",
+    "lines": 299,
+    "classes": [
+      {
+        "name": "D_QAOA",
+        "line": 15,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_callback",
+          "plot_convegence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/D_RQAOA.py",
+    "lines": 210,
+    "classes": [
+      {
+        "name": "RecursiveQAOA",
+        "line": 15,
+        "bases": [
+          "D_QAOA"
+        ],
+        "methods": [
+          "__init__",
+          "_draw_mean_map",
+          "_mean_map",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "draw_convegence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/Dwave_aneal.py",
+    "lines": 111,
+    "classes": [
+      {
+        "name": "DwaveAnneal",
+        "line": 12,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_build_maxcut_bqm",
+          "_best_sample",
+          "_normalize_spins",
+          "_compute_cut_value",
+          "_solve_with_dwave_sa",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/FT_test.py",
+    "lines": 48,
+    "classes": [
+      {
+        "name": "Test",
+        "line": 6,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/FineTuning.py",
+    "lines": 115,
+    "classes": [
+      {
+        "name": "FineTuning",
+        "line": 9,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_compute_cut_value",
+          "_fine_tuning_hamiltonian",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/GoemansWilliamson.py",
+    "lines": 112,
+    "classes": [
+      {
+        "name": "GoemansWilliamsonMaxcut",
+        "line": 11,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "calculate_cut_value",
+          "solve",
+          "_callback"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/LS_RQAOA.py",
+    "lines": 283,
+    "classes": [
+      {
+        "name": "LargeScaleRQAOA",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_dict_to_array",
+          "_graph_reduction",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_max_corr_hist"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/QAOA.py",
+    "lines": 470,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 17,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "mean_map",
+          "_init_approximation",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/QAOA2.py",
+    "lines": 192,
+    "classes": [
+      {
+        "name": "QAOAinQAOA",
+        "line": 153,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "solve"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/QAOA_GPU.py",
+    "lines": 730,
+    "classes": [
+      {
+        "name": "QAOA",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_init_approximation",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "_adam_optimization",
+          "_cmaes_optimization",
+          "solve",
+          "_cut_value",
+          "_callback",
+          "plot_convergence",
+          "NED",
+          "energy",
+          "energy_and_grad",
+          "energies_batch",
+          "state_numpy",
+          "energies",
+          "layers_borders",
+          "_record",
+          "_optimize",
+          "_save_state",
+          "_decode",
+          "_prepare",
+          "_blocks",
+          "_call",
+          "_to_cpu",
+          "_fwht",
+          "_phase",
+          "_reduce",
+          "_trajectory",
+          "_allocate",
+          "_evaluate_workspace",
+          "_evaluate_state",
+          "_init_backend",
+          "_walsh_numpy"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/RQAOA.py",
+    "lines": 326,
+    "classes": [
+      {
+        "name": "RecursiveQAOA",
+        "line": 15,
+        "bases": [
+          "QAOA"
+        ],
+        "methods": [
+          "__init__",
+          "_expand_correlations",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "draw_convegence",
+          "draw_param_evolution"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/WS_QAOA.py",
+    "lines": 393,
+    "classes": [
+      {
+        "name": "WSQAOA",
+        "line": 43,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "get_initial_states_for_graph",
+          "_init_approximation",
+          "_prepare_warm_start_state",
+          "_apply_warm_start_mixer",
+          "_maxcut_classical_solver",
+          "_cost_function",
+          "_layerwise_optimization",
+          "solve",
+          "_callback",
+          "plot_convegence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Solvers/WS_RQAOA.py",
+    "lines": 287,
+    "classes": [
+      {
+        "name": "WSRecursiveQAOA",
+        "line": 15,
+        "bases": [
+          "WSQAOA"
+        ],
+        "methods": [
+          "__init__",
+          "_draw_mean_map",
+          "_mean_map",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "draw_convegence"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/Densest_sub.py",
+    "lines": 167,
+    "classes": []
+  },
+  {
+    "path": "Tools/GraphDecomposer.py",
+    "lines": 335,
+    "classes": [
+      {
+        "name": "SubgraphConfig",
+        "line": 30,
+        "bases": [],
+        "methods": []
+      },
+      {
+        "name": "GraphUtils",
+        "line": 45,
+        "bases": [],
+        "methods": [
+          "embeddedness",
+          "jaccard"
+        ]
+      },
+      {
+        "name": "OptimizedDenseSubgraphGenerator",
+        "line": 66,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_precompute",
+          "_avg_distance_to_selected",
+          "_node_rating",
+          "_select_nodes_adaptive",
+          "_select_optimal_start",
+          "_optimize_local",
+          "_ensure_connectivity",
+          "generate_dense_subgraph",
+          "generate_multiple_subgraphs"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/Graph_part_interception.py",
+    "lines": 363,
+    "classes": [
+      {
+        "name": "LazyMaxHeap",
+        "line": 35,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "push",
+          "pop_valid",
+          "push_if_possible"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/Graph_partition.py",
+    "lines": 171,
+    "classes": []
+  },
+  {
+    "path": "Tools/Hebbian_generator.py",
+    "lines": 69,
+    "classes": [
+      {
+        "name": "MaxCut_definite_generator",
+        "line": 6,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "generate_problem",
+          "cut_value_for_planted"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/MI_LS_RQAOA.py",
+    "lines": 428,
+    "classes": [
+      {
+        "name": "MI_RQAOA",
+        "line": 18,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_mutual_information",
+          "_graph_reduction",
+          "_mi_map",
+          "_mean_map",
+          "_solution_encoder",
+          "_cut_value",
+          "_recursive_step",
+          "solve",
+          "_callback",
+          "_logs",
+          "_collect_step_info",
+          "plot_mi_maps",
+          "plot_information",
+          "plot_qubit_information",
+          "plot_shortest_path"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/MI_QAOA.py",
+    "lines": 529,
+    "classes": [
+      {
+        "name": "MutualInfoQAOA",
+        "line": 19,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_compute_nonlocality",
+          "_maxcut_classical_solver",
+          "_mix_operator_preset",
+          "_one_q_trace",
+          "_two_q_trace",
+          "_mutual_information_map",
+          "_cost_function",
+          "_simultaneous_optimization",
+          "_layerwise_optimization",
+          "solve",
+          "_callback",
+          "plot_convegence",
+          "plot_mi_maps",
+          "plot_information",
+          "plot_qubit_information",
+          "plot_shortest_path"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/MutInfo.py",
+    "lines": 96,
+    "classes": [
+      {
+        "name": "MutualInformationMap",
+        "line": 10,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_one_q_trace",
+          "_two_q_trace",
+          "mutual_information_map"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/PartitionEfficiency.py",
+    "lines": 253,
+    "classes": [
+      {
+        "name": "PartitionEfficiency",
+        "line": 16,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "_density",
+          "_nonlocality",
+          "efficiency",
+          "plot_statistic"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/ProblemGenerator.py",
+    "lines": 113,
+    "classes": [
+      {
+        "name": "ProblemGenerator",
+        "line": 7,
+        "bases": [],
+        "methods": [
+          "_cut_value",
+          "_correlation",
+          "recover_binary_vector_soft_fast"
+        ]
+      },
+      {
+        "name": "HebbianMaxCutGenerator",
+        "line": 50,
+        "bases": [
+          "ProblemGenerator"
+        ],
+        "methods": [
+          "__init__",
+          "generate"
+        ]
+      },
+      {
+        "name": "WishartMaxCutGenerator",
+        "line": 70,
+        "bases": [
+          "ProblemGenerator"
+        ],
+        "methods": [
+          "__init__",
+          "generate"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "Tools/WPE_generator.py",
+    "lines": 46,
+    "classes": [
+      {
+        "name": "WishartMaxCutGenerator",
+        "line": 6,
+        "bases": [],
+        "methods": [
+          "__init__",
+          "generate"
+        ]
+      }
+    ]
+  }
+]

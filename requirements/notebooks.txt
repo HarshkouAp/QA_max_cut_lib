@@ -1,0 +1,2 @@
+# Run from the project root.
+-e .[cpu,notebooks]
