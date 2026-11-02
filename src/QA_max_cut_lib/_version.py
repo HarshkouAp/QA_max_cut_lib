@@ -5,4 +5,4 @@ runtime result metadata can then read the version without optional
 dependencies.
 """
 
-__version__ = "0.1.0a14"
+__version__ = "0.1.0a15"

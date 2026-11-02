@@ -576,7 +576,7 @@ The active state is a full `2^{|S|}` CPU state; external spins are classical
 data, not an X-mixed subsystem. Local fields never enter the global reducer.
 
 
-## 14. Block mean-field exchange (0.1.0a14)
+## 14. Block mean-field exchange (0.1.0a15)
 
 For a disjoint block cover and compact first/internal moments, the product
 model has

@@ -25,6 +25,10 @@ def __getattr__(name):
         from .warm_start_qaoa_cpu import WarmStartQAOACPU
         globals()[name] = WarmStartQAOACPU
         return WarmStartQAOACPU
+    if name == "DistributedLSRQAOACPU":
+        from .distributed_ls_rqaoa_cpu import DistributedLSRQAOACPU
+        globals()[name] = DistributedLSRQAOACPU
+        return DistributedLSRQAOACPU
     if name == "BlockMeanFieldQAOACPU":
         from .block_mean_field_qaoa_cpu import BlockMeanFieldQAOACPU
         globals()[name] = BlockMeanFieldQAOACPU
@@ -53,6 +57,7 @@ __all__ = [
     "ConditionalQAOACPU",
     "EnvironmentLSRQAOACPU",
     "BlockMeanFieldQAOACPU",
+    "DistributedLSRQAOACPU",
     "IMPLEMENTED_VARIANTS",
     "catalog_summary",
     "get_file",

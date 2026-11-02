@@ -739,7 +739,7 @@ class BlockMeanFieldQAOACPU(BaseSolver):
         self._resume_mode = True
         return self.solve(self._resume_graph, control=control)
 
-    def _run(self, graph, config, rng):
+    def _run(self, graph, config, rng, budget=None):
         blocks = [tuple(int(node) for node in block) for block in config["partition"]["parameters"]["blocks"]]
         layers = int(config["parameters"]["layers"])
         if not graph.nodes:
@@ -801,7 +801,8 @@ class BlockMeanFieldQAOACPU(BaseSolver):
                         q[canonical_edge(u, v)] = means[int(u)] * means[int(v)]
             theta, angle_source = self._initial_thetas(graph, config, rng)
             initial_thetas = [value.copy() for value in theta]
-            budget = ShotBudget(config["limits"]["shots_total"])
+            if budget is None:
+                budget = ShotBudget(config["limits"]["shots_total"])
             history = []
             model_history = []
             completed_sweeps = 0
@@ -843,7 +844,7 @@ class BlockMeanFieldQAOACPU(BaseSolver):
 
         publish("initialized", next_sweep)
         for sweep in range(next_sweep, int(config["parameters"]["max_sweeps"])):
-            if self._control is not None and self._control.should_pause(
+            if getattr(self, "_control", None) is not None and self._control.should_pause(
                 "sweeps", completed_sweeps
             ):
                 status = "paused"

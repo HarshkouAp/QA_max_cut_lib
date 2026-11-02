@@ -62,6 +62,9 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.block_mean_field.MeanFieldBlockProblem
 
+.. autoclass:: QA_max_cut_lib.solvers.distributed_ls.DistributedLSRQAOACPU
+   :members: solve
+
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
 

@@ -51,6 +51,13 @@ CAPABILITIES = {
         "phases": ["initialized", "gauss_seidel_sweep_commit", "jacobi_sweep_commit", "paused"],
         "notes": "Compact model-bank codec; mid-sweep child checkpoints are not claimed in this codec.",
     },
+    "laboratory.distributed_ls_rqaoa_cpu": {
+        "supports_checkpoint": True,
+        "boundaries": ["initialized", "reduction_committed"],
+        "state": "reduction state, parent means, budget, completed episodes and history",
+        "phases": ["initialized", "reduction_committed"],
+        "notes": "Outer nested checkpoint codec; mid-episode child resume is not claimed.",
+    },
     "qaoa_gpu": {
         "supports_checkpoint": False,
         "boundaries": [],
