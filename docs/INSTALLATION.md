@@ -93,3 +93,10 @@ LaTeX, его форматы и пакеты, а для растрового Agg
 10/NTFS (локальная проверка, включая одновременные экспорты). Файловые системы
 без hard links не проверялись. При конфликте имён нет автоматической
 перезаписи или переименования.
+
+
+## Laboratory warm-start
+
+`provided_spins` and `provided_probabilities` require only the CPU profile.
+`classical_solver` with GW/SA requires the existing `classical` extra.
+No CuPy, Qiskit or archive RAR is needed for the catalog or provided sources.

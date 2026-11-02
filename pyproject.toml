@@ -60,6 +60,9 @@ docs = [
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"QA_max_cut_lib.laboratory" = ["data/*.json"]
+
 [tool.setuptools.dynamic]
 version = {attr = "QA_max_cut_lib._version.__version__"}
 

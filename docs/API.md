@@ -1,4 +1,4 @@
-# API версии 0.1.0a10
+# API версии 0.1.0a11
 
 Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
 
@@ -720,3 +720,48 @@ python -m QA_max_cut_lib.tools.parallelism --benchmark experiments/benchmark_sma
 тот же canonical run. Новый `solve()` на восстановленном объекте — новый run.
 CLI: `python -m QA_max_cut_lib.tools.checkpoints inspect --checkpoint PATH`.
 Полная матрица границ — в `CHECKPOINTS_RU.md`.
+
+
+## Laboratory и warm-start
+
+```python
+from QA_max_cut_lib import GraphFactory, tools
+from QA_max_cut_lib.laboratory import WarmStartQAOACPU
+
+graph = GraphFactory.from_recipe(tools.load_json("configs/graphs/warm_start_4.json"))
+config = tools.load_json("configs/solvers/warm_start_qaoa_cpu_provided.json")
+solver = WarmStartQAOACPU(config)
+solution = solver.solve(graph)
+```
+
+`type="laboratory.warm_start_qaoa_cpu"`. Обязательный раздел `warm_start`:
+
+```json
+{
+  "epsilon": 0.25,
+  "source": {"type": "provided_spins", "parameters": {"entries": [{"node": 10, "spin": -1}]}},
+  "mixer": {"type": "rounded_modified"}
+}
+```
+
+Источники: `provided_spins`, `provided_probabilities`, `classical_solver`
+(`gw_cpu`, `simulated_annealing_cpu`, `exact_cpu`). Mixer: `x`,
+`warm_aligned`, `rounded_modified`. `epsilon` фиксирован на run.
+Source entries должны покрывать все метки текущего графа без повторов.
+Classical child не запускается в конструкторе; его `source_cost` отдельно.
+
+`result` дополнительно содержит `variant_id`, `warm_start_data`
+(`q_raw`, `q_clipped`, `warm_start_angles`, `node_order`), `mixer_id`,
+`source_type`, `source_cut`, `source_run`, `source_cost`,
+`initial_expected_cut`, `initial_expected_energy`. `source_cut` — дискретный
+seed cut, а не ожидание product state. `warm_start_angles` не входят в
+`optimal_angles` и не являются trainable параметрами.
+
+Каталог:
+
+```bash
+python -m QA_max_cut_lib.laboratory list
+python -m QA_max_cut_lib.laboratory show --id warm_start_product_qaoa_cpu_v1
+```
+
+`list/show` не требуют CuPy/CVXPY. Полный обзор — `LABORATORY_RU.md`.

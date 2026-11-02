@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "type": "laboratory.warm_start_qaoa_cpu",
+  "seed": 44,
+  "num_treads": 1,
+  "parameters": {"layers": 1, "dtype": "complex128"},
+  "warm_start": {
+    "epsilon": 0.25,
+    "source": {
+      "type": "classical_solver",
+      "parameters": {
+        "solver_type": "gw_cpu",
+        "config": {
+          "schema_version": 1,
+          "type": "gw_cpu",
+          "seed": 9100,
+          "parameters": {"num_hyperplanes": 8, "solver": "SCS"}
+        }
+      }
+    },
+    "mixer": {"type": "rounded_modified"}
+  },
+  "objective": {"type": "mean_cut"},
+  "estimation": {"mode": "shots", "shots_per_evaluation": 32},
+  "optimizer": {
+    "type": "adam",
+    "parameters": {"max_steps": 1, "learning_rate": 0.05, "gradient_tolerance": 0.0},
+    "gradient": {"type": "central_difference", "parameters": {"step": 0.01}}
+  },
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.4, 0.2]}},
+  "readout": {"mode": "best_of_shots", "shots": 64},
+  "limits": {"shots_total": 224},
+  "collect": {"probabilities": true, "optimizer_history": true},
+  "output": {"report": 1, "logs": 0, "color": "auto"}
+}

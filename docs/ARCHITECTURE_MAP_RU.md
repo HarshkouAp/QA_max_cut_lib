@@ -15,6 +15,7 @@
 | Core | `core.graph`, `core.records`, `core.saving`, `core.factory` | Общие типы, результат, сериализация, сборка. Не зависит от алгоритмов. |
 | Solvers | `solvers.base`, CPU/GPU QAOA, RQAOA/LS, QAOA-in-QAOA, GW/SA, `RefinedSolver` | Полные алгоритмы и их вычислительные компоненты. Могут использовать Core и численные функции Tools. |
 | Experiments | `core.experiment_spec`, `core.runner`, `core.references`, `core.profile`, `core.measurement`, `core.series_analysis` | Общий план, независимые trials, эталоны, measurement protocol и профиль; циклы солверов не копируются. |
+| Laboratory | `laboratory.catalog`, `solvers.warm_start`, `solvers.warm_start_qaoa_cpu` | Versioned inventory/catalog, 89 source records, explicit source aliases, CPU product-state warm start and mixer IDs; deferred families stay unavailable. |
 | Checkpoint | `core.checkpoint`, `core.checkpoint_capabilities`, `tools/checkpoints` | Immutable JSON/NPY generations, RunControl, durable journal, inspect/restore/resume; capability matrix отклоняет неизвестные codecs. |
 | Generators | `generators.graphs` | Рецепты графов, подграфы, разбиения. Не зависит от солверов. |
 | Tools | `tools.numerics`, `tools.plotting`, `tools.reporting`, `tools.landscape`, `tools.demo` | Численные функции, анализ, визуализация, отчёты, демонстрации. Численные функции не импортируют графику и солверы. |

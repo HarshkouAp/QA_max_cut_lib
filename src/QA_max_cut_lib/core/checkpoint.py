@@ -627,8 +627,12 @@ def restore(path, *, overrides=None):
     manifest = loaded["manifest"]
     state = loaded["state"]
     component = manifest.get("component_id")
-    if component != "qaoa_cpu":
-        raise CheckpointIncompatible(f"Component {component!r} has no a10 resume codec.")
+    from .checkpoint_capabilities import capability
+
+    if not capability(component).get("supports_checkpoint", False):
+        raise CheckpointIncompatible(
+            f"Component {component!r} has no checkpoint resume codec."
+        )
     config = deepcopy(state.get("config"))
     if not isinstance(config, dict):
         raise CheckpointCorrupt("Checkpoint has no resolved solver config.")
@@ -647,9 +651,9 @@ def restore(path, *, overrides=None):
             raise CheckpointIncompatible(f"Unsupported restore overrides: {sorted(set(overrides) - allowed)}")
         for key, value in overrides.items():
             config[key] = deepcopy(value)
-    from ..solvers.qaoa_cpu import QAOACPU
+    from ..core.factory import SolverFactory
 
-    solver = QAOACPU(config)
+    solver = SolverFactory.from_config(config)
     graph = state.get("graph")
     if not isinstance(graph, dict):
         raise CheckpointCorrupt("Checkpoint has no graph snapshot.")

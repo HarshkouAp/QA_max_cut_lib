@@ -31,11 +31,12 @@ CUDA-контекст.
 
 ## Capability matrix
 
-В a10 фактически реализован переносимый codec только для `QAOACPU`:
+В a11 реализованы переносимые codecs для `QAOACPU` и `laboratory.warm_start_qaoa_cpu`:
 
 | Компонент | a10 boundary | Статус |
 |---|---|---|
 | `QAOACPU` / `qaoa_cpu` | completed ADAM iteration, `training_done`, `readout_done` | реализован |
+| `WarmStartQAOACPU` / `laboratory.warm_start_qaoa_cpu` | те же границы; frozen source/q/mixer | реализован |
 | `QAOAGPU` / `qaoa_gpu` | требуется переносимый CuPy sampler protocol | отклоняется |
 | `RQAOACPU`, `RQAOAGPU` | source/reduction codec | отклоняется |
 | `LSRQAOACPU`, `LSRQAOAGPU` | parent/child task codec | отклоняется |
@@ -50,7 +51,7 @@ CUDA-контекст.
 `ValueError`/`CheckpointIncompatible`, а не тихую частичную сериализацию.
 Новый неизвестный плагин без codec также отклоняется.
 
-## RunState QAOACPU
+## RunState QAOACPU и warm-start
 
 Сохраняются:
 

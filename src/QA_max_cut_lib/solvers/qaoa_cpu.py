@@ -46,6 +46,7 @@ class QAOACPU(BaseSolver):
     """
 
     algorithm_type = "qaoa_cpu"
+    checkpoint_component_id = "qaoa_cpu"
     supports_checkpoint = True
     optional_fields = BaseSolver.optional_fields + (
         "checkpoint_info",
@@ -191,6 +192,14 @@ class QAOACPU(BaseSolver):
             if type(collect[key]) is not bool:
                 raise ValueError(f"collect.{key} must be boolean.")
 
+    def _state_at_angles(self, cuts, angles, layers, dtype):
+        """Return the state and probabilities for the active ansatz."""
+        return state_at_angles(cuts, angles, layers, dtype)
+
+    def _checkpoint_extra(self):
+        """Return component-specific durable checkpoint fields."""
+        return {}
+
     def _run(self, graph, config, rng):
         from ..tools.reporting import log_message
 
@@ -223,7 +232,7 @@ class QAOACPU(BaseSolver):
             manager = CheckpointManager(
                 checkpoint_config,
                 run_id=self._run_id,
-                component_id="qaoa_cpu",
+                component_id=self.checkpoint_component_id,
                 graph=graph,
                 config_signature=stable_hash({"config": config, "graph": graph.snapshot()}),
             )
@@ -280,7 +289,7 @@ class QAOACPU(BaseSolver):
                     arrays[name] = np.asarray(payload.pop(name), dtype=float)
             payload.update(
                 {
-                    "component_id": "qaoa_cpu",
+                    "component_id": self.checkpoint_component_id,
                     "config": deepcopy(config),
                     "graph": graph.snapshot(),
                     "budget_total": config["limits"]["shots_total"],
@@ -292,6 +301,7 @@ class QAOACPU(BaseSolver):
                     "recovery_ledger": recovery_ledger,
                 }
             )
+            payload.update(self._checkpoint_extra())
             ref = manager.write_generation(
                 payload,
                 arrays,
@@ -304,14 +314,14 @@ class QAOACPU(BaseSolver):
 
         if resume_state is not None and resume_state.get("phase") == "readout_done":
             best_theta = np.asarray(resume_state["best_theta"], dtype=float)
-            probabilities = state_at_angles(cuts, best_theta, layers, p["dtype"])[1]
+            probabilities = self._state_at_angles(cuts, best_theta, layers, p["dtype"])[1]
             saved = resume_state.get("readout", {}).get("solution")
             if saved is None:
                 raise CheckpointError("A completed readout checkpoint has no solution.")
             chosen = int(saved)
             training = {
                 "angles": best_theta,
-                "state": state_at_angles(cuts, best_theta, layers, p["dtype"])[0],
+                "state": self._state_at_angles(cuts, best_theta, layers, p["dtype"])[0],
                 "probabilities": probabilities,
                 "best_loss": resume_state.get("best_loss"),
                 "objective_value": None if resume_state.get("best_loss") is None else -resume_state["best_loss"],
@@ -344,6 +354,7 @@ class QAOACPU(BaseSolver):
                 state=resume_state,
                 control=self._control,
                 checkpoint_callback=save_checkpoint,
+                state_function=lambda angles: self._state_at_angles(cuts, angles, layers, p["dtype"]),
             )
             best_theta = training["angles"]
             probabilities = training["probabilities"]
@@ -388,7 +399,7 @@ class QAOACPU(BaseSolver):
             final_state = dict(training.get("state_record") or {})
             final_state.update(
                 {
-                    "component_id": "qaoa_cpu",
+                    "component_id": self.checkpoint_component_id,
                     "config": deepcopy(config),
                     "graph": graph.snapshot(),
                     "budget_total": config["limits"]["shots_total"],
@@ -401,6 +412,7 @@ class QAOACPU(BaseSolver):
                     "rng_state": rng.bit_generator.state,
                 }
             )
+            final_state.update(self._checkpoint_extra())
             arrays = {}
             for name in ("theta", "moment", "variance", "best_theta"):
                 if name in final_state:

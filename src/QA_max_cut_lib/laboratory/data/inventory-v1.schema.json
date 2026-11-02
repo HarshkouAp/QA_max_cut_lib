@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qa-max-cut-lib.local/schemas/inventory-v1.schema.json",
+  "title": "QA_max_cut_lib Laboratory source inventory",
+  "type": "object",
+  "required": ["schema_version", "archive_sha256", "member_count", "files", "coverage"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "archive_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "member_count": {"type": "integer", "minimum": 1},
+    "parser": {"type": "string"},
+    "directory_counts": {"type": "object"},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "bytes", "parser", "role", "variant_id", "review_status"],
+        "properties": {
+          "path": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "parser": {"type": "string"},
+          "parse_error": {"type": ["object", "null"]},
+          "role": {"type": "string"},
+          "variant_id": {"type": "string"},
+          "review_status": {"type": "string"},
+          "runtime_status": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "ast_alias_groups": {"type": "array"},
+    "coverage": {
+      "type": "object",
+      "required": ["python_members_expected", "python_members_recorded", "python_members_parsed"],
+      "properties": {
+        "python_members_expected": {"type": "integer"},
+        "python_members_recorded": {"type": "integer"},
+        "python_members_parsed": {"type": "integer"},
+        "parse_failures": {"type": "integer"}
+      }
+    }
+  }
+}

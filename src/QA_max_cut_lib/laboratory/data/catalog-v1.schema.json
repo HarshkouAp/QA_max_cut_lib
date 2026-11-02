@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qa-max-cut-lib.local/schemas/catalog-v1.schema.json",
+  "title": "QA_max_cut_lib Laboratory variant catalog",
+  "type": "object",
+  "required": ["schema_version", "archive_sha256", "variants", "implemented_variant_ids", "source_to_variant"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "archive_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["variant_id", "family", "source_members", "role", "status"],
+        "properties": {
+          "variant_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "family": {"type": "string"},
+          "source_members": {"type": "array"},
+          "role": {"type": "string"},
+          "status": {
+            "type": "object",
+            "required": ["source_review", "scientific_specification", "implementation"]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "implemented_variant_ids": {"type": "array", "items": {"type": "string"}},
+    "deferred_variant_ids": {"type": "array", "items": {"type": "string"}},
+    "source_to_variant": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    }
+  }
+}

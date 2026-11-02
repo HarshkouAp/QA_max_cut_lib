@@ -509,3 +509,26 @@ uncertain charge; повторное reconciliation не добавляет ег
 Readout token резервируется один раз. Completed readout checkpoint возвращает
 сохранённое назначение без новых `M` измерений; неизвестный результат
 потерянной попытки не считается нулевым расходом.
+
+## 11. Warm-start product QAOA (0.1.0a11)
+
+Для seed `s_i^(0) = +/-1` вероятность bit=1 есть `q_i=(1-s_i)/2`.
+Регуляризация: `q~_i=clip(q_i, eps, 1-eps)`. Для явно заданных
+fractional `q_i` это только clip, без аффинного преобразования.
+Preparation angles: `alpha_i=2 asin sqrt(q~_i)`. Они фиксированы и не
+входят в размерность ADAM.
+
+```
+U_aligned(beta)  = RY(alpha) RZ(-2 beta) RY(-alpha)
+U_modified(beta) = RY(-alpha) RZ(-2 beta) RY(alpha)
+U_x(beta)        = exp(-i beta X)
+```
+
+Cost layer по-прежнему `exp(+i gamma C)`, затем выбранный mixer.
+При `eps=1/2` modified совпадает с обычным X-миксером при `beta`,
+aligned — при `-beta`. При `eps=0` aligned/modified сохраняют исходный
+basis state с фазой; это не относится к `x`.
+
+Source cut и `E[C]` product state — разные величины:
+`source_cut=C(s_seed)`, `initial_expected_cut=C^T P0`. Полный бюджет
+p=1, max_steps=3, M_train=32, M_readout=64 равен 544 shots.

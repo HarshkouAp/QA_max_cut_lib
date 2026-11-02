@@ -29,6 +29,7 @@ class SolverFactory:
             "gw_cpu",
             "simulated_annealing_cpu",
             "refined",
+            "laboratory.warm_start_qaoa_cpu",
         )
 
     @staticmethod
@@ -46,6 +47,7 @@ class SolverFactory:
         from ..solvers.goemans_williamson_cpu import GoemansWilliamsonCPU
         from ..solvers.simulated_annealing_cpu import SimulatedAnnealingCPU
         from ..solvers.refined import RefinedSolver
+        from ..solvers.warm_start_qaoa_cpu import WarmStartQAOACPU
 
         types = {
             "exact_cpu": ExactCPU,
@@ -60,6 +62,7 @@ class SolverFactory:
             "gw_cpu": GoemansWilliamsonCPU,
             "simulated_annealing_cpu": SimulatedAnnealingCPU,
             "refined": RefinedSolver,
+            "laboratory.warm_start_qaoa_cpu": WarmStartQAOACPU,
         }
         if config.get("type") not in types:
             raise ValueError(

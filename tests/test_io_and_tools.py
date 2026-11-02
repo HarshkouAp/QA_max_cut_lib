@@ -147,6 +147,7 @@ def test_no_silent_unimplemented_features():
         "gw_cpu",
         "simulated_annealing_cpu",
         "refined",
+        "laboratory.warm_start_qaoa_cpu",
     )
 
 

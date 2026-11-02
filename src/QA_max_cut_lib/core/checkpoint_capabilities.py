@@ -16,6 +16,13 @@ CAPABILITIES = {
         "phases": ["training", "training_done", "readout_done"],
         "notes": "Full CPU QAOACPU codec, including central-difference probes and final readout token.",
     },
+    "laboratory.warm_start_qaoa_cpu": {
+        "supports_checkpoint": True,
+        "boundaries": ["completed ADAM iteration", "training_done", "readout_done"],
+        "state": "theta, m, v, best evaluation, RNG, budget, frozen source/q/mixer",
+        "phases": ["training", "training_done", "readout_done"],
+        "notes": "CPU full-state warm-start codec; source preparation is frozen in the checkpoint.",
+    },
     "qaoa_gpu": {
         "supports_checkpoint": False,
         "boundaries": [],

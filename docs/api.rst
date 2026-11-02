@@ -43,6 +43,8 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_cpu.QAOACPU
 
+.. autoclass:: QA_max_cut_lib.solvers.warm_start_qaoa_cpu.WarmStartQAOACPU
+
 .. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
    :members: solve
 
@@ -76,6 +78,12 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.refined.RefinedSolver
    :members: solve
+
+.. automodule:: QA_max_cut_lib.laboratory.catalog
+   :members: load_catalog, load_inventory, list_variants, get_variant, get_file, source_to_variant, catalog_summary
+
+.. automodule:: QA_max_cut_lib.solvers.warm_start
+   :members: validate_warm_start_section, prepare_warm_start, product_state, state_at_warm_angles, mixer_unitary
 
 .. automodule:: QA_max_cut_lib.tools.classical_plots
    :members: analyze_solution, plot_gw_convergence, plot_sa_reads, plot_refinement, plot_classical_comparison
