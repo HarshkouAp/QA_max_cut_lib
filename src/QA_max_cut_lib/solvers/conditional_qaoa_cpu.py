@@ -115,7 +115,12 @@ class ConditionalQAOACPU(BaseSolver):
             raise ValueError("estimation.mode must be exact or shots.")
         positive_int(estimation["shots_per_evaluation"], "shots_per_evaluation")
         config["optimizer"] = validate_adam_config(config.get("optimizer", {}))
-        _validate_initialization(config, int(p["layers"]))
+        if active:
+            _validate_initialization(config, int(p["layers"]))
+        else:
+            init = config.setdefault("initialization", {"type": "fixed_angles"})
+            init.setdefault("type", "fixed_angles")
+            init.setdefault("parameters", {"values": [0.0] * (2 * int(p["layers"]))})
         readout = config.setdefault("readout", {})
         if set(readout) - {"mode", "shots"}:
             raise ValueError("Unknown readout field.")

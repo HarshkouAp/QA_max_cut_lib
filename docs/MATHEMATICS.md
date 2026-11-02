@@ -558,3 +558,19 @@ E_original = -b_t - C_t
 из-за нехватки training-ресурса. Control A: A=(+,+,−,+), B=(+,−,+,+),
 U=2, A имеет multiplicity 3; средние c дают (30,80) с sigma=-1, b=8,
 C=8, E_Ising=-7.5.
+
+## 13. Conditional fields and environment LS (0.1.0a13)
+
+For a current graph `G_t`, active block `S`, and fixed external spins `r_T`:
+
+\[
+A_S(x;r_T)=C_{SS}(x)+C_{ST}(x,r_T),
+\qquad
+E_{\mathrm{aff}}=-A_S=c_{\mathrm{aff}}+\sum_{i\in S}h_i x_i+
+\sum_{\{i,k\}\subset S}J_{ik}x_ix_k,
+\]
+
+with `J_ik=w_ik/2` and `h_i=1/2 sum_{j in T} w_ij r_j`. The three constants
+`c_aff`, `C_TT(r_T)`, and the accumulated reduction offset `b_t` are distinct.
+The active state is a full `2^{|S|}` CPU state; external spins are classical
+data, not an X-mixed subsystem. Local fields never enter the global reducer.
