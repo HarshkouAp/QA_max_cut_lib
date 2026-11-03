@@ -1,4 +1,4 @@
-QA_max_cut_lib 0.1.0a18
+QA_max_cut_lib 0.1.0rc1
 ========================
 
 Четырнадцатый этап научной библиотеки взвешенного Max-Cut.
@@ -49,6 +49,7 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка этапа 16 <VALIDATION_0.1.0a16.md>`
 * :download:`Проверка этапа 17 <VALIDATION_0.1.0a17.md>`
 * :download:`Проверка этапа 18 <VALIDATION_0.1.0a18.md>`
+* :download:`Release candidate <../RELEASE_READINESS.md>`
 * :download:`Warm-start RQAOA <WARM_START_RQAOA_RU.md>`
 * :download:`Laboratory: каталог и warm-start <LABORATORY_RU.md>`
 * :download:`Условные поля и environment LS <CONDITIONAL_RU.md>`
@@ -63,7 +64,7 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
 * :download:`Проверка исходной сборки <VALIDATION.md>`
 * :download:`Согласованная полная архитектура <reference/MaxCut_Library_Architecture_RU.md>`
 
-Девятнадцать выполненных учебных ноутбуков находятся в папке notebooks исходного
+Двадцать один выполненный учебный ноутбук находятся в папке notebooks исходного
 проекта. Третий ноутбук проверяет ядро редукций, четвёртый — RQAOA на CPU,
 пятый — аналитический p=1, шестой — LS-RQAOA, седьмой — NVIDIA GPU QAOA,
 восьмой — QAOA-in-QAOA, девятый — GW/SA и refinement, десятый — серии,

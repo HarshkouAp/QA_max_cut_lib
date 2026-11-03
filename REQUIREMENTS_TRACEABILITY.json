@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "artifact_role": "final_release_traceability",
+  "date": "2026-11-03",
+  "source": {
+    "name": "MaxCut_Library_Architecture_RU.md",
+    "library_file_id": "libfile_900e241dd68c819184b55c9a791dc6b2",
+    "library_version_id": "9",
+    "document_version": "0.10"
+  },
+  "requirements_count": 65,
+  "implementation_validation_performed": true,
+  "note": "Заполняется фактическими evidence этапа 20; null и requires_harness_verification не означают pass.",
+  "requirements": [
+    {
+      "id": "R01",
+      "requirement": "Четыре основных раздела: Solvers, Tools, Generators, Laboratory. Архитектура использует ООП.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R02",
+      "requirement": "Составные алгоритмы собираются из заменяемых компонентов. У LS-RQAOA независимо выбираются источник корреляций, построитель подграфов, правило редукции и завершающий солвер.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R03",
+      "requirement": "Один экземпляр солвера принимает разные графы: solver.solve(graph).",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R04",
+      "requirement": "Солвер хранит дополнительные результаты последнего запуска. Историю нескольких запусков собирает отдельный объект эксперимента.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R05",
+      "requirement": "Каждый обычный solve() начинает новый запуск. Предыдущие углы, решения и продолжение вычислений используются явно. Подходящие рабочие буферы допускается переиспользовать.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R06",
+      "requirement": "Заданный seed заново применяется при каждом новом запуске.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R07",
+      "requirement": "Объект графа изменяемый.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R08",
+      "requirement": "Внешние номера вершин — целые числа с возможными пропусками. Подграфы и решения сохраняют исходные номера.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R09",
+      "requirement": "JSON графа содержит рецепт генерации: тип генератора, параметры и seeds.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R10",
+      "requirement": "Ориентир ближайших экспериментов — полные графы до примерно 1 000 вершин.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R11",
+      "requirement": "Все графы взвешенные. Единичные веса представляют обычный невзвешенный случай.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R12",
+      "requirement": "CPU- и GPU-реализации представлены самостоятельными алгоритмами.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R13",
+      "requirement": "Нормальный результат солвера — словарь исходный_номер_вершины → +1 или −1. Дополнительные результаты доступны отдельно.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R14",
+      "requirement": "Для редукции разрешены существующие рёбра или произвольные пары — по настройке алгоритма.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R15",
+      "requirement": "QAOA поддерживает получение решения как наиболее вероятного состояния или лучшего из M шотов.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R16",
+      "requirement": "Пользовательский вход — задача Max-Cut на взвешенном графе. Локальные поля формируют сами алгоритмы внутри вычислений.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R17",
+      "requirement": "При обучении QAOA выбирается точная оценка целевой функции или оценка по шотам.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R18",
+      "requirement": "Включаются Mean Cut, CVaR, Gibbs, Best-of-K и Threshold Probability с настройкой их параметров.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R19",
+      "requirement": "В Laboratory сохраняются все содержательно различающиеся экспериментальные версии из архива.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R20",
+      "requirement": "Старые скрипты можно адаптировать под новый единый интерфейс.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R21",
+      "requirement": "Новые компоненты добавляются в исходный код библиотеки.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R22",
+      "requirement": "Нужен общий механизм запуска серий экспериментов и сбора результатов.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R23",
+      "requirement": "Серия выполняется на одной машине. CPU/GPU выбирается для каждого солвера; смешанные серии разрешены.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R24",
+      "requirement": "Нужны общий бюджет шотов на запуск и настраиваемые лимиты работы отдельных этапов, например число шагов оптимизации.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R25",
+      "requirement": "Общий бюджет шотов строгий: превышение запрещено.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R26",
+      "requirement": "По умолчанию сохраняются основные итоги; подробные данные включаются через конфигурацию.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R27",
+      "requirement": "Поддерживается продолжение прерванного алгоритма из контрольной точки.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R28",
+      "requirement": "Эталоны: перебор для малых задач, GW для средних, сравнение энергий методов и лучшее известное решение для больших.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R29",
+      "requirement": "В Tools нужен готовый расчёт ландшафтов QAOA по сетке и их визуализация.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R30",
+      "requirement": "Generators создаёт исходные графы, подграфы и разбиения. Инициализация QAOA остаётся среди компонентов солверов.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R31",
+      "requirement": "Каждый модуль полноценного солвера содержит самостоятельный запуск через if __name__ == \"__main__\":, включая CPU/GPU-реализации и Laboratory.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R32",
+      "requirement": "Tools строит гистограммы распределения вероятностей: плоские и в виде столбцов на координатной плоскости, в том числе для распределений большого размера.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R33",
+      "requirement": "Ландшафты отображаются как плоские тепловые карты и интерактивные трёхмерные поверхности с сохранением в HTML.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R34",
+      "requirement": "Для RQAOA и его составных вариантов Tools строит траектории параметров по шагам редукции: на плоскости и в интерактивном трёхмерном HTML.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R35",
+      "requirement": "После solve() algorithm.result предоставляет JSON со всеми конечными результатными атрибутами, метаданными и накопленными данными последнего запуска.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R36",
+      "requirement": "Каждый результатный атрибут также доступен непосредственно как algorithm.attribute_x. Прямой доступ и result описывают одни данные.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R37",
+      "requirement": "Код максимально прозрачен. Подробные комментарии и docstrings следуют ASD-STE100 и объясняют алгоритм, математический смысл и причину каждого нетривиального преобразования.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R38",
+      "requirement": "Автоматический итоговый отчёт имеет независимый аргумент уровня: 0 — выключен, 1 — краткий, 2 — развёрнутый.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R39",
+      "requirement": "Логи имеют независимый аргумент уровня: 0 — выключены, 1 — краткие, 2 — развёрнутые. Логи и отчёт имеют единое аккуратное оформление и цветовую дифференциацию.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R40",
+      "requirement": "Tools строит кривые оптимизации на основе накопленных данных; соответствующая функциональность из базовых алгоритмов переносится в общий инструмент. Для семейства LS основной график прогресса заменяется энергетическими графиками редукций, указанными в R42–R43.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R41",
+      "requirement": "Tools поддерживает простую отрисовку взвешенного графа, графа с решением и графа с основной информацией о задаче.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R42",
+      "requirement": "Для семейства LS основной график прогресса показывает зафиксированную энергию в редуцированных рёбрах по шагам редукции.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R43",
+      "requirement": "Для LS зафиксирована энергетическая нотация E = −C. Вклад выбранного ребра после фиксации равен −w(1−σ)/2, его математическое ожидание по корреляции — −w(1−c)/2. Строятся значения по шагам и накопленные суммы без нормировки.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R44",
+      "requirement": "Для LS и RQAOA строятся траектории оптимизированных параметров на каждом шаге редукции. Для p слоёв включаются все неупорядоченные пары из 2p параметров; доступны плоские графики и интерактивный HTML с номером редукционного шага по оси Z.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R45",
+      "requirement": "Нужны графики веса выбранного редуцируемого ребра от номера редукции и среднего модуля веса ребра от номера редукции.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R46",
+      "requirement": "Пакет сопровождается подробными исполняемыми учебными ноутбуками по использованию основных возможностей.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R47",
+      "requirement": "Все графики имеют единый LaTeX-стиль и LaTeX-шрифт, включая подписи, легенды, шкалы и интерактивный HTML.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R48",
+      "requirement": "Параметры каждого графика передаются в соответствующий инструмент через конфигурационный JSON.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R49",
+      "requirement": "Все алгоритмы и инструменты используют необязательный раздел save в конфигурации. При его отсутствии автоматический экспорт соответствующих результатов не выполняется.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R50",
+      "requirement": "Для графики save задаёт path, format, DPI, filename, metadata, makedir и при необходимости savedir. Основной файл называется filename.format. При metadata = true внизу графика указываются дата и время, алгоритм, параметры запуска и задачи.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R51",
+      "requirement": "Результат алгоритма сохраняется в JSON с датой и временем, всеми использованными параметрами солвера и графа, временем расчёта, числом этапов, подробным отчётом и атрибутами, выбранными через atts.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R52",
+      "requirement": "Атрибуты из save_original_data дополнительно сохраняются в собственных форматах с основой имени filename_attributename; для массива NumPy используется .npy.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R53",
+      "requirement": "makedir разрешает создание отсутствующего path. При savedir = true внутри path создаётся папка filename, в которую помещается весь сохраняемый набор.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R54",
+      "requirement": "Защита от перезаписи обязательна для всех файлов и папок сохраняемого набора, включая дополнительные массивы и коллекции графиков.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R55",
+      "requirement": "Нужен отдельный исполняемый ноутбук быстрого старта с основными примерами запуска, настройки, визуализации и сохранения.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R56",
+      "requirement": "Нужен отдельный подробный ноутбук с описанием всего функционала пакета. Тематические ноутбуки дополняют его.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R57",
+      "requirement": "Формулируются отдельные наборы зависимостей для CPU и NVIDIA GPU. Установка и использование CPU не требуют GPU или CUDA.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R58",
+      "requirement": "Каждый алгоритм и функция документируются в репозитории в стиле NumPy/SciPy: строгая физическая и математическая постановка, все аргументы, результаты и атрибуты.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R59",
+      "requirement": "Общий аргумент num_treads управляет CPU-параллелизмом; он описан в сигнатурах, JSON и документации.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R60",
+      "requirement": "Реализуется параллельное исполнение независимых локальных задач, особенно подграфов LS и независимых задач QAOA-in-QAOA, с сохранением зависимостей алгоритма.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R61",
+      "requirement": "Tools содержит профилировщик CPU-параллелизма перед бенчмарком. Он принимает ту же спецификацию задач и солверов, что и общий бенчмарк.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R62",
+      "requirement": "Профилировщик разворачивает все допустимые комбинации заданной сетки параметров и использует один выбранный seed. Рекомендация числа потоков оптимизируется для всего диапазона конфигураций.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R63",
+      "requirement": "Строятся кривые времени, скорости и ускорения от числа ядер/потоков; оцениваются эффективность, коэффициенты параллелизуемости и процент последовательной части с указанием модели и качества оценки.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    },
+    {
+      "id": "R64",
+      "requirement": "Seaborn предпочтителен для статистической 2D-визуализации. Оформление Another_pars.py служит пользовательским референсом общей темы с сохранением LaTeX-шрифта и JSON-настройки.",
+      "status": "blocked",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "installed_package_evidence": null,
+      "documentation_example": null
+    },
+    {
+      "id": "R65",
+      "requirement": "Название пакета и Python-импорта — QA_max_cut_lib. В примерах, структуре исходников и командах запуска используется это имя с указанным регистром.",
+      "status": "passed",
+      "implementation_target": "QA_max_cut_lib",
+      "scientific_evidence": "tests/ and docs/VALIDATION_0.1.0rc1.md",
+      "installed_package_evidence": "wheel smoke/CLI evidence",
+      "documentation_example": "README.md / docs/ / notebooks/"
+    }
+  ],
+  "release_status": "0.1.0rc1"
+}
