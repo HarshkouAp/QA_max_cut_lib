@@ -12,31 +12,19 @@
 - 48-case generation/plan/analysis series: 0 quantum shots.
 - Sphinx `-W`.
 
-## Blockers для 0.1.0
+## Матрица R01–R65
 
-1. **Stage 19 controllers:** `BatchLSRQAOACPU` и
-   `QuantizedQAOACPU` добавлены как реальные CPU assemblies;
-   `ConfidenceBacktrackingRQAOACPU`, hierarchical covariance source и
-   полный odds/history end-to-end adapter всё ещё не закрыты.
-   `DecisionEvidence`, parity forest, odds, selected-observation,
-   restriction proxy, quantization и non-mutating history formulas
-   реализованы как проверяемые компоненты.
-2. **89-source closure:** в registry сохранены исходные записи, но
-   содержательно отличающиеся GraphDecomposer_light/legacy branches
-   остаются unresolved; aggregate `full_archive_migration_complete`
-   не заявлен.
-3. **G8 NVIDIA:** текущий source GPU test set `10 passed` на локальном
-   RTX 3050; полный installed-wheel GPU profile ещё не является
-   отдельным release gate evidence.
-4. **R01–R65:** полная матрица evidence заполнена только для
-   реализованных срезов; несвязанные записи имеют blocker, а не
-   фиктивный pass.
-5. **Два главных notebooks:** 00/01 исполнены для CPU-среза; полный
-   controller coverage остаётся ограниченным.
+`REQUIREMENTS_TRACEABILITY.json`: **64 passed, 1 blocked**.
+
+Единственный оставшийся blocker — **R19**: полный перенос всех
+содержательно различающихся ветвей 89-source архива. `SOURCE_CLOSURE.json`
+содержит все 89 записей; 18 записей имеют `reviewed_deferred`
+(GraphDecomposer_light truss/repair/sampling, часть MK_6/7/8,
+CorrelationExtractor и связанные active branches). Поэтому
+`full_archive_migration_complete=false`.
 
 ## Release decision
 
-Версия **0.1.0rc1** может использоваться для проверки CPU-среза и
-подготовки reviewable RC. Она не должна маркироваться как финальный
-`0.1.0`, пока blockers выше не закрыты или явно не исключены владельцем
-проекта.
+`0.1.0rc2` — честный reviewable CPU/GPU candidate. Финальный `0.1.0`
+требует закрыть или явно исключить оставшиеся 18 source records и
+повторить release gates. Маркировка `0.1.0` без этого была бы ложной.
