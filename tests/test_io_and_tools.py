@@ -155,6 +155,8 @@ def test_no_silent_unimplemented_features():
         "laboratory.distributed_ls_rqaoa_cpu",
         "laboratory.qaoa_mi_cpu",
         "laboratory.incremental_ls_rqaoa_cpu",
+        "laboratory.batch_ls_rqaoa_cpu",
+        "laboratory.quantized_qaoa_cpu",
         "laboratory.rqaoa_mi_cpu",
     )
 

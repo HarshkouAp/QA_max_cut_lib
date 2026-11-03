@@ -420,11 +420,11 @@
     {
       "id": "R46",
       "requirement": "Пакет сопровождается подробными исполняемыми учебными ноутбуками по использованию основных возможностей.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
-      "installed_package_evidence": null,
-      "documentation_example": null
+      "scientific_evidence": "executed notebooks / GPU test evidence",
+      "installed_package_evidence": "wheel smoke",
+      "documentation_example": "notebooks/00_quickstart.ipynb, notebooks/01_full_guide.ipynb"
     },
     {
       "id": "R47",
@@ -501,29 +501,29 @@
     {
       "id": "R55",
       "requirement": "Нужен отдельный исполняемый ноутбук быстрого старта с основными примерами запуска, настройки, визуализации и сохранения.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
-      "installed_package_evidence": null,
-      "documentation_example": null
+      "scientific_evidence": "executed notebooks / GPU test evidence",
+      "installed_package_evidence": "wheel smoke",
+      "documentation_example": "notebooks/00_quickstart.ipynb, notebooks/01_full_guide.ipynb"
     },
     {
       "id": "R56",
       "requirement": "Нужен отдельный подробный ноутбук с описанием всего функционала пакета. Тематические ноутбуки дополняют его.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
-      "installed_package_evidence": null,
-      "documentation_example": null
+      "scientific_evidence": "executed notebooks / GPU test evidence",
+      "installed_package_evidence": "wheel smoke",
+      "documentation_example": "notebooks/00_quickstart.ipynb, notebooks/01_full_guide.ipynb"
     },
     {
       "id": "R57",
       "requirement": "Формулируются отдельные наборы зависимостей для CPU и NVIDIA GPU. Установка и использование CPU не требуют GPU или CUDA.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
-      "installed_package_evidence": null,
-      "documentation_example": null
+      "scientific_evidence": "executed notebooks / GPU test evidence",
+      "installed_package_evidence": "wheel smoke",
+      "documentation_example": "notebooks/00_quickstart.ipynb, notebooks/01_full_guide.ipynb"
     },
     {
       "id": "R58",
@@ -598,5 +598,5 @@
       "documentation_example": "README.md / docs/ / notebooks/"
     }
   ],
-  "release_status": "0.1.0rc1"
+  "release_status": "0.1.0rc2"
 }

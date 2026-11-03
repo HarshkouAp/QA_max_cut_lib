@@ -1,0 +1,905 @@
+{
+  "schema_version": 1,
+  "archive_sha256": "b4c684a5d4da469adc25bd99a405e402892d1a2524465e4c97ab6229c71a4aed",
+  "member_count": 89,
+  "recorded_count": 89,
+  "full_archive_migration_complete": false,
+  "summary": {
+    "reviewed_reference": 38,
+    "component_recomposition": 26,
+    "reviewed_deferred": 18,
+    "tool_or_diagnostic": 7
+  },
+  "records": [
+    {
+      "path": "Diplom/Bench_mod.py",
+      "sha256": "a9d15f86e6da1bd86eb56d6b606212bb73d9b01a35c275d6a98ce9e1cc7d6762",
+      "lines": 14,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Benchmark.py",
+      "sha256": "3b1c3d51b6b952ecfb1f4d6667a59c491be0cad09b452cac404cd4558df2d1c8",
+      "lines": 166,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_1.py",
+      "sha256": "328c0c84e22ad765cd2e0cb29040f5ae9b55ad2757186e9210008235f59e21d1",
+      "lines": 216,
+      "role": "historical_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_2.py",
+      "sha256": "02bb82267fd7002abed481e950660f37ae727f51bed46fe42077377ddf4d31b6",
+      "lines": 244,
+      "role": "historical_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_2_1.py",
+      "sha256": "59df3323290617eddc50e8715469d490af286945219bad1d4281281cbd28c487",
+      "lines": 239,
+      "role": "historical_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_2_2.py",
+      "sha256": "0777fd7b470ebd7cf7bfce69e7d2d08d8dc6019d2aa903404fa4727338b068ac",
+      "lines": 239,
+      "role": "historical_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_3.py",
+      "sha256": "6c3e5efc446b96db9f8963c21ece0deae6096d7db3d0d076de51086c8c882502",
+      "lines": 251,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_3_1.py",
+      "sha256": "74ff1376e13e14f89326100741ba549b5d7ac3db313af48be4142255591f8c88",
+      "lines": 248,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_4.py",
+      "sha256": "baa35017a900c78f0f4b545b056f30be985b147f8ca6b5bc535bc7631c964bfc",
+      "lines": 277,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_5.py",
+      "sha256": "34a3dd3ba5346583456d281646a5272cad7506dae09bbb0bb0f90948b780fe71",
+      "lines": 344,
+      "role": "legacy_ls_rqaoa_alias",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_5_1.py",
+      "sha256": "2905703b78c86272b1e5aacf097b152c763e3f4e4c2b2fd75a84f249717d822c",
+      "lines": 283,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_5_2.py",
+      "sha256": "1153759c73f7bddfb476b2a9e66590ba79ab587c03c2c1f1cf6b69058c8791e5",
+      "lines": 306,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_5_3(8_3).py",
+      "sha256": "9ea2bb4dfef66f5a50bde378e71b1443e90207a9e90ead8d2444a613904beee5",
+      "lines": 310,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_6_1.py",
+      "sha256": "d7ca550a47923b7b05b753785c5e0554c741cdb97ed89371d7664c85c296be5b",
+      "lines": 266,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_deferred",
+      "target": "RELEASE_READINESS.md blocker",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_6_2.py",
+      "sha256": "6e6220f1147e35a4f29522e458a711e4b141b72bd8eab26443ee212ad7f8a2a6",
+      "lines": 280,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_deferred",
+      "target": "RELEASE_READINESS.md blocker",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_7_1.py",
+      "sha256": "7b69ae4d1a125b42b61c609fd4d150c7dd0f71865746ed97d0f4e3bf5a801147",
+      "lines": 268,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_deferred",
+      "target": "RELEASE_READINESS.md blocker",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/MK_7_2.py",
+      "sha256": "51a0317c8e5df9af768cbfbbb84fa82af31803a6ae4b382a57c4daf471051685",
+      "lines": 280,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_deferred",
+      "target": "RELEASE_READINESS.md blocker",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_8.py",
+      "sha256": "65a5bc55ba730fa01109cdeddf988fce26dc9cc3ba4ec18ad4aefca11ad733df",
+      "lines": 205,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_8_1.py",
+      "sha256": "2d942e02ac3cae2d7f9b6a67e972822481697b5da59c913c21db9d60c2f6f500",
+      "lines": 257,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_8_2.py",
+      "sha256": "2585e7ed75748d72954084e17130e1e627ba6f2fe93337cdade9840eaaca8b8c",
+      "lines": 261,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/Mk_8_3.py",
+      "sha256": "7aeae3e1fff88a1481076b92fef23eadace8265ddd6e3e24ecca0fa130851e59",
+      "lines": 287,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA2_CE_fixed.py",
+      "sha256": "5e87409ff2764ca9438b5031dd85f257d47064af7d98801433aa9f2f4d4df309",
+      "lines": 451,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA2_Dip.py",
+      "sha256": "5b9395dcd2f637a76a21bc3ff1cd67bcf3d3a2042de29df9a941015d73fd65be",
+      "lines": 156,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA2_СE.py",
+      "sha256": "a8d325b20027cc1d4209cf9699d6720ae91d6691e066d161ea8f456e557e9c30",
+      "lines": 283,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA_DF.py",
+      "sha256": "a46d3b0c10169315728189ecdd70ca1fc7a757c454d27f259b6842080bc52885",
+      "lines": 508,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA_F.py",
+      "sha256": "fd9e5cfe12177b57b1df67a94ecc0e1ed087573b783f3d55236382c74cda5872",
+      "lines": 343,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA_СF.py",
+      "sha256": "ff8df710affc316efbf85e9d27cdf3c46f2b7183244b682207f77f4218190955",
+      "lines": 491,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Diplom/QAOA_СFR.py",
+      "sha256": "6fd931226631d1e65e254fe1e9084bdd58554aa2d84d2abdc1163137e6fc9b46",
+      "lines": 495,
+      "role": "historical_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "ENV/GoemansWilliamson.py",
+      "sha256": "a900bdf72f0d9add1d7ebdb3a29b5a78d469509e06813ef48d564d7a486b42eb",
+      "lines": 93,
+      "role": "environment_component",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "ENV/ProblemGenerator.py",
+      "sha256": "7000ea83fa9f784b09c942cbebacc627af9a1c1ef470e5b734d6dba2dd56fdf3",
+      "lines": 118,
+      "role": "environment_component",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "ENV/QAOA.py",
+      "sha256": "da69bbbdb0c77d649ed8d614ee4e504698a84cd0e7c4725d2a8157357fb0e853",
+      "lines": 348,
+      "role": "environment_component",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Generators/GraphGenerator.py",
+      "sha256": "7c140722775572ad58dd7e294597dd16ea6ce70b3d1ff9b78f16a75224774d3c",
+      "lines": 224,
+      "role": "generator",
+      "disposition": "component_recomposition",
+      "target": "QA_max_cut_lib.generators",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Generators/maxcut_benchmark_generator.py",
+      "sha256": "1a93aaeb5bbe033606a20eab90730be62681a78a0ac808d3dc2264e2c4c7a06d",
+      "lines": 368,
+      "role": "generator",
+      "disposition": "component_recomposition",
+      "target": "QA_max_cut_lib.generators",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Generators/Nonlocality_Gen.py",
+      "sha256": "d46a75acb2b730ca8812e2b85d80ad6d0f01fe30f624967d4688de22f120a7fb",
+      "lines": 120,
+      "role": "generator",
+      "disposition": "component_recomposition",
+      "target": "QA_max_cut_lib.generators",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/correct_mean.py",
+      "sha256": "78aedc31d17fb367a904f56771956e797bf6280206256da1d8f66bab5c07e6a1",
+      "lines": 347,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/CorrelationExtractor.py",
+      "sha256": "883cd53d28782f6f2d095105e4e314a2527ca3654b1a9bc68dfad33c9dc6e748",
+      "lines": 353,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/DistQAOA.py",
+      "sha256": "58d2842062434ceeabf46150a8b394fbd0e1aceebac707825a7beb1dd1e88b2c",
+      "lines": 283,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/Distributed_QAOA_CF.py",
+      "sha256": "12149bd5409bd36872359d18f84b65123b848c4bfd3a61ecc5fa83571fc3097c",
+      "lines": 425,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/EdgeExtender.py",
+      "sha256": "9a1d9efb789533a08f1c66038afb76cf549641f9608a37d4b1ac619ba6186cc6",
+      "lines": 225,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/GraphDecomposer_light.py",
+      "sha256": "7058d91b5d818231677730c34b9a86c25bc53f25b0f66e1d7b0f6702e284f0db",
+      "lines": 759,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/GraphScanning.py",
+      "sha256": "2573bf4cad34edecc2f1073783185c55ee51299281688a6f594730c3c0d4482d",
+      "lines": 100,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS-DistQAOA.py",
+      "sha256": "801488ed5c4b953b4000695a4356e7b7ca5486128657f509bd318548f59231dd",
+      "lines": 325,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_QAOA_field.py",
+      "sha256": "0ee6e4916ef055f20c8b24f06c52125d442d4f228e03bc2e07b2caf4dd6ea750",
+      "lines": 256,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_exp.py",
+      "sha256": "46c97cf753e8820256dedb2efba8d26fb6910672604525ec1e7b65c6228c06d5",
+      "lines": 233,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_fast_1.py",
+      "sha256": "8d74188852963988bd02abd77d639ec891cc0585db58ba46acea9f2c7c48fa3b",
+      "lines": 362,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_fast_2.py",
+      "sha256": "a7ef0047382785b6182891ee942ec5baa53371699f9a8287e99b5d5a00490c04",
+      "lines": 342,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_fast_3.py",
+      "sha256": "0c6e42abcf051f7f90c0a9bafa3955e95a92634ac9ccd7369e35b92e5b46a2fe",
+      "lines": 342,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_fast_4.py",
+      "sha256": "c05d4870b7b483f17b9afcc7bf2af9fa89c500e9e4c2444e252eba39b9b099f1",
+      "lines": 334,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/LS_RQAOA_fast_5.py",
+      "sha256": "91006f32df8dc04e705e834551a0219f37ae1134253d58816dae2ce3d69c2b5c",
+      "lines": 347,
+      "role": "legacy_ls_rqaoa_alias",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/NodeExtender.py",
+      "sha256": "c9a419683b38bd66cfe733ab168598a2536a6f68bbd51dd14e4a54c6d315ea40",
+      "lines": 198,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/QAOA_ADAM.py",
+      "sha256": "d4048c6094b2747dd0a1f5bff96877cfc0ee7100a9a52fea1f6234d8fa2ea706",
+      "lines": 521,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/QAOA_F.py",
+      "sha256": "4e57cda4964271851494cd2d3ca61d6c0dea76d7f0532e25e1f8c171ee6107ef",
+      "lines": 349,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/QAOA_F2.py",
+      "sha256": "9ef39892fe804fa18bf6a1578d3d545bd28b90c9ecead604b2780f4702060e36",
+      "lines": 372,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/QAOA_F_M.py",
+      "sha256": "853aae93ea8623433a5cdad9bce87037958c4f5ba11ca03c85ced47bbabd7d89",
+      "lines": 549,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/QAOA_F_M_D.py",
+      "sha256": "f949d03758809cdf810584862ca87901aeea0686d81c9837d8a12533d904322d",
+      "lines": 107,
+      "role": "laboratory_family_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Laboratory/test_partition.py",
+      "sha256": "d855c19ab4836015782ebcca73b9096989eb994f976346032082b376547ca1ee",
+      "lines": 40,
+      "role": "laboratory_family_source",
+      "disposition": "reviewed_deferred",
+      "target": "docs/LABORATORY_CONTROLLERS_RU.md",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Other/WS_QAOA_correct.py",
+      "sha256": "ccfa1802dff370b0df830a0cebec40fabab5dfea043db3b5bac7a2a33e22e148",
+      "lines": 428,
+      "role": "warm_start_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "partially_reviewed",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Other/WS_QAOA_no_GW.py",
+      "sha256": "71d41c7f33bb3ba3fe8bc2b6e7dc8c336f7d9eb2ca37b29ce21a6246dbf2f877",
+      "lines": 513,
+      "role": "warm_start_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "partially_reviewed",
+      "runtime": "not_run"
+    },
+    {
+      "path": "RQAOA_exp/QAOA.py",
+      "sha256": "4c5261a2efc3b745df46472f84137e0d3d3cd3b0200e2253c3321aea30476835",
+      "lines": 491,
+      "role": "research_experiment",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "RQAOA_exp/RQAOA.py",
+      "sha256": "f9c2966b17b9794466b817039ad0450592d1442805e245184fc30c9f83730531",
+      "lines": 325,
+      "role": "research_experiment",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/AnalyticalQAOA.py",
+      "sha256": "6a49343c5256d7c240dd9cb6d532f7f0e7675ebcdc011ac406c9686803b22b88",
+      "lines": 255,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/AnalyticalRQAOA.py",
+      "sha256": "e84ae4a1164810710558079ceae17d1aea0f19f3f17dbc9f039eef0b6264c131",
+      "lines": 447,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/AutoTest.py",
+      "sha256": "fd9e12604779faa9ea116526bbccb09b6fc72b6f871803cd5bd3dcbea0a1e807",
+      "lines": 227,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/ClassicSolver.py",
+      "sha256": "130b0c7fae28af7bd7dcb8c66dfde61dc136a9098c1917313aff327f53a0ef56",
+      "lines": 58,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/D_QAOA.py",
+      "sha256": "3ce17f351a07d6b4e4cb15631ad0a316b01754f737f8a81040287f8f1f593676",
+      "lines": 299,
+      "role": "legacy_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory.quantized_qaoa_cpu / strategies",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/D_RQAOA.py",
+      "sha256": "d43846b4ea5bf7f2c6dccb4eaa552230745b4049471efdff2dd153ef75656e44",
+      "lines": 210,
+      "role": "legacy_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory.quantized_qaoa_cpu / strategies",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/DLS_RQAOA.py",
+      "sha256": "06c5d2799d183f0f8279c83c79b794c9628c63c6f46429e790454f1653555169",
+      "lines": 250,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/Dwave_aneal.py",
+      "sha256": "bf6cfdae9111be74dc9c8daf7790ce351e9b1c5e363cdf6760331de0ad7ffd35",
+      "lines": 111,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/FineTuning.py",
+      "sha256": "516ec251cfdbd730cee9521afab11263b3350e7ad60a7adc0d481437de0cbbc1",
+      "lines": 115,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/FT_test.py",
+      "sha256": "9f071e1bcc70c7a59e35bca23668ba21a54ddf9719d19da4206d454454273317",
+      "lines": 48,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/GoemansWilliamson.py",
+      "sha256": "1af78d4728f905862a0c67a256f51926ccc7c63cb8980e136cd52fb2c201901c",
+      "lines": 112,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/LS_RQAOA.py",
+      "sha256": "8f8c53d3d338b04bc48b87a279364637f50cca5f2a3d7478b0cb15b2ff323617",
+      "lines": 283,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/QAOA.py",
+      "sha256": "90b5a85fee2c815eb952a9fdde61a19c241c1ca16a8a0fb3a43c4bf82796779b",
+      "lines": 470,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/QAOA2.py",
+      "sha256": "db9071023aaf7873b584aee6012a07184eff32f3a6c9770b6b1bfda89386726b",
+      "lines": 192,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/QAOA_GPU.py",
+      "sha256": "cdc1053e846fe5b60b34ac67811e3fd1f17c77ff58f80ea118a012f035d2dec4",
+      "lines": 730,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/RQAOA.py",
+      "sha256": "ad055516a3c04173913c53557267e5dc556d32232f913808d37c3a1540dbe73e",
+      "lines": 326,
+      "role": "legacy_solver_source",
+      "disposition": "reviewed_reference",
+      "target": "migration catalog / examples",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/WS_QAOA.py",
+      "sha256": "7beaba04c7f37e9bcc0393273c4ff8ec2f292ed27ecf295aae14d78497a5c2e5",
+      "lines": 393,
+      "role": "legacy_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Solvers/WS_RQAOA.py",
+      "sha256": "e02a7beb0c39807eb382dae5a0f8ea4cd47bd8c9b015625282dcbff9f3c9f4b9",
+      "lines": 287,
+      "role": "legacy_solver_source",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/Densest_sub.py",
+      "sha256": "ef3c2a30eaaefc1bb9122bce292f608fad78122681100a5618c5ff34b1b607ae",
+      "lines": 167,
+      "role": "tool_or_diagnostic",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/Graph_part_interception.py",
+      "sha256": "c62bba5b94a2cdd226ff5201b729b73bf4a47e14e60f58bc1632cb136510b27b",
+      "lines": 363,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/Graph_partition.py",
+      "sha256": "c0b511e2c6167a40a4c8f6b137d189fac2e760b115dd98313b69992892c72125",
+      "lines": 171,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/GraphDecomposer.py",
+      "sha256": "47dbf5c0804fbb52c695776e9e2ecfb55cb590595b81635db6c816391316b13a",
+      "lines": 335,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/Hebbian_generator.py",
+      "sha256": "00e6cb96849682240ef384914ebbd65e4cf2d2366a12bf94e85a9902ce8c6d51",
+      "lines": 69,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/MI_LS_RQAOA.py",
+      "sha256": "8ada89f744624b40add553b2f125186026194795ac4f395e4c43d81fdefc6685",
+      "lines": 428,
+      "role": "tool_or_diagnostic",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/MI_QAOA.py",
+      "sha256": "e3eee87591c2a8b3131c022c5e4d5eff1868d95adb7f7814198e04ce266ea170",
+      "lines": 529,
+      "role": "tool_or_diagnostic",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/MutInfo.py",
+      "sha256": "c0ab49ef8538e7bb4b5fe0523dc6c26d0511826074efd84185b031d8e668950a",
+      "lines": 96,
+      "role": "tool_or_diagnostic",
+      "disposition": "component_recomposition",
+      "target": "laboratory catalog / CPU assembly",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/PartitionEfficiency.py",
+      "sha256": "87342adcc8d91b1081129d4b029c47eeeb9ffe2967c5e30893e1a0ddd13c0844",
+      "lines": 253,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/ProblemGenerator.py",
+      "sha256": "ccede6aca21b893afdc29b11648ef298ac240c6ae95bd7dd75604d1835a9bb22",
+      "lines": 113,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    },
+    {
+      "path": "Tools/WPE_generator.py",
+      "sha256": "4ead744c54b2c8e782dca6273d9b20090724174e9239fcca59020c4e3cc1802f",
+      "lines": 46,
+      "role": "tool_or_diagnostic",
+      "disposition": "tool_or_diagnostic",
+      "target": "QA_max_cut_lib.tools",
+      "source_review": "inventoried",
+      "runtime": "not_run"
+    }
+  ]
+}

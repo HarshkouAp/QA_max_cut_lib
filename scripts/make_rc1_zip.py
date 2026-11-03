@@ -16,6 +16,7 @@ EXTRA = [
     "results/generators_series/stage18_48_cases.json",
     "RELEASE_READINESS.md",
     "REQUIREMENTS_TRACEABILITY.json",
+    "SOURCE_CLOSURE.json",
 ]
 
 

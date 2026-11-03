@@ -43,6 +43,8 @@ def __getattr__(name):
         "DistributedLSRQAOACPU": ".distributed_ls",
         "IncrementalLSRQAOACPU": ".incremental_ls",
         "QAOAWithMIObserverCPU": ".mi_observer",
+        "BatchLSRQAOACPU": ".batch_ls",
+        "QuantizedQAOACPU": ".quantized_qaoa",
         "RQAOAWithMIObserverCPU": ".mi_observer",
         "EnvironmentLSRQAOACPU": ".environment_ls_rqaoa_cpu",
     }

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "type": "laboratory.quantized_qaoa_cpu",
+  "seed": 20,
+  "num_treads": 1,
+  "parameters": {"layers": 1, "dtype": "complex128"},
+  "objective": {"type": "mean_cut", "parameters": {}},
+  "estimation": {"mode": "exact"},
+  "optimizer": {"type": "adam", "parameters": {"max_steps": 2}},
+  "initialization": {"type": "fixed_angles", "parameters": {"values": [0.3, 0.2]}},
+  "readout": {"mode": "most_probable"},
+  "limits": {"shots_total": 0},
+  "angle_quantization": {"enabled": true, "delta": 0.39269908169872414, "tie_rule": "nearest_ties_to_even"},
+  "output": {"report": 0, "logs": 0, "color": "auto"}
+}

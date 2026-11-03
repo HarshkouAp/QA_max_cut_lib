@@ -67,3 +67,22 @@ def test_history_and_hierarchy():
     assert proxy.raw == pytest.approx(math.sqrt(0.19))
     assert proxy.valid is False
     assert proxy.reason == "frechet_violation"
+
+
+def test_batch_and_quantized_smoke():
+    import json
+    from QA_max_cut_lib import WeightedGraph
+
+    graph = WeightedGraph([(10, 30, 2), (10, 80, 3), (30, 80, 5)], nodes=[10, 30, 80, 101])
+    from QA_max_cut_lib.laboratory import BatchLSRQAOACPU, QuantizedQAOACPU
+
+    batch = BatchLSRQAOACPU(json.loads(open("configs/solvers/batch_ls_rqaoa_cpu.json").read()))
+    solution = batch.solve(graph, num_treads=1)
+    assert set(solution) == set(graph.nodes)
+    assert batch.result["status"] in ("completed", "stopped")
+
+    config = json.loads(open("configs/solvers/quantized_qaoa_cpu.json").read())
+    quantized = QuantizedQAOACPU(config)
+    quantized.solve(graph)
+    assert quantized.result["angle_quantization"]["tie_rule"] == "nearest_ties_to_even"
+    assert quantized.result["solution_source"] == "quantized_argmax"

@@ -37,6 +37,8 @@ class SolverFactory:
             "laboratory.distributed_ls_rqaoa_cpu",
             "laboratory.qaoa_mi_cpu",
             "laboratory.incremental_ls_rqaoa_cpu",
+            "laboratory.batch_ls_rqaoa_cpu",
+            "laboratory.quantized_qaoa_cpu",
             "laboratory.rqaoa_mi_cpu",
         )
 
@@ -63,6 +65,8 @@ class SolverFactory:
         from ..solvers.distributed_ls import DistributedLSRQAOACPU
         from ..solvers.mi_observer import QAOAWithMIObserverCPU, RQAOAWithMIObserverCPU
         from ..solvers.incremental_ls import IncrementalLSRQAOACPU
+        from ..solvers.batch_ls import BatchLSRQAOACPU
+        from ..solvers.quantized_qaoa import QuantizedQAOACPU
 
         types = {
             "exact_cpu": ExactCPU,
@@ -86,6 +90,8 @@ class SolverFactory:
             "laboratory.qaoa_mi_cpu": QAOAWithMIObserverCPU,
             "laboratory.rqaoa_mi_cpu": RQAOAWithMIObserverCPU,
             "laboratory.incremental_ls_rqaoa_cpu": IncrementalLSRQAOACPU,
+            "laboratory.batch_ls_rqaoa_cpu": BatchLSRQAOACPU,
+            "laboratory.quantized_qaoa_cpu": QuantizedQAOACPU,
         }
         if config.get("type") not in types:
             raise ValueError(

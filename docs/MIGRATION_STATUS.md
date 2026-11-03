@@ -1,4 +1,4 @@
-# Статус 0.1.0rc1
+# Статус 0.1.0rc2
 
 Версия 0.1.0a9 добавляет **общий планировщик серий, ExperimentRunner,
 ReferencePolicy, общий measurement executor и ParallelismProfiler**. Бенчмарк
