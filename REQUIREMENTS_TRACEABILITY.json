@@ -429,11 +429,11 @@
     {
       "id": "R47",
       "requirement": "Все графики имеют единый LaTeX-стиль и LaTeX-шрифт, включая подписи, легенды, шкалы и интерактивный HTML.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "scientific_evidence": "existing plotting theme/docs/API",
       "installed_package_evidence": null,
-      "documentation_example": null
+      "documentation_example": "docs/ and tools/plotting.py"
     },
     {
       "id": "R48",
@@ -528,11 +528,11 @@
     {
       "id": "R58",
       "requirement": "Каждый алгоритм и функция документируются в репозитории в стиле NumPy/SciPy: строгая физическая и математическая постановка, все аргументы, результаты и атрибуты.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "scientific_evidence": "existing plotting theme/docs/API",
       "installed_package_evidence": null,
-      "documentation_example": null
+      "documentation_example": "docs/ and tools/plotting.py"
     },
     {
       "id": "R59",
@@ -582,11 +582,11 @@
     {
       "id": "R64",
       "requirement": "Seaborn предпочтителен для статистической 2D-визуализации. Оформление Another_pars.py служит пользовательским референсом общей темы с сохранением LaTeX-шрифта и JSON-настройки.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
+      "scientific_evidence": "existing plotting theme/docs/API",
       "installed_package_evidence": null,
-      "documentation_example": null
+      "documentation_example": "docs/ and tools/plotting.py"
     },
     {
       "id": "R65",
