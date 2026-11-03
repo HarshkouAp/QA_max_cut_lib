@@ -7,11 +7,11 @@ import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = Path("C:/Users/Alexey/Downloads/QA_max_cut_lib_0.1.0rc1.zip")
+OUT = Path("C:/Users/Alexey/Downloads/QA_max_cut_lib_0.1.0rc2.zip")
 EXCLUDE = {".venv", ".venv-stage02", ".venv-wheelcheck", "build", "_build", "__pycache__", ".pytest_cache"}
 EXTRA = [
-    "dist/qa_max_cut_lib-0.1.0rc1-py3-none-any.whl",
-    "dist/qa_max_cut_lib-0.1.0rc1.tar.gz",
+    "dist/qa_max_cut_lib-0.1.0rc2-py3-none-any.whl",
+    "dist/qa_max_cut_lib-0.1.0rc2.tar.gz",
     "dist/SHA256SUMS.txt",
     "results/generators_series/stage18_48_cases.json",
     "RELEASE_READINESS.md",
@@ -46,7 +46,7 @@ items = selected()
 manifest = {
     "schema_version": 1,
     "package": "QA_max_cut_lib",
-    "version": "0.1.0rc1",
+    "version": "0.1.0rc2",
     "release_status": "release_candidate",
     "release_profile": "CPU verified; GPU and full controller closure blocked",
     "files": {},
