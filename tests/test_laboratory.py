@@ -83,13 +83,13 @@ def test_catalog_covers_archive_and_keeps_deferred_visible():
     assert summary["parsed_members"] == 89
     assert summary["variants"] >= 6
     assert "warm_start_product_qaoa_cpu_v1" in summary["implemented_variant_ids"]
-    assert "warm_start_rqaoa" in summary["deferred_variant_ids"]
+    assert summary["deferred_variant_ids"] == []
     alias = get_file("Diplom/Mk_5.py")
     assert alias["ast_sha256"] == get_file("Laboratory/LS_RQAOA_fast_5.py")["ast_sha256"]
     assert alias["path"] != get_file("Laboratory/LS_RQAOA_fast_5.py")["path"]
-    deferred = get_variant("warm_start_rqaoa")
-    assert deferred["status"]["implementation"] == "not_implemented"
-    assert any(not card["runnable"] for card in list_variants())
+    variant = get_variant("warm_start_rqaoa")
+    assert variant["status"]["implementation"] == "implemented"
+    assert all(card["runnable"] for card in list_variants())
 
 
 def test_a_product_state_and_initial_statistics():

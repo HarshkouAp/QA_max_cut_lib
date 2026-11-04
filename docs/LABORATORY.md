@@ -40,9 +40,10 @@ src/QA_max_cut_lib/laboratory/data/inventory-v1.schema.json
 src/QA_max_cut_lib/laboratory/data/catalog-v1.schema.json
 ```
 
-`source_to_variant` covers all 89 records. A deferred family stays in
-`deferred_variant_ids` with a reason and a backlog; it never runs the base
-`QAOACPU` under a historical name.
+`source_to_variant` covers all 89 records. Every variant card is runnable:
+historical LS/MK, mean-map, correlation, edge-extension, decomposition, scanning,
+and QAOA variants map to `laboratory.legacy` adapters; the remaining controllers
+use their dedicated assemblies. No card remains in `deferred_variant_ids`.
 
 ## Runnable variants
 

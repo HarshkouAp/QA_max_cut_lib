@@ -139,6 +139,7 @@ Start with the [Quickstart](docs/QUICKSTART.md), then read
 - [NVIDIA GPU](docs/GPU.md)
 - [Mutual-information diagnostics](docs/MUTUAL_INFORMATION.md)
 - [Generators and typed plans](docs/GENERATORS_PLANS.md)
+- [Legacy compatibility adapters (R19)](docs/LEGACY_COMPATIBILITY.md)
 - [Architecture](docs/ARCHITECTURE_MAP.md)
 - [Release status and limitations](RELEASE_READINESS.md)
 
@@ -172,18 +173,18 @@ python -m sphinx -W -b html docs docs/_build/html
 python -m build
 ```
 
-In the current environment: `218 passed, 1 skipped`; Sphinx builds with `-W`;
+In the current environment: `233 passed, 1 skipped`; Sphinx builds with `-W`;
 GPU tests `10 passed` on a local RTX 3050. Wheel installation is checked outside
 the source tree in a separate environment.
 
 ## Status
 
-`0.1.0rc2` is a release candidate, not the final `0.1.0`. CPU/GPU solvers,
-reductions, RQAOA, LS, generators, typed plans, diagnostics, and Laboratory
-components are implemented. The remaining blocker is R19: not every materially
-different branch of the original 89-file archive has been ported. See
+`0.1.0rc2` contains all 65 requirements. CPU/GPU solvers, reductions, RQAOA, LS,
+generators, typed plans, diagnostics, and Laboratory components are implemented.
+R19 is closed: all 89 archive records have a terminal disposition, including 18
+compatibility adapters in `QA_max_cut_lib.laboratory.legacy`. See
 [RELEASE_READINESS.md](RELEASE_READINESS.md) and
-[SOURCE_CLOSURE.json](SOURCE_CLOSURE.json) for the exact list.
+[SOURCE_CLOSURE.json](SOURCE_CLOSURE.json).
 
 No public distribution license has been assigned yet; the package is not on
 PyPI. Source comments and docstrings are in technical English.

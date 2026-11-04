@@ -51,8 +51,9 @@ Guides
 * :download:`Migration status <MIGRATION_STATUS.md>`
 * :download:`Project environment <PROJECT_SETUP.md>`
 * :download:`Public release checklist <PUBLISHING.md>`
-* :download:`Release readiness and R19 <../RELEASE_READINESS.md>`
+* :download:`Release readiness <../RELEASE_READINESS.md>`
 * :download:`Source closure inventory <../SOURCE_CLOSURE.json>`
+* :download:`Legacy compatibility adapters (R19) <LEGACY_COMPATIBILITY.md>`
 * :download:`Acceptance evidence archive <ARCHIVE.md>`
 
 Notebooks

@@ -92,7 +92,7 @@ The checks below were run on Windows 10 with Python 3.12.14, the installed
 `QA_max_cut_lib 0.1.0rc2` wheel, NumPy 2.5.4, SciPy 1.18.1, and Sphinx 9.1.1.
 The public example was run outside the package source tree.
 
-- `218 passed` CPU tests; `10 passed` GPU tests on the local RTX 3050.
+- `233 passed` CPU tests; `10 passed` GPU tests on the local RTX 3050.
 - Sphinx `-W` builds successfully.
 - `examples/public_quickstart.py`: exact optimum `3.5`, expected QAOA cut
   `3.044365`, best cut in 128 shots `3.5`, optimal mass `0.805755`.
@@ -111,11 +111,11 @@ without a run on that commit is not acceptance evidence.
 
 ## Release gate
 
-`0.1.0rc2` is a release candidate, not `0.1.0`. The remaining blocker is R19:
-not every materially different branch of the 89-file archive has been ported.
-`RELEASE_READINESS.md` and `SOURCE_CLOSURE.json` record the exact list. Do not
-label a build `0.1.0`, and do not describe the Laboratory as a complete legacy
-migration, until that gate is closed or explicitly excluded.
+All 65 requirements are passed and R19 is closed through the
+`laboratory.legacy` compatibility adapters. `RELEASE_READINESS.md` and
+`SOURCE_CLOSURE.json` are the authority for the closure evidence. A stable
+`0.1.0` still needs the packaging choices below (license, CI, and optionally
+PyPI).
 
 ## Limitations
 

@@ -5,9 +5,10 @@ mathematics they implement, and what is still missing. It is an engineering stat
 page, not a user guide: method selection is in `CHOOSE_ALGORITHM.md`, exact fields
 are in `API.md`, and the release position is in `RELEASE_READINESS.md`.
 
-`0.1.0rc2` is a release candidate, not the final `0.1.0`. The only open
-requirement is R19, the full closure of the 89-file source archive; 18 records are
-reviewed and deferred. See `SOURCE_CLOSURE.json` for the list.
+`0.1.0rc2` has all 65 requirements passed. R19, the closure of the 89-file source
+archive, is complete: 18 formerly deferred branches are available through
+`QA_max_cut_lib.laboratory.legacy` compatibility adapters. See
+`SOURCE_CLOSURE.json` for the mapping.
 
 ## Status by area
 
@@ -26,7 +27,7 @@ reviewed and deferred. See `SOURCE_CLOSURE.json` for the list.
 | GPU | `QAOAGPU`, `QAOAGPUCorrelationSource`, `RQAOAGPU`, `LSRQAOAGPU`; CuPy 14.2.0, RTX 3050 Laptop CC 8.6, 4 GiB; CPU import without CUDA | RTX 5060, V100 and other cards need separate checks; multi-GPU |
 | Generators | complete, `G(n,m)`, `G(n,p)`, three weight families, induced subgraphs, `random_partition`, `greedy_abs_weight_partition`; schema2 families, BenchGraph16/Benchmark297 resolvers, Wishart/Hebbian candidates, typed vertex/induced/edge plans, coverage analyzer | research generators and subgraph strategies from the archive |
 | Tools | correlations, quality, static plots, `p=1` map, reduction weights and energies, LS coverage, `binomial(2p,2)` trajectories, hierarchy overview/3D/tree, GW/SA/refinement panels, series coverage and quality, parallelism panels, standalone HTML, MI heatmaps and profiles | large-distribution histograms, an interactive profile |
-| Laboratory | 89 file records and 15 variant cards; 10 implemented variant IDs; source aliases and deferred backlog; `laboratory list/show` | warm-start RQAOA resume, LS/MK families, fields and environment, MI strategies |
+| Laboratory | 89 file records and 15 runnable variant cards; source aliases and compatibility adapters; `laboratory list/show` | warm-start RQAOA resume, LS/MK families, fields and environment, MI strategies |
 | Series | `BenchmarkSpec`, stable graph/case/trial IDs, full product, rejected records, isolated and concurrent runner, exact/GW/best-known references, write-once records | checkpoint/resume, distributed campaigns |
 | Parallelism | `LSRQAOACPU`, `IncrementalLSRQAOACPU`, `QAOAInQAOACPU`, SA; shared `ParallelismProfiler` with 1/2/4, warmups and repetitions, work counters, Amdahl and Karp–Flatt, paired bootstrap and a global recommendation | concurrent profile on one GPU, more scheduler policies |
 | Budgets | strict shared budget for QAOA/RQAOA/LS; per-step correlation reserve and round-robin quotas | nested budgets for QAOA-in-QAOA |
@@ -249,9 +250,7 @@ corresponding algorithm has been ported.
 
 ## Remaining sequence
 
-1. Close R19: port or explicitly exclude the 18 deferred records while preserving
-   the provenance of each variant.
-2. Add the missing checkpoint codecs and declare each boundary in the capability
+1. Add the missing checkpoint codecs and declare each boundary in the capability
    matrix.
 3. Complete CE and updatable-environment variants as separate mathematical
    strategies.

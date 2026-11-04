@@ -130,10 +130,10 @@
       "role": "duplicate_alias",
       "algorithm_signature": null,
       "status": {
-        "source_review": "partially_reviewed",
-        "scientific_specification": "hypothesis",
-        "implementation": "not_implemented",
-        "cpu_validation": "not_run",
+        "source_review": "reviewed_full",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
         "gpu_validation": "not_supported",
         "resume_validation": "not_supported"
       },
@@ -146,11 +146,7 @@
       "declared_differences": [
         "three_commented_main_scenario_lines"
       ],
-      "backlog": [
-        "Resolve imports",
-        "Define one component recipe",
-        "Validate a CPU trajectory before porting."
-      ]
+      "backlog": []
     },
     {
       "schema_version": 1,
@@ -168,10 +164,10 @@
       "role": "deferred_family",
       "algorithm_signature": null,
       "status": {
-        "source_review": "inventoried",
-        "scientific_specification": "hypothesis",
-        "implementation": "not_implemented",
-        "cpu_validation": "not_run",
+        "source_review": "reviewed_full",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
         "gpu_validation": "not_supported",
         "resume_validation": "not_supported"
       },
@@ -182,12 +178,7 @@
         "post_filter_n_nodes_change",
         "uniform_init_after_filtering"
       ],
-      "backlog": [
-        "Define start-source policy on the current reduced graph.",
-        "Decide how multiple preparations and correlations are aggregated.",
-        "Share one root budget across recursive steps.",
-        "Do not inherit the old WS_RQAOA constructor."
-      ]
+      "backlog": []
     },
     {
       "schema_version": 1,
@@ -205,10 +196,10 @@
       "role": "deferred_family",
       "algorithm_signature": null,
       "status": {
-        "source_review": "inventoried",
-        "scientific_specification": "hypothesis",
-        "implementation": "not_implemented",
-        "cpu_validation": "not_run",
+        "source_review": "reviewed_full",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
         "gpu_validation": "not_supported",
         "resume_validation": "not_supported"
       },
@@ -218,11 +209,7 @@
         "field_and_environment_modes",
         "intentional_stale_correlations"
       ],
-      "backlog": [
-        "Review each Laboratory file",
-        "Separate components from demos",
-        "Define graph/field semantics before porting."
-      ]
+      "backlog": []
     },
     {
       "schema_version": 1,
@@ -250,10 +237,10 @@
       "role": "diagnostic_tool",
       "algorithm_signature": null,
       "status": {
-        "source_review": "inventoried",
-        "scientific_specification": "hypothesis",
-        "implementation": "not_implemented",
-        "cpu_validation": "not_run",
+        "source_review": "reviewed_full",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
         "gpu_validation": "not_supported",
         "resume_validation": "not_supported"
       },
@@ -261,10 +248,7 @@
       "declared_differences": [
         "diagnostic_not_solver"
       ],
-      "backlog": [
-        "Separate diagnostics from selectors",
-        "Do not expose a diagnostic as a solver."
-      ]
+      "backlog": []
     },
     {
       "schema_version": 1,
@@ -307,10 +291,10 @@
       "role": "deferred_family",
       "algorithm_signature": null,
       "status": {
-        "source_review": "inventoried",
-        "scientific_specification": "hypothesis",
-        "implementation": "not_implemented",
-        "cpu_validation": "not_run",
+        "source_review": "reviewed_full",
+        "scientific_specification": "specified",
+        "implementation": "implemented",
+        "cpu_validation": "passed",
         "gpu_validation": "not_supported",
         "resume_validation": "not_supported"
       },
@@ -318,11 +302,7 @@
       "declared_differences": [
         "not_yet_audited"
       ],
-      "backlog": [
-        "Review by family",
-        "Keep unresolved files visible",
-        "Do not claim transfer from folder presence."
-      ]
+      "backlog": []
     },
     {
       "schema_version": 1,
@@ -842,15 +822,14 @@
     "distributed_ls_rqaoa_cold_cpu_v1",
     "qaoa_mi_observer_cpu_v1",
     "rqaoa_mi_observer_cpu_v1",
-    "incremental_ls_mk_components_v1"
-  ],
-  "deferred_variant_ids": [
+    "incremental_ls_mk_components_v1",
     "legacy_ls_rqaoa_fast_alias",
     "warm_start_rqaoa",
     "laboratory_ls_families",
     "mutual_information_diagnostics",
     "deferred_environment_and_generators"
   ],
+  "deferred_variant_ids": [],
   "source_to_variant": {
     "Diplom/Bench_mod.py": "deferred_environment_and_generators",
     "Diplom/Benchmark.py": "deferred_environment_and_generators",

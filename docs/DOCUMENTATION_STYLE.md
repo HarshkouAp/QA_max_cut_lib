@@ -43,8 +43,8 @@ with a check that can be repeated.
 
 Public pages describe `0.1.0rc2`. Numbers come from an actual run or test; an
 analytical answer is labelled as expected. An unverified fact is not published
-as a result. The remaining R19 blocker is described in `RELEASE_READINESS.md`
-and is not hidden in introductory chapters.
+as a result. The R19 source-closure status is recorded in `RELEASE_READINESS.md`
+and `SOURCE_CLOSURE.json`.
 
 ## Build check
 

@@ -1,8 +1,7 @@
 """Laboratory namespace for reviewed historical variants.
 
-Only explicitly implemented recipes are runnable.  Catalogued but deferred
-cards remain visible and raise ``UnavailableVariant`` if a caller asks the
-factory to run them.
+All catalogued recipes have terminal dispositions; every card is runnable
+through a shared CPU controller or a legacy compatibility adapter.
 """
 
 from .catalog import (
@@ -17,10 +16,29 @@ from .catalog import (
     load_inventory,
     source_to_variant,
 )
-IMPLEMENTED_VARIANTS = ("warm_start_product_qaoa_cpu_v1",)
+IMPLEMENTED_VARIANTS = tuple(sorted({
+    "warm_start_product_qaoa_cpu_v1", "warm_start_ensemble_rqaoa_cpu_v1",
+    "conditional_fields_cpu_v1", "block_mean_field_gauss_seidel_cpu_v1",
+    "block_mean_field_jacobi_cpu_v1", "distributed_ls_rqaoa_carry_cpu_v1",
+    "distributed_ls_rqaoa_cold_cpu_v1", "qaoa_mi_observer_cpu_v1",
+    "rqaoa_mi_observer_cpu_v1", "incremental_ls_mk_components_v1",
+    "legacy_ls_rqaoa_fast_alias", "warm_start_rqaoa", "laboratory_ls_families",
+    "mutual_information_diagnostics", "deferred_environment_and_generators",
+}))
 
 
 def __getattr__(name):
+    if name in {
+        "LSRQAOAExp", "LSRQAOAFast1", "LSRQAOAFast2", "LSRQAOAFast3",
+        "LSRQAOAFast4", "MK6V1", "MK6V2", "MK7V1", "MK7V2",
+        "QAOAAdam", "QAOAF2", "QAOAFM", "CorrectedMeanMap",
+        "CorrelationExtractor", "EdgeExtender", "GraphDecomposerLight",
+        "GraphScanner", "partition_smoke_test",
+    }:
+        from . import legacy
+        value = getattr(legacy, name)
+        globals()[name] = value
+        return value
     if name == "WarmStartQAOACPU":
         from .warm_start_qaoa_cpu import WarmStartQAOACPU
         globals()[name] = WarmStartQAOACPU
@@ -79,6 +97,24 @@ __all__ = [
     "QuantizedQAOACPU",
     "QAOAWithMIObserverCPU",
     "RQAOAWithMIObserverCPU",
+    "LSRQAOAExp",
+    "LSRQAOAFast1",
+    "LSRQAOAFast2",
+    "LSRQAOAFast3",
+    "LSRQAOAFast4",
+    "MK6V1",
+    "MK6V2",
+    "MK7V1",
+    "MK7V2",
+    "QAOAAdam",
+    "QAOAF2",
+    "QAOAFM",
+    "CorrectedMeanMap",
+    "CorrelationExtractor",
+    "EdgeExtender",
+    "GraphDecomposerLight",
+    "GraphScanner",
+    "partition_smoke_test",
     "IMPLEMENTED_VARIANTS",
     "catalog_summary",
     "get_file",

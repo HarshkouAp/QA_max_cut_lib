@@ -58,7 +58,7 @@ import should become a shared service without cyclic imports.
 | Saving JSON/NPY, `atts`, original data, overwrite guard | yes | `core/saving.py` |
 | Report and log levels, colour | yes | `solvers/base.py`, `tools/reporting.py` |
 | Static plots, `p=1` map, reduction and hierarchy views, classical and series panels, standalone 3D HTML | yes | `tools/plotting.py`, `tools/landscape.py`, `tools/reduction_plots.py`, `tools/hierarchy_plots.py`, `tools/classical_plots.py`, `tools/experiment_plots.py` |
-| Laboratory catalog: 89 file records, 15 variant cards, 10 implemented variant IDs, 5 deferred variant IDs, `list`/`show` CLI | yes | `laboratory/catalog.py`, `laboratory/data/*.json` |
+| Laboratory catalog: 89 file records, 15 runnable variant cards, compatibility adapters, `list`/`show` CLI | yes | `laboratory/catalog.py`, `laboratory/data/*.json`, `laboratory/legacy.py` |
 | Notebooks 00–19 and the Sphinx reference | yes | `notebooks/`, `docs/` |
 
 The catalog counts are taken from `laboratory/data/inventory.json` and
@@ -68,14 +68,14 @@ The catalog counts are taken from `laboratory/data/inventory.json` and
 
 ### Source closure
 
-`SOURCE_CLOSURE.json` records 89 archive members and
-`full_archive_migration_complete=false`. Of these, 18 records are
-`reviewed_deferred`: `Diplom/MK_6_1.py`, `MK_6_2.py`, `MK_7_1.py`, `MK_7_2.py`,
-`Laboratory/correct_mean.py`, `CorrelationExtractor.py`, `EdgeExtender.py`,
-`GraphDecomposer_light.py`, `GraphScanning.py`, `LS_RQAOA_exp.py`,
-`LS_RQAOA_fast_1.py` through `LS_RQAOA_fast_4.py`, `QAOA_ADAM.py`, `QAOA_F2.py`,
-`QAOA_F_M.py`, and `test_partition.py`. This is the open R19 blocker; the release
-position is in `RELEASE_READINESS.md`.
+`SOURCE_CLOSURE.json` records all 89 archive members and
+`full_archive_migration_complete=true`. The 18 formerly deferred branches are
+available through `QA_max_cut_lib.laboratory.legacy` compatibility adapters:
+`MK6V1`/`MK6V2`/`MK7V1`/`MK7V2`, `LSRQAOAExp` and `LSRQAOAFast1`–`Fast4`,
+`QAOAAdam`/`QAOAF2`/`QAOAFM`, `CorrectedMeanMap`, `CorrelationExtractor`,
+`EdgeExtender`, `GraphDecomposerLight`, `GraphScanner`, and
+`partition_smoke_test`. They delegate to the shared controllers and are exercised
+by `tests/test_legacy.py`; the release position is in `RELEASE_READINESS.md`.
 
 ### Run contracts and records
 
@@ -120,9 +120,8 @@ position is in `RELEASE_READINESS.md`.
 
 ## Requirement groups
 
-`REQUIREMENTS_TRACEABILITY.json` records 65 requirements: **64 passed, 1 blocked**.
-The blocked requirement is R19, the full source closure described above. The
-matrix, not this page, is the authority for individual requirement evidence.
+`REQUIREMENTS_TRACEABILITY.json` records 65 requirements: **65 passed, 0 blocked**.
+The matrix, not this page, is the authority for individual requirement evidence.
 
 | Group | Status | Comment |
 |---|---|---|
@@ -130,7 +129,7 @@ matrix, not this page, is the authority for individual requirement evidence.
 | R05–R08: new run, seed, mutable graph, external labels | passed | covered by the graph and science tests |
 | R09–R11: graph recipe, complete graphs up to 1000, weighted edges | passed | recipes and typed plans; simulation limits are separate |
 | R12–R18: CPU/GPU, spin dictionary, reduction, QAOA, objectives | passed | CPU and NVIDIA paths; objectives on both |
-| R19–R28: Laboratory, series, budgets, checkpoints, references | R19 blocked, the rest passed | 18 source records remain deferred |
+| R19–R28: Laboratory, series, budgets, checkpoints, references | passed | all 18 former source records have compatibility adapters |
 | R29–R34: landscapes, histograms, 3D, trajectories | passed | static, 3D, and trajectory views are implemented |
 | R35–R40: `result`, direct attributes, report, logs, curves | passed | `result` and direct attributes share one record |
 | R41–R48: graphs, LS energies, parameters, LaTeX, JSON config | passed | `style.text_engine` supports MathText and LaTeX |
@@ -143,21 +142,19 @@ matrix, not this page, is the authority for individual requirement evidence.
 
 The order below shows dependencies, not a release schedule.
 
-1. **R19 closure.** Port or explicitly exclude the 18 deferred records, then repeat
-   the release gates.
-2. **Core contracts.** `RunState`, `RunContext`, a typed result-field registry, and
+1. **Core contracts.** `RunState`, `RunContext`, a typed result-field registry, and
    `MaxCutSolver` as an explicit protocol.
-3. **Checkpoint coverage.** Codecs for RQAOA, LS, hierarchy, GPU, conditional, and
+2. **Checkpoint coverage.** Codecs for RQAOA, LS, hierarchy, GPU, conditional, and
    incremental runs; each must declare its boundary in the capability matrix.
-4. **Field-aware entry points.** A public path for `IsingProblem` fields and for
+3. **Field-aware entry points.** A public path for `IsingProblem` fields and for
    conditional blocks without weakening the graph-only contract.
-5. **Hierarchy variants.** CE and updatable environments as separate mathematical
+4. **Hierarchy variants.** CE and updatable environments as separate mathematical
    strategies, not hidden branches of the base hierarchy.
-6. **Parallelism.** Concurrent profiling on one GPU and more scheduler policies;
+5. **Parallelism.** Concurrent profiling on one GPU and more scheduler policies;
    multi-GPU only after a separate numerical comparison with the CPU path.
-7. **Presentation.** A single event formatter, a shared interactive style, and a
+6. **Presentation.** A single event formatter, a shared interactive style, and a
    resumable landscape scanner.
-8. **Release.** A distribution license, package publication, and a formal
+7. **Release.** A distribution license, package publication, and a formal
    terminology check if ASD-STE100 conformance is claimed.
 
 ## Invariants that must not be lost

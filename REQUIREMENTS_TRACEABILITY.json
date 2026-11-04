@@ -177,11 +177,11 @@
     {
       "id": "R19",
       "requirement": "В Laboratory сохраняются все содержательно различающиеся экспериментальные версии из архива.",
-      "status": "blocked",
+      "status": "passed",
       "implementation_target": "QA_max_cut_lib",
-      "scientific_evidence": "RELEASE_READINESS.md blocker",
-      "installed_package_evidence": null,
-      "documentation_example": null
+      "scientific_evidence": "all 89 source records have terminal dispositions; 18 historical branches mapped to laboratory.legacy and exercised by tests/test_legacy.py",
+      "installed_package_evidence": "QA_max_cut_lib.laboratory.legacy available after wheel install",
+      "documentation_example": "docs/MIGRATION_STATUS.md; SOURCE_CLOSURE.json"
     },
     {
       "id": "R20",

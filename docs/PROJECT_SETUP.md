@@ -21,9 +21,9 @@ other systems are in [`INSTALLATION.md`](INSTALLATION.md).
 8. The exact core of pair reductions Max-Cut to Ising in `core/reduction.py`.
 9. A git repository with the full history.
 
-The current build is a release candidate: CPU and GPU solver families, reductions,
-Laboratory controllers, series, and checkpoints are implemented, while the source
-closure R19 is still open. `0.1.0rc2` is not the final `0.1.0`.
+The current build contains all 65 requirements: CPU and GPU solver families,
+reductions, Laboratory controllers, series, and checkpoints are implemented. R19
+is closed through the `laboratory.legacy` compatibility adapters.
 
 ## Project structure
 
@@ -140,7 +140,7 @@ Expected results on this machine:
 
 | Check | Command | Result |
 |---|---|---|
-| CPU suite | `.venv-stage02/Scripts/python.exe -m pytest -q` | `218 passed, 1 skipped, 1 warning` |
+| CPU suite | `.venv-stage02/Scripts/python.exe -m pytest -q` | `233 passed, 1 skipped, 1 warning` |
 | GPU suite | `.venv/Scripts/python.exe -m pytest -q -m gpu` | `10 passed, 218 deselected` |
 | Sphinx | `.venv-stage02/Scripts/sphinx-build.exe -W -b html docs docs/_build/html` | success, no warnings |
 
@@ -196,8 +196,8 @@ installation without `ctk`, a compatible `cupy-cuda13x` version is sufficient.
 
 They are not hidden and are not presented as finished capabilities:
 
-- R19 is open: 18 of the 89 source records are reviewed and deferred, so
-  `full_archive_migration_complete=false`. See `RELEASE_READINESS.md` and
+- R19 is closed: all 89 source records have terminal dispositions and
+  `full_archive_migration_complete=true`. See `RELEASE_READINESS.md` and
   `SOURCE_CLOSURE.json`.
 - No D-Wave quantum annealer; the classical SA is implemented.
 - The public `solve(graph)` does not accept fields; fields are available in

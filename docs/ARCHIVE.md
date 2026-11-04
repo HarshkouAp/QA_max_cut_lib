@@ -26,7 +26,7 @@ did not change the evidence.
 |---|---|---|---|---|---|
 | `VALIDATION.md` (historical section) | 1 November 2026 | `0.1.0a1` | 42 checks | not run | first working CPU stage, installed wheel, two tutorial notebooks |
 | `VALIDATION_0.1.0rc1.md` | 3 November 2026 | `0.1.0rc1` | 216 passed, 1 skipped, 1 warning | not rechecked | first release candidate; artifacts and known gaps |
-| `VALIDATION_0.1.0rc2.md` | 3 November 2026 | `0.1.0rc2` | 218 passed, 1 skipped, 1 warning | 10 passed | current candidate; batch LS, quantized QAOA, R19 open |
+| `VALIDATION_0.1.0rc2.md` | 3 November 2026 | `0.1.0rc2` | 233 passed, 1 skipped, 1 warning | 10 passed | current candidate; batch LS, quantized QAOA, R19 closed |
 
 ## Stage records `0.1.0a2`–`0.1.0a18`
 

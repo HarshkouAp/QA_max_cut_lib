@@ -9,7 +9,7 @@ first-build record is kept at the end of this page for provenance.
 
 | Check | Command or scope | Result |
 |---|---|---|
-| CPU test suite | `.venv-stage02/Scripts/python.exe -m pytest -q` | `218 passed, 1 skipped, 1 warning` |
+| CPU test suite | `.venv-stage02/Scripts/python.exe -m pytest -q` | `233 passed, 1 skipped, 1 warning` |
 | GPU test suite | `.venv/Scripts/python.exe -m pytest -q -m gpu` | `10 passed, 218 deselected` |
 | Documentation | `.venv-stage02/Scripts/sphinx-build.exe -W -b html docs docs/_build/html` | success, no warnings |
 | Wheel import | install into a separate environment, import outside `src` | no CuPy, CUDA, CVXPY, or Qiskit required for the CPU import |
@@ -74,9 +74,9 @@ The failure is not reproduced once the font cache exists.
 | [`VALIDATION_0.1.0rc2.md`](VALIDATION_0.1.0rc2.md) | current release candidate: counts, artifacts, quickstart |
 | [`VALIDATION_LOCAL.md`](VALIDATION_LOCAL.md) | Windows 10 / Python 3.12 local check of `0.1.0a2` (historical) |
 | [`ARCHIVE.md`](ARCHIVE.md) | index of all historical acceptance records |
-| `RELEASE_READINESS.md` (repository root) | release position and the open R19 blocker |
+| `RELEASE_READINESS.md` (repository root) | release position and R19 closure evidence |
 | `SOURCE_CLOSURE.json` (repository root) | per-file source closure ledger |
-| `REQUIREMENTS_TRACEABILITY.json` (repository root) | R01–R65 matrix, 64 passed and 1 blocked |
+| `REQUIREMENTS_TRACEABILITY.json` (repository root) | R01–R65 matrix, 65 passed and 0 blocked |
 
 ## Historical record: first build `0.1.0a1`
 

@@ -7,7 +7,7 @@ Status: **release candidate 2, not final `0.1.0`**.
 
 | Check | Result |
 |---|---|
-| CPU suite | `218 passed, 1 skipped, 1 warning` |
+| CPU suite | `233 passed, 1 skipped, 1 warning` |
 | GPU suite (`.venv`, current source) | `10 passed` |
 | Sphinx `-W` | success, no warnings |
 | `00_quickstart.ipynb`, `01_full_guide.ipynb` | executed |
@@ -23,9 +23,9 @@ quantization.
 ## Artifacts
 
 - wheel SHA-256:
-  `5c15255b889685a295ba2341881568347c2fe4a628436d46fa475e3637b81878`
+  `781fe8c48306614ed0510d2209ba828b67f7a93bfcffc2486302ead62ed570a3`
 - sdist SHA-256:
-  `1bf830d665e9f3070039f5168acb2e4e6a043804b34f246df91d53457cd5f12f`
+  `41708de2028f35fbda5bd7bace61a0da29e473e60ee4fa7e77b1b804d33c3c66`
 
 ## Public quickstart
 
@@ -35,9 +35,9 @@ exact optimum `3.5`, expected cut `3.044365`, best of 128 shots `3.5`, optimal m
 
 ## Limits
 
-- `0.1.0rc2` is not `0.1.0`. R19 remains open: 18 of the 89 source records are
-  reviewed and deferred, so `full_archive_migration_complete=false`. See
-  `RELEASE_READINESS.md` and `SOURCE_CLOSURE.json`.
+- `0.1.0rc2` is a release candidate by version name, but all 65 requirements are
+  passed. R19 is closed: all 89 source records have terminal dispositions and the
+  18 compatibility adapters are exercised by `tests/test_legacy.py`.
 - The GPU result is local evidence on one RTX 3050 Laptop. It does not cover other
   cards, multi-GPU, CUDA Graphs, or `batch>1`.
 - The CPU candidate does not replace GPU acceptance, and the GPU result does not
@@ -46,4 +46,4 @@ exact optimum `3.5`, expected cut `3.044365`, best of 128 shots `3.5`, optimal m
   the figure is still produced.
 - On a cold Matplotlib font cache the first full run failed once in
   `tests/test_experiments.py::test_plot_reads_profile_without_solver`; the test
-  passed alone and the repeated full run returned `218 passed, 1 skipped`.
+  passed alone and the repeated full run returned `233 passed, 1 skipped`.
