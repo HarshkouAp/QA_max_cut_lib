@@ -7802,12 +7802,13 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="LS-RQAOA-%D0%BD%D0%B0-CPU">LS-RQAOA на CPU<a class="anchor-link" href="#LS-RQAOA-%D0%BD%D0%B0-CPU">¶</a></h1><p><strong>Версия 0.1.0a5.</strong> Ноутбук проверяет базовый локальный поиск RQAOA:
-два построителя, индуцированные подграфы, среднее корреляций по наблюдениям
-каждой пары, покрытие, глобальную редукцию, последовательный и параллельный
-запуск, энергетический прогресс и локальные углы.</p>
-<p>Локальная задача — подграф текущего графа без граничных рёбер и без полей.
-Это эвристика, а не точное разложение полного гамильтониана.</p>
+<h1 id="LS-RQAOA-on-CPU">LS-RQAOA on CPU<a class="anchor-link" href="#LS-RQAOA-on-CPU">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> The notebook exercises base RQAOA local search: two
+builders, induced subgraphs, the per-pair mean of observed correlations,
+coverage, global reduction, sequential and parallel execution, energy progress
+and local angles.</p>
+<p>A local problem is a subgraph of the current graph without boundary edges and
+without fields. This is a heuristic, not an exact decomposition of the full
+Hamiltonian.</p>
 </div>
 </div>
 </div>
@@ -7862,9 +7863,9 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\.venv-wheelcheck\Lib\sit
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%93%D1%80%D0%B0%D1%84-%D0%B1%D0%BE%D0%BB%D1%8C%D1%88%D0%B5-%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B0-statevector">Граф больше предела statevector<a class="anchor-link" href="#%D0%93%D1%80%D0%B0%D1%84-%D0%B1%D0%BE%D0%BB%D1%8C%D1%88%D0%B5-%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B0-statevector">¶</a></h2><p>Граф из 30 вершин и 95 рёбер. Полный вектор состояния на нём не строится;
-локальные задачи ограничены размером 10, и аналитический источник p=1
-работает без <code>2**N</code>.</p>
+<h2 id="A-graph-beyond-the-statevector-limit">A graph beyond the statevector limit<a class="anchor-link" href="#A-graph-beyond-the-statevector-limit">¶</a></h2><p>The graph has 30 vertices and 95 edges. A full state vector cannot be built on
+it; local problems are capped at size 10, and the analytic p=1 source works
+without <code>2**N</code>.</p>
 </div>
 </div>
 </div>
@@ -7907,7 +7908,7 @@ labels: (0, 1, 2, 3, 4, 5, 6, 7) ...
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9F%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B8-%D0%B8-%D0%B8%D0%BD%D0%B4%D1%83%D1%86%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8">Построители и индуцированные задачи<a class="anchor-link" href="#%D0%9F%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B8-%D0%B8-%D0%B8%D0%BD%D0%B4%D1%83%D1%86%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8">¶</a></h2>
+<h2 id="Builders-and-induced-problems">Builders and induced problems<a class="anchor-link" href="#Builders-and-induced-problems">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7963,9 +7964,9 @@ greedy tasks: 6 sizes: [10, 10, 10, 10, 10, 10] max: 10
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-LS-RQAOA">Последовательный аналитический LS-RQAOA<a class="anchor-link" href="#%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-LS-RQAOA">¶</a></h2><p><code>limits.shots_total=0</code>, потому что локальные корреляции считаются точно.
-Каждая задача имеет свои углы; <code>parameter_trajectory</code> хранит строки задач, а
-не синтетическую глобальную траекторию.</p>
+<h2 id="Sequential-analytic-LS-RQAOA">Sequential analytic LS-RQAOA<a class="anchor-link" href="#Sequential-analytic-LS-RQAOA">¶</a></h2><p><code>limits.shots_total=0</code> because the local correlations are computed exactly.
+Each problem has its own angles; <code>parameter_trajectory</code> stores rows per problem,
+not a synthetic global trajectory.</p>
 </div>
 </div>
 </div>
@@ -8023,7 +8024,7 @@ tasks: 98 shots: 0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9F%D0%BE%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5-%D0%BF%D0%B0%D1%80">Покрытие пар<a class="anchor-link" href="#%D0%9F%D0%BE%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5-%D0%BF%D0%B0%D1%80">¶</a></h2>
+<h2 id="Pair-coverage">Pair coverage<a class="anchor-link" href="#Pair-coverage">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8066,9 +8067,9 @@ tasks: 98 shots: 0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-CLI">Реальный параллельный запуск через CLI<a class="anchor-link" href="#%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-CLI">¶</a></h2><p>Прямой <code>spawn</code> из Jupyter на Windows не является надёжным, поэтому ноутбук
-запускает импортируемый CLI как подпроцесс. Это не подмена параллельного
-режима последовательным: CLI выбирает <code>num_treads=2</code> и создаёт пул процессов.</p>
+<h2 id="A-real-parallel-run-through-the-CLI">A real parallel run through the CLI<a class="anchor-link" href="#A-real-parallel-run-through-the-CLI">¶</a></h2><p>A direct <code>spawn</code> from Jupyter on Windows is not reliable, so the notebook runs
+the importable CLI as a subprocess. This does not replace the parallel mode with
+a sequential one: the CLI selects <code>num_treads=2</code> and creates a process pool.</p>
 </div>
 </div>
 </div>
@@ -8139,7 +8140,7 @@ parallel cut: 41.74654631200346
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%AD%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B5%D1%81%D1%81-%D0%B8-%D0%BF%D0%BE%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5">Энергетический прогресс и покрытие<a class="anchor-link" href="#%D0%AD%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B5%D1%81%D1%81-%D0%B8-%D0%BF%D0%BE%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5">¶</a></h2>
+<h2 id="Energy-progress-and-coverage">Energy progress and coverage<a class="anchor-link" href="#Energy-progress-and-coverage">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8202,7 +8203,7 @@ Figure 2
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9B%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D1%83%D0%B3%D0%BB%D1%8B:-%D0%B2%D1%81%D0%B5-%D0%BF%D0%B0%D1%80%D1%8B-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2">Локальные углы: все пары параметров<a class="anchor-link" href="#%D0%9B%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D1%83%D0%B3%D0%BB%D1%8B:-%D0%B2%D1%81%D0%B5-%D0%BF%D0%B0%D1%80%D1%8B-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2">¶</a></h2>
+<h2 id="Local-angles:-all-parameter-pairs">Local angles: all parameter pairs<a class="anchor-link" href="#Local-angles:-all-parameter-pairs">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8259,8 +8260,8 @@ task ids: ['r0:p0:b0', 'r0:p0:b1', 'r0:p0:b2', 'r0:p1:b0', 'r0:p1:b1', 'r0:p1:b2
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Statevector-p=2">Statevector p=2<a class="anchor-link" href="#Statevector-p=2">¶</a></h2><p>Второй источник использует уже существующий полный симулятор на локальных
-подграфах; предел проверяется по размеру локальной задачи, а не родителя.</p>
+<h2 id="Statevector-p=2">Statevector p=2<a class="anchor-link" href="#Statevector-p=2">¶</a></h2><p>The second source uses the existing full simulator on local subgraphs; the limit
+is checked against the size of the local problem, not of the parent.</p>
 </div>
 </div>
 </div>
@@ -8315,9 +8316,9 @@ task ids: ['r0:p0:b0', 'r0:p0:b1', 'r0:p0:b2', 'r0:p1:b0', 'r0:p1:b1', 'r0:p1:b2
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9E%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BF%D0%BE-%D0%BE%D0%B1%D1%89%D0%B5%D0%BC%D1%83-%D1%88%D0%BE%D1%82%D0%BE%D0%B2%D0%BE%D0%BC%D1%83-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%83">Остановка по общему шотовому бюджету<a class="anchor-link" href="#%D0%9E%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BF%D0%BE-%D0%BE%D0%B1%D1%89%D0%B5%D0%BC%D1%83-%D1%88%D0%BE%D1%82%D0%BE%D0%B2%D0%BE%D0%BC%D1%83-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%83">¶</a></h2><p>Координатор резервирует корреляционные выборки и квоты обучения до запуска
-worker-процессов. При нехватке возвращается полное допустимое решение,
-<code>status="stopped"</code> и честная причина.</p>
+<h2 id="Stopping-on-the-shared-shot-budget">Stopping on the shared shot budget<a class="anchor-link" href="#Stopping-on-the-shared-shot-budget">¶</a></h2><p>The coordinator reserves correlation samples and training quotas before the
+worker processes start. When the budget is insufficient it returns a complete
+feasible solution, <code>status="stopped"</code> and an honest reason.</p>
 </div>
 </div>
 </div>
@@ -8365,7 +8366,7 @@ worker-процессов. При нехватке возвращается по
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2>
 </div>
 </div>
 </div>

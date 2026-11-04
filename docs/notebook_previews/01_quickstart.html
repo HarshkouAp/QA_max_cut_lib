@@ -7802,9 +7802,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="QA_max_cut_lib-%C2%B7-%D0%B1%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9-%D1%81%D1%82%D0%B0%D1%80%D1%82">QA_max_cut_lib · быстрый старт<a class="anchor-link" href="#QA_max_cut_lib-%C2%B7-%D0%B1%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9-%D1%81%D1%82%D0%B0%D1%80%D1%82">¶</a></h1><p>Версия <strong>0.1.0a4</strong>, третий CPU-этап. Добавлены RQAOA, аналитический p=1 CPU и учебные ноутбуки 04–05; ExactCPU и QAOACPU сохранены.</p>
-<p>Используется энергия $E=-C$: <strong>меньшая энергия лучше</strong>. В этой версии реализованы ExactCPU, QAOACPU и RQAOACPU. Аналитический p=1, LS, GPU, Laboratory, общий бенчмарк и контрольные точки ещё предстоит перенести; этот ноутбук не имитирует их работу.</p>
-<p>Запускайте ячейки сверху вниз. Все расчёты малы и работают без NVIDIA. При повторном выполнении создаётся новое явно названное место экспорта; научный seed остаётся тем же.</p>
+<h1 id="QA_max_cut_lib-%C2%B7-quick-start">QA_max_cut_lib · quick start<a class="anchor-link" href="#QA_max_cut_lib-%C2%B7-quick-start">¶</a></h1><p>Version <strong>0.1.0rc2</strong>, the fourth CPU stage. RQAOA, the analytic p=1 CPU source and tutorial notebooks 04–05 were added; ExactCPU and QAOACPU are preserved.</p>
+<p>The energy convention is $E=-C$: <strong>lower energy is better</strong>. This version implements ExactCPU, QAOACPU, RQAOACPU and the analytic p=1 CPU source. LS, GPU, Laboratory, the shared benchmark and checkpoints are still to be ported; this notebook does not imitate them.</p>
+<p>Run the cells from top to bottom. All computations are small and work without NVIDIA hardware. Running again creates a new, explicitly named export location; the scientific seed stays the same.</p>
 </div>
 </div>
 </div>
@@ -7815,11 +7815,11 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%B8%D0%BC%D0%BF%D0%BE%D1%80%D1%82%D1%8B">1. Установка и импорты<a class="anchor-link" href="#1.-%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%B8%D0%BC%D0%BF%D0%BE%D1%80%D1%82%D1%8B">¶</a></h2><p>В терминале из корня распакованного проекта:</p>
+<h2 id="1.-Installation-and-imports">1. Installation and imports<a class="anchor-link" href="#1.-Installation-and-imports">¶</a></h2><p>In a terminal, from the root of the unpacked project:</p>
 <div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[cpu,notebooks]"</span>
 python<span class="w"> </span>-m<span class="w"> </span>jupyter<span class="w"> </span>lab<span class="w"> </span>notebooks/01_quickstart.ipynb
 </pre></div>
-<p>Выберите ядро того же Python-окружения. Системный LaTeX для этого примера не требуется: режим MathText указан явно, шрифт — Computer Modern.</p>
+<p>Select the kernel of the same Python environment. No system LaTeX is required for this example: MathText mode is set explicitly and the font is Computer Modern.</p>
 </div>
 </div>
 </div>
@@ -7875,7 +7875,7 @@ python<span class="w"> </span>-m<span class="w"> </span>jupyter<span class="w"> 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%93%D1%80%D0%B0%D1%84-%D0%B8%D0%B7-%D0%BE%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE-JSON-%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D0%B0">2. Граф из отдельного JSON-рецепта<a class="anchor-link" href="#2.-%D0%93%D1%80%D0%B0%D1%84-%D0%B8%D0%B7-%D0%BE%D1%82%D0%B4%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE-JSON-%D1%80%D0%B5%D1%86%D0%B5%D0%BF%D1%82%D0%B0">¶</a></h2><p>Рецепт задаёт полный граф из семи вершин, исходные номера с пропусками, дискретные веса $\{-1,+1\}$ и независимые seeds топологии и весов. Даже единичный вес должен задаваться явно. Граф можно редактировать после создания.</p>
+<h2 id="2.-Graph-from-a-standalone-JSON-recipe">2. Graph from a standalone JSON recipe<a class="anchor-link" href="#2.-Graph-from-a-standalone-JSON-recipe">¶</a></h2><p>The recipe defines a complete graph with seven vertices, source labels with gaps, discrete weights $\{-1,+1\}$ and independent seeds for topology and weights. Even a unit weight must be given explicitly. The graph can be edited after creation.</p>
 </div>
 </div>
 </div>
@@ -7926,8 +7926,8 @@ Edges: 21
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%A2%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80-%D0%B8-%D0%BD%D0%B5%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D1%8B%D0%B9-QAOA">3. Точный ориентир и независимый QAOA<a class="anchor-link" href="#3.-%D0%A2%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80-%D0%B8-%D0%BD%D0%B5%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D1%8B%D0%B9-QAOA">¶</a></h2><p>ExactCPU полностью перебирает спиновые назначения с учётом симметрии глобальной инверсии. На семи вершинах это быстро. Он нужен для проверки качества, а не для замены QAOA.</p>
-<p>QAOACPU читает отдельный JSON: p=1, ADAM, точная оценка среднего, 30 шагов, затем 256 конечных шотов с выбором лучшего решения. Конечные шоты входят в общий бюджет. Во время точного обучения шоты не расходуются.</p>
+<h2 id="3.-Exact-reference-and-independent-QAOA">3. Exact reference and independent QAOA<a class="anchor-link" href="#3.-Exact-reference-and-independent-QAOA">¶</a></h2><p>ExactCPU enumerates all spin assignments, taking the global-inversion symmetry into account. At seven vertices this is fast. It exists to check quality, not to replace QAOA.</p>
+<p>QAOACPU reads a separate JSON: p=1, ADAM, exact expectation evaluation, 30 steps, then 256 final shots with selection of the best solution. The final shots count against the total budget. No shots are consumed during exact training.</p>
 </div>
 </div>
 </div>
@@ -7989,7 +7989,7 @@ Shot counters: {'shots_used': 256, 'training_shots': 0, 'readout_shots': 256, 'o
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%94%D0%BE%D1%81%D1%82%D1%83%D0%BF-%D0%BA-%D1%80%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%D1%83">4. Доступ к результату<a class="anchor-link" href="#4.-%D0%94%D0%BE%D1%81%D1%82%D1%83%D0%BF-%D0%BA-%D1%80%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82%D1%83">¶</a></h2><p><code>solve()</code> вернул словарь <code>исходная_вершина: ±1</code>. <code>algorithm.result</code> содержит весь последний запуск в JSON-совместимом представлении. <code>algorithm.attribute</code> возвращает нативные данные; например, углы — NumPy-массив. <code>last_run</code> фиксирует этот запуск независимо от будущих запусков солвера.</p>
+<h2 id="4.-Accessing-the-result">4. Accessing the result<a class="anchor-link" href="#4.-Accessing-the-result">¶</a></h2><p><code>solve()</code> returned a dictionary <code>source_vertex: ±1</code>. <code>algorithm.result</code> holds the entire last run in a JSON-compatible representation. <code>algorithm.attribute</code> returns native data; angles, for example, come back as a NumPy array. <code>last_run</code> pins this run regardless of future solver runs.</p>
 </div>
 </div>
 </div>
@@ -8037,7 +8037,7 @@ Run ID: e08bfcf0-6b03-4b08-a0f0-ee1163431bbc
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E%D1%82-%D1%81%D0%B0%D0%BC-%D1%81%D0%BE%D0%BB%D0%B2%D0%B5%D1%80">5. Инструменты получают сам солвер<a class="anchor-link" href="#5.-%D0%98%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B0%D1%8E%D1%82-%D1%81%D0%B0%D0%BC-%D1%81%D0%BE%D0%BB%D0%B2%D0%B5%D1%80">¶</a></h2><p>Накопление вероятностей и истории было включено <strong>до</strong> <code>solve()</code>. Инструменты не запускают обучение заново. Для выбранного критерия Mean Cut функция потерь равна ожиданию энергии. Вероятностная диаграмма показывает только top-12 состояний с их исходными вероятностями; остаток массы указан в заголовке.</p>
+<h2 id="5.-Tools-receive-the-solver-itself">5. Tools receive the solver itself<a class="anchor-link" href="#5.-Tools-receive-the-solver-itself">¶</a></h2><p>Probability and history accumulation were enabled <strong>before</strong> <code>solve()</code>. The tools do not re-run training. For the selected Mean Cut criterion the loss equals the expected energy. The probability chart shows only the top-12 states with their source probabilities; the remaining mass is reported in the title.</p>
 </div>
 </div>
 </div>
@@ -8100,7 +8100,7 @@ Run ID: e08bfcf0-6b03-4b08-a0f0-ee1163431bbc
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%92%D1%8B%D0%B1%D0%BE%D1%80%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-JSON-%D0%B8-%D0%B8%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2">6. Выборочный JSON и исходный массив<a class="anchor-link" href="#6.-%D0%92%D1%8B%D0%B1%D0%BE%D1%80%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-JSON-%D0%B8-%D0%B8%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2">¶</a></h2><p>Без <code>save</code> файлы автоматически не создавались. Сейчас явно сохраним решение, энергию и углы в JSON, вероятности — отдельным <code>.npy</code>. Поля конфигурации, снимок графа, даты, время, ресурсы и отчёт сохраняются обязательно. <code>savedir=True</code> создаёт папку с именем <code>filename</code>.</p>
+<h2 id="6.-Selective-JSON-and-the-source-array">6. Selective JSON and the source array<a class="anchor-link" href="#6.-Selective-JSON-and-the-source-array">¶</a></h2><p>Without <code>save</code>, no files were created automatically. Here we explicitly save the solution, energy and angles to JSON, and the probabilities to a separate <code>.npy</code>. The configuration fields, graph snapshot, dates, time, resources and report are always saved. <code>savedir=True</code> creates a folder named after <code>filename</code>.</p>
 </div>
 </div>
 </div>
@@ -8148,7 +8148,7 @@ Run ID: e08bfcf0-6b03-4b08-a0f0-ee1163431bbc
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-%D0%B8%D0%B7-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D1%91%D0%BD%D0%BD%D1%8B%D1%85-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85">7. График из сохранённых данных<a class="anchor-link" href="#7.-%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-%D0%B8%D0%B7-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D1%91%D0%BD%D0%BD%D1%8B%D1%85-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85">¶</a></h2><p>Теперь вход инструмента — загруженная запись. <code>metadata=True</code> добавляет видимую подпись с происхождением. Для самостоятельного JSON результата инструмента можно дополнительно указать <code>atts</code> в его <code>save</code>.</p>
+<h2 id="7.-Plot-from-saved-data">7. Plot from saved data<a class="anchor-link" href="#7.-Plot-from-saved-data">¶</a></h2><p>The tool input is now the loaded record. <code>metadata=True</code> adds a visible provenance caption. For a standalone JSON of the tool result, also pass <code>atts</code> to its <code>save</code>.</p>
 </div>
 </div>
 </div>
@@ -8202,7 +8202,7 @@ Run ID: e08bfcf0-6b03-4b08-a0f0-ee1163431bbc
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%97%D0%B0%D1%89%D0%B8%D1%82%D0%B0-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA">8. Защита и повторный запуск<a class="anchor-link" href="#8.-%D0%97%D0%B0%D1%89%D0%B8%D1%82%D0%B0-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA">¶</a></h2><p>Попытка повторить экспорт с тем же именем должна завершиться ошибкой. Повторный расчёт с тем же seed даёт то же научное решение; идентификатор и время запуска будут новыми. Старый <code>record</code> остаётся доступным. Для нового имени экспорта заново выполните первую ячейку с <code>export_id</code>.</p>
+<h2 id="8.-Protection-and-re-running">8. Protection and re-running<a class="anchor-link" href="#8.-Protection-and-re-running">¶</a></h2><p>Repeating the export with the same name must fail. Recomputing with the same seed gives the same scientific solution; the run identifier and timestamp will be new. The old <code>record</code> stays available. For a new export name, re-run the first cell with <code>export_id</code>.</p>
 </div>
 </div>
 </div>
@@ -8253,7 +8253,7 @@ Fresh run, same seed, same solution; the old record is unchanged.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%94%D0%B0%D0%BB%D1%8C%D1%88%D0%B5">Дальше<a class="anchor-link" href="#%D0%94%D0%B0%D0%BB%D1%8C%D1%88%D0%B5">¶</a></h2><p>В <code>02_current_api_guide.ipynb</code> разобраны шотовое обучение, все пять критериев, многослойный QAOA, карты p=1, корреляции и остальные реализованные инструменты. Поля конфигурации и результаты описаны в <code>docs/API.md</code>, физика — в <code>docs/MATHEMATICS.md</code>, будущий объём переноса — в <code>docs/MIGRATION_STATUS.md</code>.</p>
+<h2 id="Next-steps">Next steps<a class="anchor-link" href="#Next-steps">¶</a></h2><p><code>02_current_api_guide.ipynb</code> covers shot-based training, all five criteria, multi-layer QAOA, p=1 landscapes, correlations and the remaining implemented tools. Configuration fields and results are described in <code>docs/API.md</code>, the physics in <code>docs/MATHEMATICS.md</code>, and the remaining port scope in <code>docs/MIGRATION_STATUS.md</code>.</p>
 </div>
 </div>
 </div>
@@ -8264,13 +8264,13 @@ Fresh run, same seed, same solution; the old record is unchanged.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="RQAOA-%D0%BD%D0%B0-CPU">RQAOA на CPU<a class="anchor-link" href="#RQAOA-%D0%BD%D0%B0-CPU">¶</a></h2><p>Базовый <code>RQAOACPU</code> обучает QAOA на текущем графе, получает физические
-корреляции, выбирает пару и применяет точное ограничение. Остаток решает
-<code>ExactCPU</code>; исходные спины восстанавливаются.</p>
-<p>Полный разбор с таблицей редукций, шотовым режимом, остановкой по бюджету и
-сохранением находится в <a href="04_rqaoa_cpu.ipynb">04_rqaoa_cpu.ipynb</a>. Полный вектор
-состояния ограничивает размер исходного графа; ориентир 1000 вершин к этой
-реализации не относится.</p>
+<h2 id="RQAOA-on-CPU">RQAOA on CPU<a class="anchor-link" href="#RQAOA-on-CPU">¶</a></h2><p>The base <code>RQAOACPU</code> trains QAOA on the current graph, obtains physical
+correlations, selects a pair and applies an exact constraint. <code>ExactCPU</code> solves
+the remainder; the original spins are reconstructed.</p>
+<p>A full walkthrough with the reduction table, shot mode, budget stop and saving
+is in <a href="04_rqaoa_cpu.ipynb">04_rqaoa_cpu.ipynb</a>. The full state vector limits the
+size of the source graph; the 1000-vertex target does not apply to this
+implementation.</p>
 </div>
 </div>
 </div>
@@ -8325,10 +8325,10 @@ Fresh run, same seed, same solution; the old record is unchanged.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-p=1">Аналитический p=1<a class="anchor-link" href="#%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9-p=1">¶</a></h2><p>Источник <code>qaoa_analytic_p1_cpu</code> вычисляет средний разрез и физические
-ZZ-корреляции без вектора состояния <code>2**N</code>. Он поддерживает только Mean Cut,
-<code>p=1</code> и точные моменты; шоты и остальные критерии остаются у statevector
-источника. Полный пример с профилем gamma и задачей из 30 вершин находится в
+<h2 id="Analytic-p=1">Analytic p=1<a class="anchor-link" href="#Analytic-p=1">¶</a></h2><p>The <code>qaoa_analytic_p1_cpu</code> source computes the mean cut and physical ZZ
+correlations without a <code>2**N</code> state vector. It supports only Mean Cut, <code>p=1</code>
+and exact moments; shots and the other criteria remain with the statevector
+source. A full example with a gamma profile and a 30-vertex problem is in
 <a href="05_analytic_p1_rqaoa.ipynb">05_analytic_p1_rqaoa.ipynb</a>.</p>
 </div>
 </div>

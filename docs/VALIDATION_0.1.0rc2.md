@@ -14,6 +14,7 @@ Status: **release candidate 2, not final `0.1.0`**.
 | Benchmark297 | 297/297 materialized |
 | 48 generator/plan cases | 0 quantum shots |
 | Wheel import outside `src` | CPU import without CuPy/CUDA |
+| Documentation language | `scripts/check_docs_english.py`: English only; 20 notebooks and previews translated |
 
 Added in this candidate: `BatchLSRQAOACPU`, the real CPU batch epoch/parity/
 active-endpoint assembly, and `QuantizedQAOACPU`, post-training angle
@@ -22,9 +23,9 @@ quantization.
 ## Artifacts
 
 - wheel SHA-256:
-  `66eae140c9b6781456a10eb2914d752d4be3bc31caf67b3b2650b18cd913c709`
+  `5c15255b889685a295ba2341881568347c2fe4a628436d46fa475e3637b81878`
 - sdist SHA-256:
-  `2b428c0aa81665c59489c71861a264efa9e5330171e78dbe5cacd5ff821cb172`
+  `1bf830d665e9f3070039f5168acb2e4e6a043804b34f246df91d53457cd5f12f`
 
 ## Public quickstart
 

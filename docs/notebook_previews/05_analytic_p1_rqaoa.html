@@ -7802,14 +7802,13 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-p=1-%D0%B8-RQAOA">Аналитические корреляции p=1 и RQAOA<a class="anchor-link" href="#%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-p=1-%D0%B8-RQAOA">¶</a></h1><p><strong>Версия 0.1.0a4.</strong> Ноутбук проверяет аналитический вычислитель среднего
-разреза и физических ZZ-корреляций для одного слоя QAOA. Вектор состояния
-<code>2**N</code> не создаётся. Источник подключается к тому же <code>RQAOACPU</code>, который
-использовался в ноутбуке 04; рекурсивный координатор и точный редуктор не
-заменяются.</p>
-<p>Поддерживаются взвешенный Max-Cut без полей, стандартное состояние <code>|+&gt;</code>,
-X-миксер, <code>p=1</code> и критерий Mean Cut. Полное распределение, шоты, CVaR, Gibbs,
-Best-of-K и Threshold Probability этим источником не поддерживаются.</p>
+<h1 id="Analytic-p=1-correlations-and-RQAOA">Analytic p=1 correlations and RQAOA<a class="anchor-link" href="#Analytic-p=1-correlations-and-RQAOA">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> The notebook verifies the analytic evaluator of the mean
+cut and of the physical ZZ correlations for a single QAOA layer. No <code>2**N</code> state
+vector is created. The source plugs into the same <code>RQAOACPU</code> used in notebook 04;
+the recursive coordinator and the exact reducer are not replaced.</p>
+<p>Supported: weighted Max-Cut without fields, the standard <code>|+&gt;</code> state, an X mixer,
+<code>p=1</code> and the Mean Cut criterion. The full distribution, shots, CVaR, Gibbs,
+Best-of-K and Threshold Probability are not supported by this source.</p>
 </div>
 </div>
 </div>
@@ -7878,13 +7877,13 @@ Output: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\analyt
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%A4%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D0%B0-%D0%B8-%D0%B7%D0%BD%D0%B0%D0%BA%D0%B8">1. Формула и знаки<a class="anchor-link" href="#1.-%D0%A4%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D0%B0-%D0%B8-%D0%B7%D0%BD%D0%B0%D0%BA%D0%B8">¶</a></h2><p>Для <code>E=-C</code> и <code>J=w/2</code> корреляция имеет вид</p>
+<h2 id="1.-Formula-and-signs">1. Formula and signs<a class="anchor-link" href="#1.-Formula-and-signs">¶</a></h2><p>For <code>E=-C</code> and <code>J=w/2</code> the correlation reads</p>
 <p>$$c_{uv}=\frac12\sin(\gamma w_{uv})(P_{u\setminus v}+P_{v\setminus u})\sin(4\beta)
 +\frac12(P^-_{uv}-P^+_{uv})\sin^2(2\beta).$$</p>
-<p>Первое слагаемое положительно при положительном весе и положительном
-<code>sin(gamma*w)</code>. Для одного ребра при <code>gamma=pi/(2|w|)</code> и <code>beta=-pi/8</code>
-получается <code>c=-sign(w)</code>. Для несмежной пары <code>w=0</code>, но общие соседи могут дать
-ненулевое второе слагаемое.</p>
+<p>The first term is positive for a positive weight and a positive
+<code>sin(gamma*w)</code>. For a single edge at <code>gamma=pi/(2|w|)</code> and <code>beta=-pi/8</code> it gives
+<code>c=-sign(w)</code>. For a non-adjacent pair <code>w=0</code>, but common neighbours can make the
+second term non-zero.</p>
 </div>
 </div>
 </div>
@@ -7938,8 +7937,8 @@ Output: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\analyt
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%9D%D0%B5%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%B0%D1%8F-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BF%D1%80%D0%B8-%D1%84%D0%B8%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%83%D0%B3%D0%BB%D0%B0%D1%85">2. Независимая проверка при фиксированных углах<a class="anchor-link" href="#2.-%D0%9D%D0%B5%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%B0%D1%8F-%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BF%D1%80%D0%B8-%D1%84%D0%B8%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%83%D0%B3%D0%BB%D0%B0%D1%85">¶</a></h2><p>Сравним аналитические корреляции с полным вектором состояния того же пакета.
-Это проверка формулы, а не проверка оптимизатора: углы заданы вручную.</p>
+<h2 id="2.-Independent-check-at-fixed-angles">2. Independent check at fixed angles<a class="anchor-link" href="#2.-Independent-check-at-fixed-angles">¶</a></h2><p>We compare the analytic correlations with the full state vector of the same
+package. This checks the formula, not the optimizer: the angles are set by hand.</p>
 </div>
 </div>
 </div>
@@ -8002,9 +8001,9 @@ Statevector mean energy: -4.331606835366642
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%9E%D0%B4%D0%BD%D0%BE-%D1%80%D0%B5%D0%B1%D1%80%D0%BE-%D0%B8-%D0%BD%D0%B5%D1%81%D0%BC%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BF%D0%B0%D1%80%D0%B0">3. Одно ребро и несмежная пара<a class="anchor-link" href="#3.-%D0%9E%D0%B4%D0%BD%D0%BE-%D1%80%D0%B5%D0%B1%D1%80%D0%BE-%D0%B8-%D0%BD%D0%B5%D1%81%D0%BC%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BF%D0%B0%D1%80%D0%B0">¶</a></h2><p>Одно ребро проверяет знак фазы и ограничения. Путь <code>u-k-v</code> проверяет, что
-нулевой вес не означает нулевую корреляцию: при <code>gamma=pi/2</code>, <code>beta=pi/4</code>
-общий сосед даёт <code>c_uv=1</code>.</p>
+<h2 id="3.-One-edge-and-a-non-adjacent-pair">3. One edge and a non-adjacent pair<a class="anchor-link" href="#3.-One-edge-and-a-non-adjacent-pair">¶</a></h2><p>A single edge checks the phase sign and the constraints. The path <code>u-k-v</code> shows
+that a zero weight does not mean a zero correlation: at <code>gamma=pi/2</code>, <code>beta=pi/4</code>
+the shared neighbour gives <code>c_uv=1</code>.</p>
 </div>
 </div>
 </div>
@@ -8057,9 +8056,9 @@ Nonedge c(0,2): 1.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%A2%D0%BE%D1%87%D0%BD%D0%B0%D1%8F-%D0%BC%D0%B8%D0%BD%D0%B8%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-beta">4. Точная минимизация beta<a class="anchor-link" href="#4.-%D0%A2%D0%BE%D1%87%D0%BD%D0%B0%D1%8F-%D0%BC%D0%B8%D0%BD%D0%B8%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-beta">¶</a></h2><p><code>E(gamma,beta)=F0+Fs sin(4beta)+Fc cos(4beta)</code>, поэтому минимум равен
-<code>F0-hypot(Fs,Fc)</code>, а <code>beta_*</code> вычисляется через <code>atan2</code>. Сравним с плотной
-сеткой beta; сетка не должна дать меньшую энергию.</p>
+<h2 id="4.-Exact-minimization-over-beta">4. Exact minimization over beta<a class="anchor-link" href="#4.-Exact-minimization-over-beta">¶</a></h2><p><code>E(gamma,beta)=F0+Fs sin(4beta)+Fc cos(4beta)</code>, so the minimum is
+<code>F0-hypot(Fs,Fc)</code>, and <code>beta_*</code> follows from <code>atan2</code>. We compare with a dense
+beta grid; the grid must not produce a lower energy.</p>
 </div>
 </div>
 </div>
@@ -8112,8 +8111,8 @@ dense-grid minimum: -4.873654721549084
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%9F%D0%BE%D0%B8%D1%81%D0%BA-gamma-%D0%B8-%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B9">5. Поиск gamma и источник корреляций<a class="anchor-link" href="#5.-%D0%9F%D0%BE%D0%B8%D1%81%D0%BA-gamma-%D0%B8-%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B9">¶</a></h2><p>Источник перебирает явную сетку gamma, в каждой точке исключает beta и
-возвращает корреляции только при выбранных углах. Шоты не расходуются.</p>
+<h2 id="5.-Gamma-search-and-the-correlation-source">5. Gamma search and the correlation source<a class="anchor-link" href="#5.-Gamma-search-and-the-correlation-source">¶</a></h2><p>The source scans an explicit gamma grid, eliminates beta at every point and
+returns correlations only at the selected angles. No shots are consumed.</p>
 </div>
 </div>
 </div>
@@ -8165,9 +8164,9 @@ Resources: {'training_shots': 0, 'correlation_shots': 0, 'readout_shots': 0, 'ob
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-RQAOA-%D1%81-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%BE%D0%BC">6. RQAOA с аналитическим источником<a class="anchor-link" href="#6.-RQAOA-%D1%81-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC-%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%BE%D0%BC">¶</a></h2><p>Меняется только конфигурация источника. Цикл <code>RQAOACPU</code>, точный редуктор,
-точный остаток и восстановление остаются прежними. Общий лимит шотов равен
-нулю.</p>
+<h2 id="6.-RQAOA-with-the-analytic-source">6. RQAOA with the analytic source<a class="anchor-link" href="#6.-RQAOA-with-the-analytic-source">¶</a></h2><p>Only the source configuration changes. The <code>RQAOACPU</code> loop, the exact reducer,
+the exact remainder and the reconstruction stay the same. The total shot limit
+is zero.</p>
 </div>
 </div>
 </div>
@@ -8225,9 +8224,9 @@ Resources: {'shots_used': 0, 'training_shots': 0, 'correlation_shots': 0, 'reado
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9-%D0%B8-%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8C-gamma">7. Таблица редукций и профиль gamma<a class="anchor-link" href="#7.-%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9-%D0%B8-%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8C-gamma">¶</a></h2><p>Строка профиля относится к графу перед соответствующим слиянием. <code>A</code>, <code>B</code> и
-<code>E0</code> — коэффициенты аналитической энергии; <code>gamma_profile</code> не является
-историей ADAM.</p>
+<h2 id="7.-Reduction-table-and-gamma-profile">7. Reduction table and gamma profile<a class="anchor-link" href="#7.-Reduction-table-and-gamma-profile">¶</a></h2><p>The profile row refers to the graph before the corresponding merge. <code>A</code>, <code>B</code> and
+<code>E0</code> are the coefficients of the analytic energy; <code>gamma_profile</code> is not an ADAM
+history.</p>
 </div>
 </div>
 </div>
@@ -8364,8 +8363,8 @@ Resources: {'shots_used': 0, 'training_shots': 0, 'correlation_shots': 0, 'reado
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%9F%D1%80%D0%B5%D0%B6%D0%BD%D0%B8%D0%B5-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8-%D0%B8-%D0%B0%D0%B2%D1%82%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D1%8B%D0%B9-HTML">8. Прежние графики и автономный HTML<a class="anchor-link" href="#8.-%D0%9F%D1%80%D0%B5%D0%B6%D0%BD%D0%B8%D0%B5-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8-%D0%B8-%D0%B0%D0%B2%D1%82%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D1%8B%D0%B9-HTML">¶</a></h2><p>Энергии, веса и траектории читаются из той же записи. Построение не запускает
-сканер gamma и не расходует шоты.</p>
+<h2 id="8.-Existing-plots-and-standalone-HTML">8. Existing plots and standalone HTML<a class="anchor-link" href="#8.-Existing-plots-and-standalone-HTML">¶</a></h2><p>Energies, weights and trajectories are read from the same record. Plotting does
+not run the gamma scanner and does not consume shots.</p>
 </div>
 </div>
 </div>
@@ -8442,8 +8441,8 @@ HTML: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\analytic
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">9. Сохранение и повторный анализ<a class="anchor-link" href="#9.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">¶</a></h2><p>Сохраняется корневой JSON с выбранными атрибутами. Профиль входит в
-<code>local_optimizer_history</code>; после загрузки его можно строить без нового расчёта.</p>
+<h2 id="9.-Saving-and-re-analysis">9. Saving and re-analysis<a class="anchor-link" href="#9.-Saving-and-re-analysis">¶</a></h2><p>The root JSON is saved with the selected attributes. The profile is part of
+<code>local_optimizer_history</code>; once loaded it can be plotted without recomputation.</p>
 </div>
 </div>
 </div>
@@ -8503,10 +8502,10 @@ HTML: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\analytic
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="10.-%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0-%D0%B1%D0%BE%D0%BB%D1%8C%D1%88%D0%B5-statevector-%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B0">10. Задача больше statevector-предела<a class="anchor-link" href="#10.-%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0-%D0%B1%D0%BE%D0%BB%D1%8C%D1%88%D0%B5-statevector-%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B0">¶</a></h2><p>Ниже 30 вершин. Полный вектор имел бы <code>2**30</code> амплитуд; аналитический источник
-работает с плотной матрицей 30x30 и пакетами пар. Запускается короткий полный
-RQAOA до остатка из трёх вершин. Это не заявление о 1000-вершинной полной
-цепочке.</p>
+<h2 id="10.-A-problem-beyond-the-statevector-limit">10. A problem beyond the statevector limit<a class="anchor-link" href="#10.-A-problem-beyond-the-statevector-limit">¶</a></h2><p>30 vertices below. The full vector would have <code>2**30</code> amplitudes; the analytic
+source works with a dense 30x30 matrix and batches of pairs. A short full RQAOA
+runs down to a three-vertex remainder. This is not a claim about a 1000-vertex
+full chain.</p>
 </div>
 </div>
 </div>
@@ -8574,12 +8573,12 @@ Cut: 23.25 Shots: 0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="11.-%D0%98%D1%82%D0%BE%D0%B3-%D0%B8-%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D1%8F">11. Итог и ограничения<a class="anchor-link" href="#11.-%D0%98%D1%82%D0%BE%D0%B3-%D0%B8-%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D1%8F">¶</a></h2><p>Подтверждены: формула корреляций, средняя энергия, точная beta-минимизация,
-конечная gamma-сетка, покрытие <code>all_pairs</code>, подключение к существующему RQAOA,
-нулевой расход шотов, сохранение и повторная визуализация. Аналитический
-источник не предоставляет полное распределение, шоты, CVaR/Gibbs/Best-of-K/
-Threshold Probability, поля, <code>p&gt;1</code> или GPU. RQAOA остаётся эвристикой; точный
-остаток не доказывает глобальный оптимум исходной задачи.</p>
+<h2 id="11.-Summary-and-limitations">11. Summary and limitations<a class="anchor-link" href="#11.-Summary-and-limitations">¶</a></h2><p>Confirmed: the correlation formula, the mean energy, exact beta minimization, the
+finite gamma grid, <code>all_pairs</code> coverage, integration with the existing RQAOA,
+zero shot consumption, saving and re-plotting. The analytic source does not
+provide the full distribution, shots, CVaR/Gibbs/Best-of-K/Threshold
+Probability, fields, <code>p&gt;1</code> or GPU. RQAOA remains a heuristic; an exact remainder
+does not prove the global optimum of the original problem.</p>
 </div>
 </div>
 </div>

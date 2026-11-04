@@ -7802,12 +7802,11 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Classical-baselines-and-exact-refinement">Classical baselines and exact refinement<a class="anchor-link" href="#Classical-baselines-and-exact-refinement">¶</a></h1><p><strong>Версия 0.1.0a8.</strong> Ноутбук проверяет Goemans–Williamson (SDP + округление),
-классический simulated annealing, точную условную переоптимизацию блока и
-обёртку <code>base solver → refiner</code>.</p>
-<p>Все методы работают на CPU. <code>num_reads</code> отжига — это не квантовые шоты.
-<code>E=-C</code>, поэтому хорошее значение отжига и глобальный разрез сравниваются в
-одних единицах.</p>
+<h1 id="Classical-baselines-and-exact-refinement">Classical baselines and exact refinement<a class="anchor-link" href="#Classical-baselines-and-exact-refinement">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> The notebook exercises Goemans–Williamson (SDP + rounding),
+classical simulated annealing, exact conditional re-optimization of a block and
+the <code>base solver → refiner</code> wrapper.</p>
+<p>All methods run on CPU. Annealing <code>num_reads</code> are not quantum shots. <code>E=-C</code>, so a
+good annealing value and the global cut are compared in the same units.</p>
 </div>
 </div>
 </div>
@@ -7873,8 +7872,8 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\.venv\Lib\site-packages\
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%97%D0%BD%D0%B0%D0%BA-BQM-%D0%B8-%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B5-%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">1. Знак BQM и полное назначение<a class="anchor-link" href="#1.-%D0%97%D0%BD%D0%B0%D0%BA-BQM-%D0%B8-%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B5-%D0%BD%D0%B0%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">¶</a></h2><p>Положительное ребро предпочитает разные спины, отрицательное — одинаковые.
-Изолированная вершина остаётся в результате.</p>
+<h2 id="1.-BQM-sign-and-the-complete-assignment">1. BQM sign and the complete assignment<a class="anchor-link" href="#1.-BQM-sign-and-the-complete-assignment">¶</a></h2><p>A positive edge prefers different spins, a negative one prefers equal spins. An
+isolated vertex is still present in the result.</p>
 </div>
 </div>
 </div>
@@ -7929,8 +7928,8 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\.venv\Lib\site-packages\
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-ExactCPU-%D0%BA%D0%B0%D0%BA-%D0%BC%D0%B0%D0%BB%D1%8B%D0%B9-%D1%8D%D1%82%D0%B0%D0%BB%D0%BE%D0%BD">2. ExactCPU как малый эталон<a class="anchor-link" href="#2.-ExactCPU-%D0%BA%D0%B0%D0%BA-%D0%BC%D0%B0%D0%BB%D1%8B%D0%B9-%D1%8D%D1%82%D0%B0%D0%BB%D0%BE%D0%BD">¶</a></h2><p>ExactCPU решает полный граф, а не блок. Его <code>C</code> служит эталоном качества
-только для этой малой задачи; GW-разрез сам по себе эталоном не является.</p>
+<h2 id="2.-ExactCPU-as-a-small-scale-reference">2. ExactCPU as a small-scale reference<a class="anchor-link" href="#2.-ExactCPU-as-a-small-scale-reference">¶</a></h2><p>ExactCPU solves the full graph, not a block. Its <code>C</code> serves as a quality
+reference only for this small problem; the GW cut is not a reference by itself.</p>
 </div>
 </div>
 </div>
@@ -7976,8 +7975,8 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\.venv\Lib\site-packages\
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Goemans%E2%80%93Williamson">3. Goemans–Williamson<a class="anchor-link" href="#3.-Goemans%E2%80%93Williamson">¶</a></h2><p>SDP-значение — численное значение релаксации, не сертифицированная верхняя
-граница. Округление использует независимые гиперплоскости.</p>
+<h2 id="3.-Goemans%E2%80%93Williamson">3. Goemans–Williamson<a class="anchor-link" href="#3.-Goemans%E2%80%93Williamson">¶</a></h2><p>The SDP value is the numerical value of the relaxation, not a certified upper
+bound. Rounding uses independent hyperplanes.</p>
 </div>
 </div>
 </div>
@@ -8031,8 +8030,8 @@ bound: None No strict dual certificate is built in this milestone.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%9E%D1%82%D0%B6%D0%B8%D0%B3:-reads,-sweeps,-seeds">4. Отжиг: reads, sweeps, seeds<a class="anchor-link" href="#4.-%D0%9E%D1%82%D0%B6%D0%B8%D0%B3:-reads,-sweeps,-seeds">¶</a></h2><p>Один read — один независимый запуск. Все reads получают seeds из корневого
-seed и логического <code>read_id</code>, а не из порядка завершения.</p>
+<h2 id="4.-Annealing:-reads,-sweeps,-seeds">4. Annealing: reads, sweeps, seeds<a class="anchor-link" href="#4.-Annealing:-reads,-sweeps,-seeds">¶</a></h2><p>One read is one independent run. All reads take their seeds from the root seed and
+the logical <code>read_id</code>, not from completion order.</p>
 </div>
 </div>
 </div>
@@ -8082,8 +8081,8 @@ seeds: [955475868, 1385871029, 1939820029, 627778343, 2097342444, 142140079]
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%A3%D1%81%D0%BB%D0%BE%D0%B2%D0%BD%D0%B0%D1%8F-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0-FineTuning">5. Условная задача FineTuning<a class="anchor-link" href="#5.-%D0%A3%D1%81%D0%BB%D0%BE%D0%B2%D0%BD%D0%B0%D1%8F-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0-FineTuning">¶</a></h2><p>В блоке <code>S={10,30}</code> при <code>t_80=+1</code> есть граничные поля. Фиксация одного
-внутреннего спина теряет условный оптимум; перебираются оба спина.</p>
+<h2 id="5.-The-conditional-FineTuning-problem">5. The conditional FineTuning problem<a class="anchor-link" href="#5.-The-conditional-FineTuning-problem">¶</a></h2><p>Block <code>S={10,30}</code> has boundary fields at <code>t_80=+1</code>. Fixing one internal spin loses
+the conditional optimum; both spins are enumerated.</p>
 </div>
 </div>
 </div>
@@ -8137,10 +8136,10 @@ gain: 7.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B1%D0%BB%D0%BE%D0%BA%D0%BE%D0%B2">6. Последовательное применение блоков<a class="anchor-link" href="#6.-%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B1%D0%BB%D0%BE%D0%BA%D0%BE%D0%B2">¶</a></h2><p>Два независимых локальных улучшения нельзя складывать. <code>S1={10}</code> и
-<code>S2={30}</code> на старом окружении оба предлагают <code>gain=1</code>, но одновременное
-применение даёт <code>C=-4</code>. Последовательный refiner принимает только первую
-коррекцию и пересчитывает поля.</p>
+<h2 id="6.-Sequential-application-of-blocks">6. Sequential application of blocks<a class="anchor-link" href="#6.-Sequential-application-of-blocks">¶</a></h2><p>Two independent local improvements cannot be added together. <code>S1={10}</code> and
+<code>S2={30}</code> both propose <code>gain=1</code> on the old environment, but applying them together
+gives <code>C=-4</code>. A sequential refiner accepts only the first correction and
+recomputes the fields.</p>
 </div>
 </div>
 </div>
@@ -8189,9 +8188,8 @@ gain: 7.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%9E%D0%B1%D1%91%D1%80%D1%82%D0%BA%D0%B0-%D0%BD%D0%B0%D0%B4-%D0%BA%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D1%8B%D0%BC-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%BC-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC">7. Обёртка над квантовым базовым решением<a class="anchor-link" href="#7.-%D0%9E%D0%B1%D1%91%D1%80%D1%82%D0%BA%D0%B0-%D0%BD%D0%B0%D0%B4-%D0%BA%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%D1%8B%D0%BC-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%BC-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC">¶</a></h2><p>Базовая запись сохраняется отдельно. Углы, expected energy и quantum
-распределения относятся к <code>base_run</code>, а не к классически улучшенному
-назначению.</p>
+<h2 id="7.-Wrapper-around-a-quantum-base-solution">7. Wrapper around a quantum base solution<a class="anchor-link" href="#7.-Wrapper-around-a-quantum-base-solution">¶</a></h2><p>The base record is saved separately. Angles, expected energy and quantum
+distributions belong to <code>base_run</code>, not to the classically improved assignment.</p>
 </div>
 </div>
 </div>
@@ -8241,7 +8239,7 @@ base algorithm: qaoa_cpu
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%9C%D0%B5%D1%82%D1%80%D0%B8%D0%BA%D0%B8,-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8-%D0%B8-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5">8. Метрики, графики и сохранение<a class="anchor-link" href="#8.-%D0%9C%D0%B5%D1%82%D1%80%D0%B8%D0%BA%D0%B8,-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8-%D0%B8-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5">¶</a></h2>
+<h2 id="8.-Metrics,-plots-and-saving">8. Metrics, plots and saving<a class="anchor-link" href="#8.-Metrics,-plots-and-saving">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8334,7 +8332,7 @@ saved: C:\Users\Alexey\AppData\Local\Temp\classical_glxk0u9t\results\refined_exa
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-%D0%98%D1%82%D0%BE%D0%B3">9. Итог<a class="anchor-link" href="#9.-%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2>
+<h2 id="9.-Summary">9. Summary<a class="anchor-link" href="#9.-Summary">¶</a></h2>
 </div>
 </div>
 </div>

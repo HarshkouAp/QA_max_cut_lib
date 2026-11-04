@@ -7802,8 +7802,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="14.-%D0%A3%D1%81%D0%BB%D0%BE%D0%B2%D0%BD%D1%8B%D0%B9-QAOA-%D0%B8-environment-LS">14. Условный QAOA и environment LS<a class="anchor-link" href="#14.-%D0%A3%D1%81%D0%BB%D0%BE%D0%B2%D0%BD%D1%8B%D0%B9-QAOA-%D0%B8-environment-LS">¶</a></h1><p>Внешние спины фиксированы. Активный блок обучается полным CPU statevector;
-локальные поля не попадают в глобальный Max-Cut граф.</p>
+<h1 id="14.-Conditional-QAOA-and-environment-LS">14. Conditional QAOA and environment LS<a class="anchor-link" href="#14.-Conditional-QAOA-and-environment-LS">¶</a></h1><p>External spins are fixed. The active block is trained with the full CPU
+statevector; local fields do not enter the global Max-Cut graph.</p>
 </div>
 </div>
 </div>
@@ -7868,7 +7868,7 @@ C_full: [ 3.  8. -4. -3.]
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Standalone-QAOA-%D0%BD%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%BC-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5">Standalone QAOA на одном блоке<a class="anchor-link" href="#Standalone-QAOA-%D0%BD%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%BC-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5">¶</a></h2>
+<h2 id="Standalone-QAOA-on-a-single-block">Standalone QAOA on a single block<a class="anchor-link" href="#Standalone-QAOA-on-a-single-block">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7916,7 +7916,7 @@ shots: 384
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Full-graph-limit">Full-graph limit<a class="anchor-link" href="#Full-graph-limit">¶</a></h2><p>При <code>S=V</code> поля нулевые; схема должна совпасть с обычным <code>QAOACPU</code>.</p>
+<h2 id="Full-graph-limit">Full-graph limit<a class="anchor-link" href="#Full-graph-limit">¶</a></h2><p>With <code>S=V</code> the fields are zero; the circuit must coincide with ordinary <code>QAOACPU</code>.</p>
 </div>
 </div>
 </div>
@@ -7974,7 +7974,7 @@ shots: 384
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Environment-LS">Environment LS<a class="anchor-link" href="#Environment-LS">¶</a></h2><p>Один frozen reference на шаг, затем global reducer и retain survivor.</p>
+<h2 id="Environment-LS">Environment LS<a class="anchor-link" href="#Environment-LS">¶</a></h2><p>One frozen reference per step, then the global reducer and retain survivor.</p>
 </div>
 </div>
 </div>
@@ -8021,9 +8021,9 @@ source: exact_finisher shots: 96
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0">Граница<a class="anchor-link" href="#%D0%93%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0">¶</a></h2><p><code>h</code> — из фиксированного окружения, а не self-loop и не атрибут графа.
-Soft means, correlation-weighted fields и итеративный обмен <code>〈Z〉</code> —
-отдельные deferred-стратегии, не эта recipe.</p>
+<h2 id="Boundary">Boundary<a class="anchor-link" href="#Boundary">¶</a></h2><p><code>h</code> comes from the fixed environment, not from a self-loop and not from a graph
+attribute. Soft means, correlation-weighted fields and iterative <code>〈Z〉</code> exchange are
+separate deferred strategies, not this recipe.</p>
 </div>
 </div>
 </div>

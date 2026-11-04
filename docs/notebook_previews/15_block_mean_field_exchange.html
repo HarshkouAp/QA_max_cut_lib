@@ -7802,8 +7802,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="15.-%D0%91%D0%BB%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-mean-field-QAOA">15. Блочный mean-field QAOA<a class="anchor-link" href="#15.-%D0%91%D0%BB%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-mean-field-QAOA">¶</a></h1><p>Локальные full-state QAOA на блоках, обмен m/q и два расписания:
-Gauss–Seidel и Jacobi. Выход — sign_means и полный cut.</p>
+<h1 id="15.-Block-mean-field-QAOA">15. Block mean-field QAOA<a class="anchor-link" href="#15.-Block-mean-field-QAOA">¶</a></h1><p>Local full-state QAOA on blocks, m/q exchange and two schedules: Gauss–Seidel and
+Jacobi. The output is sign_means and the full cut.</p>
 </div>
 </div>
 </div>
@@ -7856,7 +7856,7 @@ Gauss–Seidel и Jacobi. Выход — sign_means и полный cut.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9F%D0%BE%D0%BB%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B0">Поля одного блока<a class="anchor-link" href="#%D0%9F%D0%BE%D0%BB%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B0">¶</a></h2><p>Внешние means дают <code>h=(1/2) sum w m</code>; <code>c_aff</code> считается отдельно.</p>
+<h2 id="Fields-of-a-single-block">Fields of a single block<a class="anchor-link" href="#Fields-of-a-single-block">¶</a></h2><p>External means give <code>h=(1/2) sum w m</code>; <code>c_aff</code> is computed separately.</p>
 </div>
 </div>
 </div>
@@ -7900,7 +7900,7 @@ c_aff: -3.5
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9E%D0%B4%D0%B8%D0%BD-Jacobi-run">Один Jacobi run<a class="anchor-link" href="#%D0%9E%D0%B4%D0%B8%D0%BD-Jacobi-run">¶</a></h2>
+<h2 id="One-Jacobi-run">One Jacobi run<a class="anchor-link" href="#One-Jacobi-run">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7946,8 +7946,8 @@ sweeps: 3 shots: 864
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Gauss%E2%80%93Seidel">Gauss–Seidel<a class="anchor-link" href="#Gauss%E2%80%93Seidel">¶</a></h2><p>Тот же partition и budget, но поля каждого следующего блока строятся
-по уже опубликованному bank.</p>
+<h2 id="Gauss%E2%80%93Seidel">Gauss–Seidel<a class="anchor-link" href="#Gauss%E2%80%93Seidel">¶</a></h2><p>The same partition and budget, but the fields of each next block are built from the
+already published bank.</p>
 </div>
 </div>
 </div>
@@ -7995,8 +7995,8 @@ sweeps: 3 shots: 864
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5-damping">Согласованное damping<a class="anchor-link" href="#%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5-damping">¶</a></h2><p>Одна convex mixture применяется и к m, и к внутреннему q. Сырой q с
-уже сглаженным m не является физической парной моделью.</p>
+<h2 id="Consistent-damping">Consistent damping<a class="anchor-link" href="#Consistent-damping">¶</a></h2><p>One convex mixture is applied to both m and the internal q. A raw q with an already
+smoothed m is not a physical pair model.</p>
 </div>
 </div>
 </div>
@@ -8040,9 +8040,9 @@ damped q: {(0, 1): 0.0}
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9E%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">Ограничение<a class="anchor-link" href="#%D0%9E%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">¶</a></h2><p>Модельный mean cut и cut округлённого решения — разные числа. В этом
-run последний может быть хуже; это честное свойство sign-rounded
-messages, а не ошибка readout.</p>
+<h2 id="Limitation">Limitation<a class="anchor-link" href="#Limitation">¶</a></h2><p>The model mean cut and the cut of the rounded solution are different numbers. In
+this run the latter may be worse; this is an honest property of sign-rounded
+messages, not a readout error.</p>
 </div>
 </div>
 </div>

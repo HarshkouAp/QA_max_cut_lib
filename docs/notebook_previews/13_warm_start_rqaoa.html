@@ -7802,19 +7802,20 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Warm-start-RQAOA:-%D0%B0%D0%BD%D1%81%D0%B0%D0%BC%D0%B1%D0%BB%D1%8C-%D1%81%D1%82%D0%B0%D1%80%D1%82%D0%BE%D0%B2">Warm-start RQAOA: ансамбль стартов<a class="anchor-link" href="#Warm-start-RQAOA:-%D0%B0%D0%BD%D1%81%D0%B0%D0%BC%D0%B1%D0%BB%D1%8C-%D1%81%D1%82%D0%B0%D1%80%D1%82%D0%BE%D0%B2">¶</a></h1><p>Ноутбук показывает:</p>
+<h1 id="Warm-start-RQAOA:-an-ensemble-of-starts">Warm-start RQAOA: an ensemble of starts<a class="anchor-link" href="#Warm-start-RQAOA:-an-ensemble-of-starts">¶</a></h1><p>The notebook shows:</p>
 <ul>
-<li>карточку <code>warm_start_ensemble_rqaoa_cpu_v1</code>;</li>
-<li>global-flip dedup и multiplicities;</li>
-<li>два реальных warm-state child на текущем графе;</li>
-<li>равную смесь физических корреляторов;</li>
-<li>отрицательное ребро, offset и lift;</li>
-<li>разницу mixture и coherent sum;</li>
-<li>квоты общего бюджета;</li>
-<li>реальный GW batch;</li>
-<li>малую серию из 12 trials.</li>
+<li>the <code>warm_start_ensemble_rqaoa_cpu_v1</code> card;</li>
+<li>global-flip dedup and multiplicities;</li>
+<li>two real warm-state children on the current graph;</li>
+<li>an equal mixture of physical correlators;</li>
+<li>a negative edge, offset and lift;</li>
+<li>the difference between a mixture and a coherent sum;</li>
+<li>quotas of the shared budget;</li>
+<li>a real GW batch;</li>
+<li>a small series of 12 trials.</li>
 </ul>
-<p>Первый сценарий не требует CVXPY. GW-секция запускается в classical-профиле.</p>
+<p>The first scenario does not require CVXPY. The GW section runs in the classical
+profile.</p>
 </div>
 </div>
 </div>
@@ -7869,8 +7870,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C-A:-%D0%B4%D0%B2%D0%B0-%D1%81%D1%82%D0%B0%D1%80%D1%82%D0%B0">1. Контроль A: два старта<a class="anchor-link" href="#1.-%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C-A:-%D0%B4%D0%B2%D0%B0-%D1%81%D1%82%D0%B0%D1%80%D1%82%D0%B0">¶</a></h2><p>A=(+,+,−,+), B=(+,−,+,+) в порядке <code>(10,30,80,101)</code>. A и −A после
-global-flip dedup дают один ключ; multiplicity A равна 3, B — 1.</p>
+<h2 id="1.-Control-A:-two-starts">1. Control A: two starts<a class="anchor-link" href="#1.-Control-A:-two-starts">¶</a></h2><p>A=(+,+,−,+), B=(+,−,+,+) in the order <code>(10,30,80,101)</code>. A and −A give one key
+after global-flip dedup; the multiplicity of A is 3, of B is 1.</p>
 </div>
 </div>
 </div>
@@ -7947,8 +7948,8 @@ unique 2 multiplicities [3, 1]
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%A1%D0%BC%D0%B5%D1%81%D1%8C-vs-coherent-sum">2. Смесь vs coherent sum<a class="anchor-link" href="#2.-%D0%A1%D0%BC%D0%B5%D1%81%D1%8C-vs-coherent-sum">¶</a></h2><p>Для двух кубитов равная смесь <code>ψ1,ψ2</code> даёт равномерное P и c=0.
-Нормированная сумма амплитуд даёт другой ответ; это ловит ошибочную
+<h2 id="2.-Mixture-vs-coherent-sum">2. Mixture vs coherent sum<a class="anchor-link" href="#2.-Mixture-vs-coherent-sum">¶</a></h2><p>For two qubits an equal mixture of <code>ψ1,ψ2</code> gives a uniform P and c=0. The
+normalized sum of amplitudes gives a different answer; this catches erroneous
 coherent aggregation.</p>
 </div>
 </div>
@@ -7995,8 +7996,8 @@ coherent aggregation.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%9A%D0%B2%D0%BE%D1%82%D1%8B-%D0%BE%D0%B1%D1%89%D0%B5%D0%B3%D0%BE-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D0%B0">3. Квоты общего бюджета<a class="anchor-link" href="#3.-%D0%9A%D0%B2%D0%BE%D1%82%D1%8B-%D0%BE%D0%B1%D1%89%D0%B5%D0%B3%D0%BE-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D0%B0">¶</a></h2><p>p=1, M_train=32, M_corr=16, max_steps=2, B=368:
-для K=3 получается [1,1,0] и reserve 48; для K=2 — [1,1].</p>
+<h2 id="3.-Quotas-of-the-shared-budget">3. Quotas of the shared budget<a class="anchor-link" href="#3.-Quotas-of-the-shared-budget">¶</a></h2><p>p=1, M_train=32, M_corr=16, max_steps=2, B=368: for K=3 this gives [1,1,0] and a
+reserve of 48; for K=2 it gives [1,1].</p>
 </div>
 </div>
 </div>
@@ -8042,7 +8043,7 @@ coherent aggregation.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-GW-batch">4. Реальный GW batch<a class="anchor-link" href="#4.-%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-GW-batch">¶</a></h2><p>Один SDP, L округлений, без K отдельных SDP. Эта секция требует CVXPY/SCS.</p>
+<h2 id="4.-A-real-GW-batch">4. A real GW batch<a class="anchor-link" href="#4.-A-real-GW-batch">¶</a></h2><p>One SDP, L roundings, no K separate SDPs. This section requires CVXPY/SCS.</p>
 </div>
 </div>
 </div>
@@ -8089,8 +8090,8 @@ coherent aggregation.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%A1%D0%B5%D1%80%D0%B8%D1%8F-12-trials">5. Серия 12 trials<a class="anchor-link" href="#5.-%D0%A1%D0%B5%D1%80%D0%B8%D1%8F-12-trials">¶</a></h2><p>Два графа × два algorithm seed × три recipe: обычный RQAOA, WS с K=1,
-WS с K=2. Это 12 trials, не 12 quantum children.</p>
+<h2 id="5.-A-series-of-12-trials">5. A series of 12 trials<a class="anchor-link" href="#5.-A-series-of-12-trials">¶</a></h2><p>Two graphs × two algorithm seeds × three recipes: ordinary RQAOA, WS with K=1,
+WS with K=2. That is 12 trials, not 12 quantum children.</p>
 </div>
 </div>
 </div>
@@ -8204,8 +8205,8 @@ WS с K=2. Это 12 trials, не 12 quantum children.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA">6. Сравнение и график<a class="anchor-link" href="#6.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA">¶</a></h2><p>График использует только сохранённые записи серии; solver/source повторно не
-запускаются. Различия качества — наблюдение, не обещание преимущества.</p>
+<h2 id="6.-Comparison-and-plot">6. Comparison and plot<a class="anchor-link" href="#6.-Comparison-and-plot">¶</a></h2><p>The plot uses only the saved records of the series; the solver/source is not run
+again. Differences in quality are an observation, not a promise of advantage.</p>
 </div>
 </div>
 </div>
@@ -8255,13 +8256,13 @@ WS с K=2. Это 12 trials, не 12 quantum children.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><ul>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2><ul>
 <li>A: U=2, multiplicities 3/1, C=8, b=8, E_Ising=-7.5.</li>
-<li>Смесь корреляций — статистическая, не coherent sum.</li>
-<li>Квоты K-зависимы и не зависят от worker count.</li>
-<li>Реальный GW: один SDP и L ограниченных округлений.</li>
-<li>Серия: 12 trials, 0 failed (в этой среде).</li>
-<li>Checkpoint/resume для multi-start RQAOA в a12 не заявлен.</li>
+<li>The mixture of correlations is statistical, not a coherent sum.</li>
+<li>Quotas depend on K and not on the worker count.</li>
+<li>Real GW: one SDP and L constrained roundings.</li>
+<li>Series: 12 trials, 0 failed (in this environment).</li>
+<li>Checkpoint/resume for multi-start RQAOA is not claimed in a12.</li>
 </ul>
 </div>
 </div>

@@ -7802,17 +7802,18 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Checkpoint-%D0%B8-resume-QAOA">Checkpoint и resume QAOA<a class="anchor-link" href="#Checkpoint-%D0%B8-resume-QAOA">¶</a></h1><p>Этот ноутбук показывает:</p>
+<h1 id="QAOA-checkpoint-and-resume">QAOA checkpoint and resume<a class="anchor-link" href="#QAOA-checkpoint-and-resume">¶</a></h1><p>This notebook shows:</p>
 <ul>
-<li>разницу между новым <code>solve()</code> и продолжением <code>resume()</code>;</li>
-<li>согласованную паузу после двух ADAM-итераций;</li>
-<li>inspect без запуска solver;</li>
-<li>продолжение в новом объекте и сравнение с непрерывным запуском;</li>
-<li>консервативный charge после незавершённой попытки;</li>
-<li>capability matrix для остальных реализаций.</li>
+<li>the difference between a new <code>solve()</code> and continuing with <code>resume()</code>;</li>
+<li>a consistent pause after two ADAM iterations;</li>
+<li>inspection without running the solver;</li>
+<li>continuation in a new object and comparison with an uninterrupted run;</li>
+<li>conservative charging after an unfinished attempt;</li>
+<li>the capability matrix for the other implementations.</li>
 </ul>
-<p>Основной пример — CPU и малый statevector. GPU checkpoint в <code>0.1.0a10</code>
-намеренно не заявлен: CuPy RNG требует отдельного переносимого протокола.</p>
+<p>The main example is CPU with a small statevector. GPU checkpointing is
+deliberately not claimed in <code>0.1.0a10</code>: the CuPy RNG needs a separate portable
+protocol.</p>
 </div>
 </div>
 </div>
@@ -7875,8 +7876,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="A.-%D0%9D%D0%B5%D0%BF%D1%80%D0%B5%D1%80%D1%8B%D0%B2%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D0%B8-%D0%BF%D0%B0%D1%83%D0%B7%D0%B0">A. Непрерывный запуск и пауза<a class="anchor-link" href="#A.-%D0%9D%D0%B5%D0%BF%D1%80%D0%B5%D1%80%D1%8B%D0%B2%D0%BD%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D0%B8-%D0%BF%D0%B0%D1%83%D0%B7%D0%B0">¶</a></h2><p>Непрерывный и паузный запуски используют одну и ту же конфигурацию и seed.
-Ожидаемые training shots: 320 после двух итераций, held readout: 64.</p>
+<h2 id="A.-Uninterrupted-run-and-pause">A. Uninterrupted run and pause<a class="anchor-link" href="#A.-Uninterrupted-run-and-pause">¶</a></h2><p>The uninterrupted and paused runs use the same configuration and seed. Expected
+training shots: 320 after two iterations, held readout: 64.</p>
 </div>
 </div>
 </div>
@@ -7933,7 +7934,7 @@ phase: training next: {'optimizer_iteration': 3}
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="B.-%D0%9F%D1%80%D0%BE%D0%B4%D0%BE%D0%BB%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D0%BD%D0%BE%D0%B2%D0%BE%D0%BC-%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B5">B. Продолжение в новом объекте<a class="anchor-link" href="#B.-%D0%9F%D1%80%D0%BE%D0%B4%D0%BE%D0%BB%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D0%BD%D0%BE%D0%B2%D0%BE%D0%BC-%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B5">¶</a></h2><p><code>restore()</code> не запускает solver. Только <code>resume()</code> продолжает canonical run.</p>
+<h2 id="B.-Continuation-in-a-new-object">B. Continuation in a new object<a class="anchor-link" href="#B.-Continuation-in-a-new-object">¶</a></h2><p><code>restore()</code> does not run the solver. Only <code>resume()</code> continues the canonical run.</p>
 </div>
 </div>
 </div>
@@ -7983,9 +7984,9 @@ max angle error: 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="C.-%D0%9D%D0%B5%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D1%91%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BF%D0%BE%D0%BF%D1%8B%D1%82%D0%BA%D0%B0-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9-charge">C. Незавершённая попытка и консервативный charge<a class="anchor-link" href="#C.-%D0%9D%D0%B5%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D1%91%D0%BD%D0%BD%D0%B0%D1%8F-%D0%BF%D0%BE%D0%BF%D1%8B%D1%82%D0%BA%D0%B0-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9-charge">¶</a></h2><p>BEGIN без COMMIT/RESOLVE означает, что измерение могло состояться. Журнал
-списывает upper bound один раз и закрывает операцию. Это не выдаётся за
-доказанное число физических shots.</p>
+<h2 id="C.-Unfinished-attempt-and-conservative-charging">C. Unfinished attempt and conservative charging<a class="anchor-link" href="#C.-Unfinished-attempt-and-conservative-charging">¶</a></h2><p>BEGIN without COMMIT/RESOLVE means the measurement may have happened. The journal
+charges the upper bound once and closes the operation. This is not presented as a
+proven number of physical shots.</p>
 </div>
 </div>
 </div>
@@ -8036,8 +8037,8 @@ max angle error: 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="D.-Capability-matrix">D. Capability matrix<a class="anchor-link" href="#D.-Capability-matrix">¶</a></h2><p>Неподдержанный компонент отклоняется явно; он не превращается в фиктивный
-частичный checkpoint.</p>
+<h2 id="D.-Capability-matrix">D. Capability matrix<a class="anchor-link" href="#D.-Capability-matrix">¶</a></h2><p>An unsupported component is rejected explicitly; it does not turn into a fake
+partial checkpoint.</p>
 </div>
 </div>
 </div>
@@ -8085,9 +8086,8 @@ simulated_annealing_cpu  supported=False boundaries=[]
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="E.-%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80-%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%8B">E. Размер поколений и бюджеты<a class="anchor-link" href="#E.-%D0%A0%D0%B0%D0%B7%D0%BC%D0%B5%D1%80-%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%8B">¶</a></h2><p>Checkpoint содержит manifest, state.json и четыре числовых <code>.npy</code> sidecar для
-<code>theta/moment/variance/best_theta</code>. Большой statevector по умолчанию не
-сохраняется.</p>
+<h2 id="E.-Generation-size-and-budgets">E. Generation size and budgets<a class="anchor-link" href="#E.-Generation-size-and-budgets">¶</a></h2><p>A checkpoint contains a manifest, state.json and four numeric <code>.npy</code> sidecars for
+<code>theta/moment/variance/best_theta</code>. A large statevector is not saved by default.</p>
 </div>
 </div>
 </div>
@@ -8132,7 +8132,7 @@ total bytes: 71575
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="F.-%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-lineage-%D0%B8-%D1%80%D0%B0%D1%81%D1%85%D0%BE%D0%B4%D0%B0">F. График lineage и расхода<a class="anchor-link" href="#F.-%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-lineage-%D0%B8-%D1%80%D0%B0%D1%81%D1%85%D0%BE%D0%B4%D0%B0">¶</a></h2><p>График строится по сохранённым manifests; solver не вызывается.</p>
+<h2 id="F.-Lineage-and-spending-plot">F. Lineage and spending plot<a class="anchor-link" href="#F.-Lineage-and-spending-plot">¶</a></h2><p>The plot is built from the saved manifests; the solver is not called.</p>
 </div>
 </div>
 </div>
@@ -8188,14 +8188,14 @@ total bytes: 71575
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><ul>
-<li><code>solve()</code> всегда новый запуск.</li>
-<li>pause → inspect → restore → resume продолжает тот же run.</li>
-<li>После двух итераций: 320 training shots, 64 held, 320 available.</li>
-<li>Completed readout не повторяет M измерений.</li>
-<li>При аварии uncertain charge не равен нулю и не удваивается при reconciliation.</li>
-<li>GPU/RQAOA/LS/hierarchy checkpoint в a10 явно не заявлены и требуют
-соответствующих codecs.</li>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2><ul>
+<li><code>solve()</code> is always a new run.</li>
+<li>pause → inspect → restore → resume continues the same run.</li>
+<li>After two iterations: 320 training shots, 64 held, 320 available.</li>
+<li>A completed readout does not repeat the M measurements.</li>
+<li>After a crash the uncertain charge is neither zero nor doubled at reconciliation.</li>
+<li>GPU/RQAOA/LS/hierarchy checkpoints are explicitly not claimed in a10 and require
+the corresponding codecs.</li>
 </ul>
 </div>
 </div>

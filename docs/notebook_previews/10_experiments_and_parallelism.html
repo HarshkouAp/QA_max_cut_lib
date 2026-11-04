@@ -7802,10 +7802,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%D0%A1%D0%B5%D1%80%D0%B8%D0%B8-%D1%8D%D0%BA%D1%81%D0%BF%D0%B5%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B8-ParallelismProfiler">Серии экспериментов и ParallelismProfiler<a class="anchor-link" href="#%D0%A1%D0%B5%D1%80%D0%B8%D0%B8-%D1%8D%D0%BA%D1%81%D0%BF%D0%B5%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B8-ParallelismProfiler">¶</a></h1><p>Учебный CPU-ноутбук этапа 09. Он показывает plan → runner → exact-эталон →
-profile полного малого grid → глобальную рекомендацию → графики. Все
-результаты читаются из сохранённых records; профиль не запускает solver
-повторно при построении графика.</p>
+<h1 id="Experiment-series-and-ParallelismProfiler">Experiment series and ParallelismProfiler<a class="anchor-link" href="#Experiment-series-and-ParallelismProfiler">¶</a></h1><p>Tutorial CPU notebook for stage 09. It shows plan → runner → exact reference →
+profile of a complete small grid → global recommendation → plots. All results are
+read from saved records; the profile does not re-run the solver when a plot is
+drawn.</p>
 </div>
 </div>
 </div>
@@ -7870,8 +7870,9 @@ profile полного малого grid → глобальную рекомен
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9C%D0%B0%D0%BB%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F">Малая серия<a class="anchor-link" href="#%D0%9C%D0%B0%D0%BB%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F">¶</a></h2><p><code>benchmark_small.json</code> содержит два графа (8 и 10 вершин), четыре mean-конфигурации,
-восемь cvar-конфигураций и две SA-конфигурации. Exact maximum считается отдельно.</p>
+<h2 id="Small-series">Small series<a class="anchor-link" href="#Small-series">¶</a></h2><p><code>benchmark_small.json</code> contains two graphs (8 and 10 vertices), four mean
+configurations, eight cvar configurations and two SA configurations. The exact
+maximum is computed separately.</p>
 </div>
 </div>
 </div>
@@ -7996,8 +7997,8 @@ profile полного малого grid → глобальную рекомен
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%A2%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D1%8D%D1%82%D0%B0%D0%BB%D0%BE%D0%BD-%D0%B8-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE">Точный эталон и качество<a class="anchor-link" href="#%D0%A2%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D1%8D%D1%82%D0%B0%D0%BB%D0%BE%D0%BD-%D0%B8-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%BE">¶</a></h2><p>ReferencePolicy сохраняет exact maximum отдельным record. <code>optimality_gap</code>
-считается как <code>C_star - C</code>; <code>ratio</code> не подменяет эту разность.</p>
+<h2 id="Exact-reference-and-quality">Exact reference and quality<a class="anchor-link" href="#Exact-reference-and-quality">¶</a></h2><p>ReferencePolicy stores the exact maximum in a separate record. <code>optimality_gap</code>
+is computed as <code>C_star - C</code>; <code>ratio</code> does not replace that difference.</p>
 </div>
 </div>
 </div>
@@ -8044,9 +8045,9 @@ q_range requires both extrema: requires_both_exact_extrema
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%9F%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8C">Параллельный профиль<a class="anchor-link" href="#%D0%9F%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8C">¶</a></h2><p>Профиль использует тот же spec, один выбранный seed и полный grid всех cases.
-Числа ниже — реальные измерения этой машины; они не являются универсальным
-бенчмарком.</p>
+<h2 id="Parallel-profile">Parallel profile<a class="anchor-link" href="#Parallel-profile">¶</a></h2><p>The profile uses the same spec, one selected seed and the full grid of all cases.
+The numbers below are real measurements on this machine; they are not a universal
+benchmark.</p>
 </div>
 </div>
 </div>
@@ -8094,7 +8095,7 @@ fit: {'points': 3, 'n_values': [1, 2, 4], 'a': 0.24193674999999995, 'b': -0.0215
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-%D0%B8-%D0%B0%D0%B2%D1%82%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D1%8B%D0%B9-HTML">График и автономный HTML<a class="anchor-link" href="#%D0%93%D1%80%D0%B0%D1%84%D0%B8%D0%BA-%D0%B8-%D0%B0%D0%B2%D1%82%D0%BE%D0%BD%D0%BE%D0%BC%D0%BD%D1%8B%D0%B9-HTML">¶</a></h2><p>Профиль уже сохранён в памяти; график читает только records/analysis.</p>
+<h2 id="Plot-and-standalone-HTML">Plot and standalone HTML<a class="anchor-link" href="#Plot-and-standalone-HTML">¶</a></h2><p>The profile is already saved in memory; the plot reads only records/analysis.</p>
 </div>
 </div>
 </div>
@@ -8155,7 +8156,7 @@ fit: {'points': 3, 'n_values': [1, 2, 4], 'a': 0.24193674999999995, 'b': -0.0215
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%93%D0%BB%D0%BE%D0%B1%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D1%80%D0%B5%D0%BA%D0%BE%D0%BC%D0%B5%D0%BD%D0%B4%D0%B0%D1%86%D0%B8%D1%8F-%D0%BD%D0%B5-%D1%8F%D0%B2%D0%BB%D1%8F%D0%B5%D1%82%D1%81%D1%8F-%D0%B3%D0%BE%D0%BB%D0%BE%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D0%BC-%D0%BB%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BC%D0%B8%D0%BD%D0%B8%D0%BC%D1%83%D0%BC%D0%BE%D0%B2">Глобальная рекомендация не является голосованием локальных минимумов<a class="anchor-link" href="#%D0%93%D0%BB%D0%BE%D0%B1%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-%D1%80%D0%B5%D0%BA%D0%BE%D0%BC%D0%B5%D0%BD%D0%B4%D0%B0%D1%86%D0%B8%D1%8F-%D0%BD%D0%B5-%D1%8F%D0%B2%D0%BB%D1%8F%D0%B5%D1%82%D1%81%D1%8F-%D0%B3%D0%BE%D0%BB%D0%BE%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%D0%BC-%D0%BB%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BC%D0%B8%D0%BD%D0%B8%D0%BC%D1%83%D0%BC%D0%BE%D0%B2">¶</a></h2><p>Синтетический контроль D: A хорош при n=4, B при n=1, но общий минимум при n=2.</p>
+<h2 id="The-global-recommendation-is-not-a-vote-of-local-minima">The global recommendation is not a vote of local minima<a class="anchor-link" href="#The-global-recommendation-is-not-a-vote-of-local-minima">¶</a></h2><p>Synthetic control D: A is good at n=4, B at n=1, but the overall minimum is at n=2.</p>
 </div>
 </div>
 </div>
@@ -8200,13 +8201,13 @@ fit: {'points': 3, 'n_values': [1, 2, 4], 'a': 0.24193674999999995, 'b': -0.0215
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><ul>
-<li>Полный product: 28 cases, 56 scientific trials, 2 exact references.</li>
-<li>Профиль: 84 case/candidate points, 84 warmup + 252 measured calls.</li>
-<li>Рекомендация учитывает весь набор cases и не выдаёт failed/missing за ноль.</li>
-<li>Графики и HTML используют сохранённые records и не вызывают solver.</li>
-<li>GPU-профиль в этом CPU-ноутбуке не запускается; аппаратная часть отмечена
-отдельно в отчёте.</li>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2><ul>
+<li>Full product: 28 cases, 56 scientific trials, 2 exact references.</li>
+<li>Profile: 84 case/candidate points, 84 warmup + 252 measured calls.</li>
+<li>The recommendation considers the whole set of cases and never reports failed/missing as zero.</li>
+<li>Plots and HTML use saved records and do not call the solver.</li>
+<li>The GPU profile does not run in this CPU notebook; the hardware part is noted
+separately in the report.</li>
 </ul>
 </div>
 </div>

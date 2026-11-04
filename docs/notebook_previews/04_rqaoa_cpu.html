@@ -7802,14 +7802,14 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="RQAOA-%D0%BD%D0%B0-CPU">RQAOA на CPU<a class="anchor-link" href="#RQAOA-%D0%BD%D0%B0-CPU">¶</a></h1><p><strong>Версия 0.1.0a3.</strong> Этот ноутбук проходит полный сценарий первого RQAOA:
-небольшой взвешенный граф → JSON-конфигурация → обучение QAOA и физические
-корреляции → выбор пары → точная редукция → точный остаток → восстановление →
-проверка энергии → графики → сохранение и повторный анализ.</p>
-<p>Используется энергетическая конвенция <code>E = -C</code>. RQAOA — эвристика. Точное
-решение остатка не доказывает глобальный оптимум исходной задачи. Полный вектор
-состояния ограничивает размер графа; эта реализация не масштабируется на 1000
-вершин.</p>
+<h1 id="RQAOA-on-CPU">RQAOA on CPU<a class="anchor-link" href="#RQAOA-on-CPU">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> This notebook walks through the complete first RQAOA scenario:
+small weighted graph → JSON configuration → QAOA training and physical
+correlations → pair selection → exact reduction → exact remainder → reconstruction →
+energy check → plots → saving and re-analysis.</p>
+<p>The energy convention is <code>E = -C</code>. RQAOA is a heuristic. Exactly solving the
+remainder does not prove the global optimum of the original problem. The full
+state vector limits the graph size; this implementation does not scale to 1000
+vertices.</p>
 </div>
 </div>
 </div>
@@ -7870,9 +7870,9 @@ Output: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\rqaoa_
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%92%D0%B7%D0%B2%D0%B5%D1%88%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-%D0%B3%D1%80%D0%B0%D1%84-%D0%B8-%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80">1. Взвешенный граф и точный ориентир<a class="anchor-link" href="#1.-%D0%92%D0%B7%D0%B2%D0%B5%D1%88%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9-%D0%B3%D1%80%D0%B0%D1%84-%D0%B8-%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80">¶</a></h2><p>Вершины <code>10, 20, 30, 40, 50</code> образуют связную часть; вершина <code>101</code> изолирована.
-Веса обоих знаков и исходные номера с пропусками проверяют общий контракт задачи.
-<code>ExactCPU</code> нужен только как независимый ориентир для малого графа.</p>
+<h2 id="1.-Weighted-graph-and-exact-reference">1. Weighted graph and exact reference<a class="anchor-link" href="#1.-Weighted-graph-and-exact-reference">¶</a></h2><p>Vertices <code>10, 20, 30, 40, 50</code> form a connected component; vertex <code>101</code> is isolated.
+Weights of both signs and source labels with gaps exercise the general problem
+contract. <code>ExactCPU</code> is used only as an independent reference for a small graph.</p>
 </div>
 </div>
 </div>
@@ -7941,10 +7941,10 @@ Exact energy: -6.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D1%8F-RQAOA">2. Конфигурация RQAOA<a class="anchor-link" href="#2.-%D0%9A%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D1%8F-RQAOA">¶</a></h2><p>Конфигурация читается из JSON. <code>finish_at=2</code> завершает цикл точным решением
-остатка из двух вершин. <code>max_steps=4</code> уменьшает время учебного запуска;
-источник всё равно обучает QAOA и возвращает физические корреляции. Глубина
-<code>p=1</code>, порядок углов — <code>gamma_0, beta_0</code>.</p>
+<h2 id="2.-RQAOA-configuration">2. RQAOA configuration<a class="anchor-link" href="#2.-RQAOA-configuration">¶</a></h2><p>The configuration is read from JSON. <code>finish_at=2</code> ends the loop with an exact
+solution of the two-vertex remainder. <code>max_steps=4</code> shortens the tutorial run;
+the source still trains QAOA and returns physical correlations. Depth is
+<code>p=1</code>, angle order is <code>gamma_0, beta_0</code>.</p>
 </div>
 </div>
 </div>
@@ -8003,9 +8003,9 @@ Resources: {'shots_used': 0, 'training_shots': 0, 'correlation_shots': 0, 'reado
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B3%D0%BE-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B8-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D0%B8">3. Проверка полного решения и энергии<a class="anchor-link" href="#3.-%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D0%B3%D0%BE-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B8-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D0%B8">¶</a></h2><p>Словарь должен содержать каждую исходную вершину ровно один раз. Значение
-разреза пересчитывается прямым суммированием на исходном графе. Инвариант
-редукций проверяется отдельно: <code>C_original = b + C_reduced</code>.</p>
+<h2 id="3.-Checking-the-complete-solution-and-the-energy">3. Checking the complete solution and the energy<a class="anchor-link" href="#3.-Checking-the-complete-solution-and-the-energy">¶</a></h2><p>The dictionary must contain every source vertex exactly once. The cut value is
+recomputed by direct summation on the source graph. The reduction invariant is
+checked separately: <code>C_original = b + C_reduced</code>.</p>
 </div>
 </div>
 </div>
@@ -8053,9 +8053,9 @@ Resources: {'shots_used': 0, 'training_shots': 0, 'correlation_shots': 0, 'reado
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-result-%D0%B8-%D0%BF%D1%80%D1%8F%D0%BC%D1%8B%D0%B5-%D0%B0%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%82%D1%8B">4. <code>result</code> и прямые атрибуты<a class="anchor-link" href="#4.-result-%D0%B8-%D0%BF%D1%80%D1%8F%D0%BC%D1%8B%D0%B5-%D0%B0%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%82%D1%8B">¶</a></h2><p><code>algorithm.result</code> — JSON-совместимый снимок последнего запуска. Прямые
-результатные атрибуты читают ту же запись: например, <code>algorithm.cut_value</code>
-совпадает с <code>result["cut_value"]</code>.</p>
+<h2 id="4.-result-and-direct-attributes">4. <code>result</code> and direct attributes<a class="anchor-link" href="#4.-result-and-direct-attributes">¶</a></h2><p><code>algorithm.result</code> is a JSON-compatible snapshot of the last run. Direct result
+attributes read the same record: for example, <code>algorithm.cut_value</code> equals
+<code>result["cut_value"]</code>.</p>
 </div>
 </div>
 </div>
@@ -8100,10 +8100,10 @@ Result fields: ['algorithm_type', 'config', 'correlation_tables', 'correlations'
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">5. Таблица редукций<a class="anchor-link" href="#5.-%D0%A2%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">¶</a></h2><p>Каждая строка относится к слиянию, выполненному <strong>после</strong> получения корреляций.
-<code>selected_weight</code> — текущий вес пары, <code>fixed_energy</code> — вклад после фиксации,
-<code>expected_fixed_energy</code> — ожидаемый вклад до фиксации. <code>score</code> — отдельная
-величина выбора, а не корреляция.</p>
+<h2 id="5.-Reduction-table">5. Reduction table<a class="anchor-link" href="#5.-Reduction-table">¶</a></h2><p>Each row refers to a merge performed <strong>after</strong> the correlations were obtained.
+<code>selected_weight</code> is the current weight of the pair, <code>fixed_energy</code> is the
+contribution after fixing, <code>expected_fixed_energy</code> is the expected contribution
+before fixing. <code>score</code> is a separate selection quantity, not a correlation.</p>
 </div>
 </div>
 </div>
@@ -8242,10 +8242,11 @@ Result fields: ['algorithm_type', 'config', 'correlation_tables', 'correlations'
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%92%D0%B5%D1%81%D0%B0-%D0%B8-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D1%8F-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">6. Веса и энергия редукций<a class="anchor-link" href="#6.-%D0%92%D0%B5%D1%81%D0%B0-%D0%B8-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D1%8F-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">¶</a></h2><p>Верхний график показывает вес выбранной пары и средний модуль ненулевого веса.
-Нижний — фиксированный и ожидаемый вклады по шагам и накопительно; отдельные
-панели показывают <code>cut_offset</code> и полную константу Изинга. Их нельзя смешивать
-с суммой вкладов выбранных рёбер.</p>
+<h2 id="6.-Weights-and-reduction-energy">6. Weights and reduction energy<a class="anchor-link" href="#6.-Weights-and-reduction-energy">¶</a></h2><p>The top plot shows the weight of the selected pair and the mean absolute
+non-zero weight. The bottom one shows the fixed and expected contributions per
+step and cumulatively; separate panels show <code>cut_offset</code> and the full Ising
+constant. They must not be confused with the sum of the selected-edge
+contributions.</p>
 </div>
 </div>
 </div>
@@ -8295,10 +8296,10 @@ Result fields: ['algorithm_type', 'config', 'correlation_tables', 'correlations'
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%A2%D1%80%D0%B0%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2">7. Траектории параметров<a class="anchor-link" href="#7.-%D0%A2%D1%80%D0%B0%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%B8%D0%B8-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%B2">¶</a></h2><p>Для <code>p=1</code> обязательна одна пара <code>(gamma_0, beta_0)</code>. Для больших <code>p</code> число
-неупорядоченных пар равно <code>binomial(2p, 2)</code>: 6 при <code>p=2</code> и 15 при <code>p=3</code>.
-Плоские панели и 3D-версия используют сохранённые углы без дополнительного
-запуска QAOA. В 3D ось Z — номер редукции.</p>
+<h2 id="7.-Parameter-trajectories">7. Parameter trajectories<a class="anchor-link" href="#7.-Parameter-trajectories">¶</a></h2><p>For <code>p=1</code> one pair <code>(gamma_0, beta_0)</code> is mandatory. For larger <code>p</code> the number of
+unordered pairs is <code>binomial(2p, 2)</code>: 6 for <code>p=2</code> and 15 for <code>p=3</code>.
+The flat panels and the 3D version use the stored angles without an extra QAOA
+run. In 3D the Z axis is the reduction index.</p>
 </div>
 </div>
 </div>
@@ -8358,8 +8359,8 @@ Result fields: ['algorithm_type', 'config', 'correlation_tables', 'correlations'
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%93%D1%80%D0%B0%D1%84-%D1%81-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC">8. Граф с решением<a class="anchor-link" href="#8.-%D0%93%D1%80%D0%B0%D1%84-%D1%81-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D0%B5%D0%BC">¶</a></h2><p>Вершины двух частей различаются цветом; рёбра разреза выделены. Изолированная
-вершина <code>101</code> также получает спин.</p>
+<h2 id="8.-Graph-with-the-solution">8. Graph with the solution<a class="anchor-link" href="#8.-Graph-with-the-solution">¶</a></h2><p>Vertices of the two parts are colored differently; cut edges are highlighted.
+The isolated vertex <code>101</code> also receives a spin.</p>
 </div>
 </div>
 </div>
@@ -8401,8 +8402,8 @@ Result fields: ['algorithm_type', 'config', 'correlation_tables', 'correlations'
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D1%81-%D0%BF%D0%B5%D1%80%D0%B5%D0%B1%D0%BE%D1%80%D0%BE%D0%BC">9. Сравнение с перебором<a class="anchor-link" href="#9.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D1%81-%D0%BF%D0%B5%D1%80%D0%B5%D0%B1%D0%BE%D1%80%D0%BE%D0%BC">¶</a></h2><p>RQAOA не обязан достигать глобального оптимума. Здесь проверяется только
-допустимость и качество полученного решения, а не равенство точному максимуму.</p>
+<h2 id="9.-Comparison-with-brute-force">9. Comparison with brute force<a class="anchor-link" href="#9.-Comparison-with-brute-force">¶</a></h2><p>RQAOA need not reach the global optimum. Only feasibility and the quality of the
+returned solution are checked here, not equality with the exact maximum.</p>
 </div>
 </div>
 </div>
@@ -8445,9 +8446,10 @@ Difference: 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="10.-%D0%A8%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-%D1%80%D0%B5%D0%B6%D0%B8%D0%BC-%D0%B8-%D1%81%D1%82%D1%80%D0%BE%D0%B3%D0%B8%D0%B9-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82">10. Шотовый режим и строгий бюджет<a class="anchor-link" href="#10.-%D0%A8%D0%BE%D1%82%D0%BE%D0%B2%D1%8B%D0%B9-%D1%80%D0%B5%D0%B6%D0%B8%D0%BC-%D0%B8-%D1%81%D1%82%D1%80%D0%BE%D0%B3%D0%B8%D0%B9-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82">¶</a></h2><p>В шотовом режиме критерий обучения и корреляции оцениваются по выборкам.
-Одна корреляционная выборка даёт все пары; счётчики обучения и корреляций
-разделены. Остаток после двух редукций решается точно и не расходует шоты.</p>
+<h2 id="10.-Shot-mode-and-a-strict-budget">10. Shot mode and a strict budget<a class="anchor-link" href="#10.-Shot-mode-and-a-strict-budget">¶</a></h2><p>In shot mode the training criterion and the correlations are estimated from
+samples. One correlation sample yields all pairs; training and correlation
+counters are kept separate. The remainder after two reductions is solved exactly
+and consumes no shots.</p>
 </div>
 </div>
 </div>
@@ -8500,10 +8502,10 @@ Shots: 2304
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="11.-%D0%9E%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BF%D0%BE-%D0%BD%D1%83%D0%BB%D0%B5%D0%B2%D0%BE%D0%BC%D1%83-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%83">11. Остановка по нулевому бюджету<a class="anchor-link" href="#11.-%D0%9E%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BF%D0%BE-%D0%BD%D1%83%D0%BB%D0%B5%D0%B2%D0%BE%D0%BC%D1%83-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D1%83">¶</a></h2><p>Лимит меньше обязательной корреляционной выборки не запускает измерение.
-Возвращается полное детерминированное решение <code>all_plus_reduced_fallback</code>;
-статус — <code>stopped</code>, причина — <code>shot_budget</code>. Это не точное решение большого
-остатка и не доказательство оптимальности.</p>
+<h2 id="11.-Stopping-on-a-zero-budget">11. Stopping on a zero budget<a class="anchor-link" href="#11.-Stopping-on-a-zero-budget">¶</a></h2><p>A limit below the mandatory correlation sample does not start a measurement.
+A complete deterministic solution <code>all_plus_reduced_fallback</code> is returned; the
+status is <code>stopped</code> and the reason is <code>shot_budget</code>. This is not an exact
+solution of a large remainder and not a proof of optimality.</p>
 </div>
 </div>
 </div>
@@ -8553,9 +8555,9 @@ Source: all_plus_reduced_fallback Shots: 0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="12.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">12. Сохранение и повторный анализ<a class="anchor-link" href="#12.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D1%8B%D0%B9-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">¶</a></h2><p>Основной JSON содержит метаданные и выбранные атрибуты. Повторная запись с тем
-же именем не перезаписывает прежний набор. Графики ниже строятся уже из
-загруженной записи и не запускают солвер.</p>
+<h2 id="12.-Saving-and-re-analysis">12. Saving and re-analysis<a class="anchor-link" href="#12.-Saving-and-re-analysis">¶</a></h2><p>The main JSON holds metadata and the selected attributes. Writing again under
+the same name does not overwrite the previous set. The plots below are built from
+the loaded record and do not run the solver.</p>
 </div>
 </div>
 </div>
@@ -8634,9 +8636,10 @@ Source: all_plus_reduced_fallback Shots: 0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="13.-%D0%98%D1%82%D0%BE%D0%B3">13. Итог<a class="anchor-link" href="#13.-%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><p>Проверены: полный словарь спинов, прямой разрез, инвариант <code>C_original = b + C_reduced</code>, <code>E = -C</code>, несколько редукций, точный остаток, шотовый режим,
-остановка по строгому бюджету, сохранение и повторное построение графиков.
-Аналитический <code>p=1</code>, GPU, LS-RQAOA и QAOA-in-QAOA остаются следующими этапами.</p>
+<h2 id="13.-Summary">13. Summary<a class="anchor-link" href="#13.-Summary">¶</a></h2><p>Verified: the complete spin dictionary, the directly computed cut, the invariant
+<code>C_original = b + C_reduced</code>, <code>E = -C</code>, several reductions, the exact remainder,
+shot mode, the strict-budget stop, saving and re-plotting. Analytic <code>p=1</code>, GPU,
+LS-RQAOA and QAOA-in-QAOA remain future stages.</p>
 </div>
 </div>
 </div>

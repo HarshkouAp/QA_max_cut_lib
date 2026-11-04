@@ -7802,8 +7802,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="%D0%AF%D0%B4%D1%80%D0%BE-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9-Max-Cut-%E2%86%92-Ising">Ядро редукций Max-Cut → Ising<a class="anchor-link" href="#%D0%AF%D0%B4%D1%80%D0%BE-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9-Max-Cut-%E2%86%92-Ising">¶</a></h1><p><strong>Версия 0.1.0a2.</strong> Этот ноутбук проверяет точное парное ограничение <code>s_u = σ s_v</code>: рабочий граф, накопленный сдвиг, полную константу Изинга, обратное восстановление и снимок состояния.</p>
-<p>Используется энергетическая конвенция <code>E = -C</code> для Max-Cut и <code>E = c + Σ h_i s_i + Σ J_ij s_i s_j</code> для внутренней задачи. Ноутбук не запускает QAOA, не выбирает пару и не измеряет корреляции.</p>
+<h1 id="Max-Cut-%E2%86%92-Ising-reduction-core">Max-Cut → Ising reduction core<a class="anchor-link" href="#Max-Cut-%E2%86%92-Ising-reduction-core">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> This notebook verifies the exact pair constraint <code>s_u = σ s_v</code>: the working graph, the accumulated offset, the full Ising constant, the inverse reconstruction and the state snapshot.</p>
+<p>It uses the energy convention <code>E = -C</code> for Max-Cut and <code>E = c + Σ h_i s_i + Σ J_ij s_i s_j</code> for the internal problem. The notebook does not run QAOA, does not select a pair and does not measure correlations.</p>
 </div>
 </div>
 </div>
@@ -7872,7 +7872,7 @@ Output: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\reduct
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B3%D1%80%D0%B0%D1%84">1. Контрольный граф<a class="anchor-link" href="#1.-%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%B3%D1%80%D0%B0%D1%84">¶</a></h2><p>Вершины <code>[10, 30, 80, 101]</code>, вершина <code>101</code> изолирована. Удаляем <code>10</code>, сохраняем <code>30</code>, σ = −1.</p>
+<h2 id="1.-Control-graph">1. Control graph<a class="anchor-link" href="#1.-Control-graph">¶</a></h2><p>Vertices <code>[10, 30, 80, 101]</code>, vertex <code>101</code> is isolated. We remove <code>10</code>, keep <code>30</code>, σ = −1.</p>
 </div>
 </div>
 </div>
@@ -7924,7 +7924,7 @@ Working nodes: (10, 30, 80, 101)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%9F%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4-%D0%B3%D1%80%D0%B0%D1%84%D0%B0-%D0%B2-%D0%98%D0%B7%D0%B8%D0%BD%D0%B3">2. Перевод графа в Изинг<a class="anchor-link" href="#2.-%D0%9F%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4-%D0%B3%D1%80%D0%B0%D1%84%D0%B0-%D0%B2-%D0%98%D0%B7%D0%B8%D0%BD%D0%B3">¶</a></h2><p>Проверяем <code>E_Ising = −C</code> для всех 2⁴ назначений исходного графа.</p>
+<h2 id="2.-Converting-the-graph-to-Ising">2. Converting the graph to Ising<a class="anchor-link" href="#2.-Converting-the-graph-to-Ising">¶</a></h2><p>We verify <code>E_Ising = −C</code> for all 2⁴ assignments of the source graph.</p>
 </div>
 </div>
 </div>
@@ -7966,7 +7966,7 @@ Working nodes: (10, 30, 80, 101)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%9E%D0%B4%D0%BD%D0%BE-%D1%81%D0%BB%D0%B8%D1%8F%D0%BD%D0%B8%D0%B5">3. Одно слияние<a class="anchor-link" href="#3.-%D0%9E%D0%B4%D0%BD%D0%BE-%D1%81%D0%BB%D0%B8%D1%8F%D0%BD%D0%B8%D0%B5">¶</a></h2><p>Событие содержит вес выбранного ребра, фиксированную энергию, сдвиг разреза и полную константу Изинга. Это разные величины.</p>
+<h2 id="3.-A-single-merge">3. A single merge<a class="anchor-link" href="#3.-A-single-merge">¶</a></h2><p>The event holds the weight of the selected edge, the fixed energy, the cut offset and the full Ising constant. These are different quantities.</p>
 </div>
 </div>
 </div>
@@ -8026,7 +8026,7 @@ Working graph: (30, 80, 101) ((30, 80, 2.0),)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%A0%D0%B0%D0%B2%D0%B5%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D0%B9-%D0%BD%D0%B0-%D0%B2%D1%81%D1%91%D0%BC-%D0%BE%D1%81%D1%82%D0%B0%D1%82%D0%BA%D0%B5">4. Равенство энергий на всём остатке<a class="anchor-link" href="#4.-%D0%A0%D0%B0%D0%B2%D0%B5%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D1%8D%D0%BD%D0%B5%D1%80%D0%B3%D0%B8%D0%B9-%D0%BD%D0%B0-%D0%B2%D1%81%D1%91%D0%BC-%D0%BE%D1%81%D1%82%D0%B0%D1%82%D0%BA%D0%B5">¶</a></h2><p>Для каждого назначения <code>[30, 80, 101]</code> подставляем <code>s_10 = −s_30</code> и сравниваем исходную и редуцированную энергии.</p>
+<h2 id="4.-Equality-of-energies-over-the-whole-remainder">4. Equality of energies over the whole remainder<a class="anchor-link" href="#4.-Equality-of-energies-over-the-whole-remainder">¶</a></h2><p>For every assignment of <code>[30, 80, 101]</code> we substitute <code>s_10 = −s_30</code> and compare the source and reduced energies.</p>
 </div>
 </div>
 </div>
@@ -8072,7 +8072,7 @@ max energy difference: 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F">5. Восстановление решения<a class="anchor-link" href="#5.-%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D1%80%D0%B5%D1%88%D0%B5%D0%BD%D0%B8%D1%8F">¶</a></h2><p>Остаток <code>{30: +1, 80: −1, 101: +1}</code> восстанавливается в исходные номера.</p>
+<h2 id="5.-Reconstructing-the-solution">5. Reconstructing the solution<a class="anchor-link" href="#5.-Reconstructing-the-solution">¶</a></h2><p>The remainder <code>{30: +1, 80: −1, 101: +1}</code> is mapped back to the source labels.</p>
 </div>
 </div>
 </div>
@@ -8118,7 +8118,7 @@ E original: -7.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%A6%D0%B5%D0%BF%D0%BE%D1%87%D0%BA%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">6. Цепочка редукций<a class="anchor-link" href="#6.-%D0%A6%D0%B5%D0%BF%D0%BE%D1%87%D0%BA%D0%B0-%D1%80%D0%B5%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D0%B9">¶</a></h2><p>Второй шаг удаляет <code>80</code>, сохраняя <code>30</code>. Вершина <code>30</code> уже была сохранена на первом шаге; восстановление идёт в обратном порядке.</p>
+<h2 id="6.-Chain-of-reductions">6. Chain of reductions<a class="anchor-link" href="#6.-Chain-of-reductions">¶</a></h2><p>The second step removes <code>80</code> and keeps <code>30</code>. Vertex <code>30</code> had already been kept in the first step; reconstruction proceeds in reverse order.</p>
 </div>
 </div>
 </div>
@@ -8175,7 +8175,7 @@ C original: 5.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F">7. Снимок состояния<a class="anchor-link" href="#7.-%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F">¶</a></h2><p>Сохраняем математическое состояние в JSON, восстанавливаем его и продолжаем редукцию. Это не checkpoint оптимизатора.</p>
+<h2 id="7.-State-snapshot">7. State snapshot<a class="anchor-link" href="#7.-State-snapshot">¶</a></h2><p>We save the mathematical state to JSON, restore it and continue the reduction. This is not an optimizer checkpoint.</p>
 </div>
 </div>
 </div>
@@ -8231,7 +8231,7 @@ saved: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\notebooks\_outputs\reducti
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><p>Проверены точное равенство энергий, связь <code>C_original = b + C_reduced</code>, различие <code>fixed_energy</code>, <code>Δb</code> и <code>Δc</code>, обратное восстановление и JSON-round-trip математического состояния. Реальные корреляции и выбор пары появятся в следующих этапах.</p>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2><p>Verified: exact equality of energies, the relation <code>C_original = b + C_reduced</code>, the distinction between <code>fixed_energy</code>, <code>Δb</code> and <code>Δc</code>, inverse reconstruction and the JSON round-trip of the mathematical state. Real correlations and pair selection appear in later stages.</p>
 </div>
 </div>
 </div>

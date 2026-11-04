@@ -7802,12 +7802,12 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="QAOA-in-QAOA:-block-patterns-and-global-orientations">QAOA-in-QAOA: block patterns and global orientations<a class="anchor-link" href="#QAOA-in-QAOA:-block-patterns-and-global-orientations">¶</a></h1><p><strong>Версия 0.1.0a7.</strong> Ноутбук показывает базовую иерархию: локальный рисунок
-спинов блока, одну свободную ориентацию блока, точный метаграф и
-восстановление исходных вершин.</p>
-<p>Это не LS-RQAOA: здесь выбирается не корреляция пары, а целый дискретный
-рисунок блока. Локальный разрез и постоянная часть <code>Delta b</code> — разные
-величины.</p>
+<h1 id="QAOA-in-QAOA:-block-patterns-and-global-orientations">QAOA-in-QAOA: block patterns and global orientations<a class="anchor-link" href="#QAOA-in-QAOA:-block-patterns-and-global-orientations">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> The notebook demonstrates the base hierarchy: a local spin
+pattern inside a block, one free block orientation, the exact metagraph and the
+reconstruction of the source vertices.</p>
+<p>This is not LS-RQAOA: what is selected here is a whole discrete block pattern,
+not a pair correlation. The local cut and the constant part <code>Delta b</code> are
+different quantities.</p>
 </div>
 </div>
 </div>
@@ -7875,9 +7875,10 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\.venv\Lib\site-packages\
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-%D0%9E%D0%B4%D0%B8%D0%BD-%D0%B1%D0%BB%D0%BE%D0%BA:-%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BE%D0%BA-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D1%80%D0%BE%D1%82">1. Один блок: рисунок и переворот<a class="anchor-link" href="#1.-%D0%9E%D0%B4%D0%B8%D0%BD-%D0%B1%D0%BB%D0%BE%D0%BA:-%D1%80%D0%B8%D1%81%D1%83%D0%BD%D0%BE%D0%BA-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D1%80%D0%BE%D1%82">¶</a></h2><p>Сначала проверяется точная формула на контрольном графе из задания. Блоки
-<code>[10,30]</code> и <code>[80,101]</code> имеют рисунки <code>(+1,-1)</code>. Метаграф содержит вес <code>-2</code>,
-<code>Delta b=10</code>, а для всех четырёх ориентаций <code>C_original=Delta b+C_meta</code>.</p>
+<h2 id="1.-One-block:-pattern-and-flip">1. One block: pattern and flip<a class="anchor-link" href="#1.-One-block:-pattern-and-flip">¶</a></h2><p>First the exact formula is checked on the control graph from the assignment.
+Blocks <code>[10,30]</code> and <code>[80,101]</code> have patterns <code>(+1,-1)</code>. The metagraph holds the
+weight <code>-2</code>, <code>Delta b=10</code>, and <code>C_original=Delta b+C_meta</code> for all four
+orientations.</p>
 </div>
 </div>
 </div>
@@ -7938,9 +7939,9 @@ Delta b: 10.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%9D%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE-%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B5%D0%B9-%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B5%D0%B3%D0%BE-QAOA">2. Несколько уровней настоящего QAOA<a class="anchor-link" href="#2.-%D0%9D%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%BE-%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B5%D0%B9-%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B5%D0%B3%D0%BE-QAOA">¶</a></h2><p>На каждом уровне локальные задачи решают только индуцированный блок. После
-readout рисунок нормируется по anchor, а <code>GraphReducer</code> применяет <code>N_l-K</code>
-точных ограничений ко всему текущему графу.</p>
+<h2 id="2.-Several-levels-of-real-QAOA">2. Several levels of real QAOA<a class="anchor-link" href="#2.-Several-levels-of-real-QAOA">¶</a></h2><p>At every level the local problems solve only the induced block. After readout the
+pattern is normalized by the anchor, and <code>GraphReducer</code> applies <code>N_l-K</code> exact
+constraints to the whole current graph.</p>
 </div>
 </div>
 </div>
@@ -8000,9 +8001,10 @@ source: exact_finisher resources: {'shots_used': 0, 'training_shots': 0, 'readou
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-CPU-%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D0%B8%D0%B7%D0%BC-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-CLI">3. CPU-параллелизм через CLI<a class="anchor-link" href="#3.-CPU-%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D0%B8%D0%B7%D0%BC-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-CLI">¶</a></h2><p>Jupyter на Windows не всегда безопасно запускает <code>spawn</code>-пул из главного
-ноутбука. Поэтому реальный параллельный путь проверяется импортируемым CLI в
-отдельном процессе. Это тот же coordinator, а не другой алгоритм.</p>
+<h2 id="3.-CPU-parallelism-through-the-CLI">3. CPU parallelism through the CLI<a class="anchor-link" href="#3.-CPU-parallelism-through-the-CLI">¶</a></h2><p>Jupyter on Windows cannot always start a <code>spawn</code> pool safely from the main
+notebook. The real parallel path is therefore exercised through the importable
+CLI in a separate process. It is the same coordinator, not a different
+algorithm.</p>
 </div>
 </div>
 </div>
@@ -8058,8 +8060,8 @@ Resources: {"backend": "cpu", "gradient_evaluations": 0, "levels_completed": 2, 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%9E%D0%B1%D1%89%D0%B8%D0%B9-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82-readout">4. Общий бюджет readout<a class="anchor-link" href="#4.-%D0%9E%D0%B1%D1%89%D0%B8%D0%B9-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82-readout">¶</a></h2><p>Для <code>best_of_shots</code> минимум задачи равен её M. Все минимумы следующего уровня
-резервируются до запуска. Резерв не удваивается для каждого блока.</p>
+<h2 id="4.-Shared-readout-budget">4. Shared readout budget<a class="anchor-link" href="#4.-Shared-readout-budget">¶</a></h2><p>For <code>best_of_shots</code> the problem minimum equals its M. All minima of the next level
+are reserved before it starts. The reservation is not doubled per block.</p>
 </div>
 </div>
 </div>
@@ -8113,9 +8115,9 @@ calls: 4
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-%D0%9D%D0%B5%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-NVIDIA-%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB">5. Необязательный NVIDIA-раздел<a class="anchor-link" href="#5.-%D0%9D%D0%B5%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-NVIDIA-%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB">¶</a></h2><p>Раздел исполняется только при доступном CuPy и NVIDIA. При отсутствии
-устройства он честно сообщает, что GPU-часть не проверялась. Локальные блоки
-обслуживает один владелец устройства.</p>
+<h2 id="5.-Optional-NVIDIA-section">5. Optional NVIDIA section<a class="anchor-link" href="#5.-Optional-NVIDIA-section">¶</a></h2><p>This section runs only when CuPy and an NVIDIA device are available. Without a
+device it states honestly that the GPU part was not exercised. Local blocks are
+served by a single device owner.</p>
 </div>
 </div>
 </div>
@@ -8169,9 +8171,9 @@ GPU resources: {'shots_used': 0, 'training_shots': 0, 'readout_shots': 0, 'local
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5,-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8">6. Восстановление, дерево и графики<a class="anchor-link" href="#6.-%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5,-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE-%D0%B8-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D0%BA%D0%B8">¶</a></h2><p>Дерево имеет составные узлы <code>(level,anchor)</code>, а листья — исходные вершины.
-Углы разных блоков не усредняются; график 3D использует уровень иерархии как
-Z.</p>
+<h2 id="6.-Reconstruction,-tree-and-plots">6. Reconstruction, tree and plots<a class="anchor-link" href="#6.-Reconstruction,-tree-and-plots">¶</a></h2><p>The tree has composite nodes <code>(level,anchor)</code>, and its leaves are the source
+vertices. Angles of different blocks are not averaged; the 3D plot uses the
+hierarchy level as Z.</p>
 </div>
 </div>
 </div>
@@ -8244,7 +8246,7 @@ b: 8.0 Ising constant: -7.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B5-%D1%87%D1%82%D0%B5%D0%BD%D0%B8%D0%B5">7. Сохранение и повторное чтение<a class="anchor-link" href="#7.-%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%BF%D0%BE%D0%B2%D1%82%D0%BE%D1%80%D0%BD%D0%BE%D0%B5-%D1%87%D1%82%D0%B5%D0%BD%D0%B8%D0%B5">¶</a></h2>
+<h2 id="7.-Saving-and-reloading">7. Saving and reloading<a class="anchor-link" href="#7.-Saving-and-reloading">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8298,7 +8300,7 @@ loaded: qaoa_in_qaoa_cpu
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%98%D1%82%D0%BE%D0%B3">8. Итог<a class="anchor-link" href="#8.-%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2>
+<h2 id="8.-Summary">8. Summary<a class="anchor-link" href="#8.-Summary">¶</a></h2>
 </div>
 </div>
 </div>

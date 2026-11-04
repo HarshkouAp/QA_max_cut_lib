@@ -7802,19 +7802,19 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Laboratory,-warm-start-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9-%D0%BF%D0%B5%D1%80%D0%B5%D0%BD%D0%BE%D1%81">Laboratory, warm-start и первый перенос<a class="anchor-link" href="#Laboratory,-warm-start-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9-%D0%BF%D0%B5%D1%80%D0%B5%D0%BD%D0%BE%D1%81">¶</a></h1><p>Этот ноутбук показывает:</p>
+<h1 id="Laboratory,-warm-start-and-the-first-migration">Laboratory, warm start and the first migration<a class="anchor-link" href="#Laboratory,-warm-start-and-the-first-migration">¶</a></h1><p>This notebook shows:</p>
 <ul>
-<li>полный каталог исходного архива и его статусы;</li>
-<li>source aliases и отложенные варианты;</li>
+<li>the complete catalogue of the source archive and its statuses;</li>
+<li>source aliases and deferred variants;</li>
 <li>seed spins → q → product state;</li>
-<li>два разных warm-start миксера;</li>
-<li>полный запуск с бюджетом 544;</li>
+<li>two different warm-start mixers;</li>
+<li>a full run with a budget of 544;</li>
 <li>checkpoint/resume;</li>
-<li>реальный classical source;</li>
-<li>малую контролируемую серию H.</li>
+<li>a real classical source;</li>
+<li>a small controlled series H.</li>
 </ul>
-<p>Основной пример использует только NumPy и <code>provided_spins</code>, поэтому
-работает в CPU-профиле без CVXPY и CUDA.</p>
+<p>The main example uses only NumPy and <code>provided_spins</code>, so it runs in the CPU
+profile without CVXPY or CUDA.</p>
 </div>
 </div>
 </div>
@@ -7882,9 +7882,9 @@ deferred_environment_and_generators False not_implemented
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Inventory-%D0%B8-aliases">1. Inventory и aliases<a class="anchor-link" href="#1.-Inventory-%D0%B8-aliases">¶</a></h2><p>Все 89 Python-членов архива имеют file record. Пара <code>Diplom/Mk_5.py</code> и
-<code>Laboratory/LS_RQAOA_fast_5.py</code> имеет одинаковый AST; это provisional
-equivalence, а не доказательство идентичной trajectory.</p>
+<h2 id="1.-Inventory-and-aliases">1. Inventory and aliases<a class="anchor-link" href="#1.-Inventory-and-aliases">¶</a></h2><p>All 89 Python members of the archive have a file record. The pair
+<code>Diplom/Mk_5.py</code> and <code>Laboratory/LS_RQAOA_fast_5.py</code> share the same AST; this is a
+provisional equivalence, not proof of an identical trajectory.</p>
 </div>
 </div>
 </div>
@@ -7935,8 +7935,8 @@ WS_RQAOA: {'source_review': 'inventoried', 'scientific_specification': 'hypothes
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-%D0%A1%D0%BF%D0%B8%D0%BD%D1%8B,-%D0%B2%D0%B5%D1%80%D0%BE%D1%8F%D1%82%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%B8-product-state-A">2. Спины, вероятности и product state A<a class="anchor-link" href="#2.-%D0%A1%D0%BF%D0%B8%D0%BD%D1%8B,-%D0%B2%D0%B5%D1%80%D0%BE%D1%8F%D1%82%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%B8-product-state-A">¶</a></h2><p>Узлы 10,30, ребро веса 2, seed <code>(+1,-1)</code>, epsilon=1/4. Ожидаемые
-вероятности: <code>(3/16, 1/16, 9/16, 3/16)</code>, initial expected C=5/4.</p>
+<h2 id="2.-Spins,-probabilities-and-product-state-A">2. Spins, probabilities and product state A<a class="anchor-link" href="#2.-Spins,-probabilities-and-product-state-A">¶</a></h2><p>Nodes 10,30, edge weight 2, seed <code>(+1,-1)</code>, epsilon=1/4. Expected probabilities:
+<code>(3/16, 1/16, 9/16, 3/16)</code>, initial expected C=5/4.</p>
 </div>
 </div>
 </div>
@@ -7988,9 +7988,9 @@ source cut: 2.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-%D0%94%D0%B2%D0%B0-warm-start-%D0%BC%D0%B8%D0%BA%D1%81%D0%B5%D1%80%D0%B0">3. Два warm-start миксера<a class="anchor-link" href="#3.-%D0%94%D0%B2%D0%B0-warm-start-%D0%BC%D0%B8%D0%BA%D1%81%D0%B5%D1%80%D0%B0">¶</a></h2><p>При epsilon=1/2 <code>rounded_modified</code> должен совпасть с обычным X-миксером
-при том же beta, а <code>warm_aligned</code> — при <code>-beta</code>. Здесь сравниваются
-не только энергии, но и полные распределения.</p>
+<h2 id="3.-Two-warm-start-mixers">3. Two warm-start mixers<a class="anchor-link" href="#3.-Two-warm-start-mixers">¶</a></h2><p>At epsilon=1/2 <code>rounded_modified</code> must coincide with the ordinary X mixer at the
+same beta, and <code>warm_aligned</code> at <code>-beta</code>. Both energies and full distributions
+are compared here.</p>
 </div>
 </div>
 </div>
@@ -8053,8 +8053,9 @@ source cut: 2.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-%D0%9F%D0%BE%D0%BB%D0%BD%D1%8B%D0%B9-provided-spin-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA">4. Полный provided-spin запуск<a class="anchor-link" href="#4.-%D0%9F%D0%BE%D0%BB%D0%BD%D1%8B%D0%B9-provided-spin-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA">¶</a></h2><p>p=1, три ADAM-итерации, 32 shots/evaluation, 64 readout: полный бюджет
-<code>3*5*32 + 64 = 544</code>. Source cut и expected product cut — разные поля.</p>
+<h2 id="4.-Full-provided-spin-run">4. Full provided-spin run<a class="anchor-link" href="#4.-Full-provided-spin-run">¶</a></h2><p>p=1, three ADAM iterations, 32 shots/evaluation, 64 readout: total budget
+<code>3*5*32 + 64 = 544</code>. The source cut and the expected product cut are different
+fields.</p>
 </div>
 </div>
 </div>
@@ -8109,8 +8110,8 @@ resources: {'shots_used': 544, 'known_spent': 544, 'uncertain_upper_charge': 0, 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-Pause-%E2%86%92-restore-%E2%86%92-resume">5. Pause → restore → resume<a class="anchor-link" href="#5.-Pause-%E2%86%92-restore-%E2%86%92-resume">¶</a></h2><p>Пауза после одной завершённой итерации: 160 training shots и 64 held.
-Продолжение в новом объекте получает тот же canonical run и полный бюджет.</p>
+<h2 id="5.-Pause-%E2%86%92-restore-%E2%86%92-resume">5. Pause → restore → resume<a class="anchor-link" href="#5.-Pause-%E2%86%92-restore-%E2%86%92-resume">¶</a></h2><p>Pause after one completed iteration: 160 training shots and 64 held. Continuation
+in a new object receives the same canonical run and the full budget.</p>
 </div>
 </div>
 </div>
@@ -8166,8 +8167,8 @@ same angles: True
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-classical-source">6. Реальный classical source<a class="anchor-link" href="#6.-%D0%A0%D0%B5%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-classical-source">¶</a></h2><p>GW и SA запускаются лениво только при выборе source. Их reads/hyperplanes
-и время остаются отдельной <code>source_cost</code>; quantum shots — отдельно.</p>
+<h2 id="6.-A-real-classical-source">6. A real classical source<a class="anchor-link" href="#6.-A-real-classical-source">¶</a></h2><p>GW and SA run lazily only when the source is selected. Their reads/hyperplanes
+and time remain a separate <code>source_cost</code>; quantum shots are separate.</p>
 </div>
 </div>
 </div>
@@ -8216,9 +8217,9 @@ quantum_shots: 224
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-%D0%9C%D0%B0%D0%BB%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F-H">7. Малая серия H<a class="anchor-link" href="#7.-%D0%9C%D0%B0%D0%BB%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F-H">¶</a></h2><p>3 графа × 2 algorithm seeds × 7 конфигураций (base + 2 epsilon × 3 mixer) =
-42 запуска. Это проверка бюджета и честного сравнения, не доказательство
-преимущества warm-start.</p>
+<h2 id="7.-Small-series-H">7. Small series H<a class="anchor-link" href="#7.-Small-series-H">¶</a></h2><p>3 graphs × 2 algorithm seeds × 7 configurations (base + 2 epsilon × 3 mixer) =
+42 runs. This checks the budget and an honest comparison, not a proof that warm
+start is superior.</p>
 </div>
 </div>
 </div>
@@ -8268,9 +8269,9 @@ declared series shots: 22848
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.-%D0%98%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D0%BE%D0%B5-%D0%B8-%D0%BA%D0%BE%D0%BD%D0%B5%D1%87%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5">8. Исходное и конечное распределение<a class="anchor-link" href="#8.-%D0%98%D1%81%D1%85%D0%BE%D0%B4%D0%BD%D0%BE%D0%B5-%D0%B8-%D0%BA%D0%BE%D0%BD%D0%B5%D1%87%D0%BD%D0%BE%D0%B5-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%B5%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5">¶</a></h2><p>Подписи явно разделяют source cut, initial expected cut и конечный cut.
-График строится из реальных массивов этого запуска; классический source
-повторно не вызывается.</p>
+<h2 id="8.-Source-and-final-distribution">8. Source and final distribution<a class="anchor-link" href="#8.-Source-and-final-distribution">¶</a></h2><p>The labels clearly separate the source cut, the initial expected cut and the final
+cut. The plot is built from the real arrays of this run; the classical source is
+not called again.</p>
 </div>
 </div>
 </div>
@@ -8324,8 +8325,8 @@ declared series shots: 22848
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-H">9. Сравнение H<a class="anchor-link" href="#9.-%D0%A1%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-H">¶</a></h2><p>Таблица ниже — solver-only качество и quantum shots. <code>source_cost</code> для
-GW/SA не приписывается конфигурациям без classical source.</p>
+<h2 id="9.-Comparison-H">9. Comparison H<a class="anchor-link" href="#9.-Comparison-H">¶</a></h2><p>The table below is solver-only quality and quantum shots. <code>source_cost</code> for GW/SA
+is not attributed to configurations without a classical source.</p>
 </div>
 </div>
 </div>
@@ -8374,14 +8375,14 @@ warm_e050_x              mean_cut=3.333 success=0.667 n=6
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2><ul>
-<li>Каталог покрывает 89 исходных файлов; deferred-карточки видны.</li>
-<li>Product state A воспроизводит <code>(3/16,1/16,9/16,3/16)</code> и initial C=5/4.</li>
-<li><code>rounded_modified</code> и <code>warm_aligned</code> имеют разные знаки beta.</li>
-<li>Полный provided запуск использует 544 shots.</li>
-<li>Pause/resume продолжает canonical run.</li>
-<li>GW source имеет отдельную стоимость preprocessing.</li>
-<li>H — 42 реальных запуска, не заявление о превосходстве warm-start.</li>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2><ul>
+<li>The catalogue covers 89 source files; deferred cards are visible.</li>
+<li>Product state A reproduces <code>(3/16,1/16,9/16,3/16)</code> and initial C=5/4.</li>
+<li><code>rounded_modified</code> and <code>warm_aligned</code> have different signs of beta.</li>
+<li>A full provided run uses 544 shots.</li>
+<li>Pause/resume continues the canonical run.</li>
+<li>The GW source has a separate preprocessing cost.</li>
+<li>H is 42 real runs, not a claim of warm-start superiority.</li>
 </ul>
 </div>
 </div>

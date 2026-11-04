@@ -7802,12 +7802,12 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="NVIDIA-GPU-QAOA">NVIDIA GPU QAOA<a class="anchor-link" href="#NVIDIA-GPU-QAOA">¶</a></h1><p><strong>Версия 0.1.0a6.</strong> Ноутбук проверяет реальный CuPy-путь: диагностику
-устройства, full и pair-представления, CPU/GPU-сравнение при фиксированных
-углах, все пять критериев, семплер, два readout-режима, GPU-RQAOA и небольшую
-GPU-LS задачу.</p>
-<p>GPU-среда не обязательна для импорта пакета. Этот ноутбук должен исполняться
-с установленным CuPy на NVIDIA-машине.</p>
+<h1 id="NVIDIA-GPU-QAOA">NVIDIA GPU QAOA<a class="anchor-link" href="#NVIDIA-GPU-QAOA">¶</a></h1><p><strong>Version 0.1.0rc2.</strong> The notebook exercises the real CuPy path: device
+diagnostics, full and pair representations, CPU/GPU comparison at fixed angles,
+all five criteria, the sampler, both readout modes, GPU-RQAOA and a small GPU-LS
+problem.</p>
+<p>A GPU environment is not required to import the package. This notebook must be
+executed with CuPy installed on an NVIDIA machine.</p>
 </div>
 </div>
 </div>
@@ -7876,7 +7876,7 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\src\QA_max_cut_lib\__ini
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%94%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B0-%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2%D0%B0">Диагностика устройства<a class="anchor-link" href="#%D0%94%D0%B8%D0%B0%D0%B3%D0%BD%D0%BE%D1%81%D1%82%D0%B8%D0%BA%D0%B0-%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2%D0%B0">¶</a></h2>
+<h2 id="Device-diagnostics">Device diagnostics<a class="anchor-link" href="#Device-diagnostics">¶</a></h2>
 </div>
 </div>
 </div>
@@ -7936,8 +7936,8 @@ package: C:\Users\Alexey\PycharmProjects\QA_max_cut_lib\src\QA_max_cut_lib\__ini
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Full-%D0%B8-pair-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F-%D0%BF%D1%80%D0%B8-%D1%84%D0%B8%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%83%D0%B3%D0%BB%D0%B0%D1%85">Full и pair-состояния при фиксированных углах<a class="anchor-link" href="#Full-%D0%B8-pair-%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F-%D0%BF%D1%80%D0%B8-%D1%84%D0%B8%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%83%D0%B3%D0%BB%D0%B0%D1%85">¶</a></h2><p>Pair-режим хранит <code>chi</code>, а не физический <code>psi</code>. Восстановленный полный вектор
-сравнивается с CPU-эталоном.</p>
+<h2 id="Full-and-pair-states-at-fixed-angles">Full and pair states at fixed angles<a class="anchor-link" href="#Full-and-pair-states-at-fixed-angles">¶</a></h2><p>Pair mode stores <code>chi</code>, not the physical <code>psi</code>. The reconstructed full vector is
+compared with the CPU reference.</p>
 </div>
 </div>
 </div>
@@ -7998,7 +7998,7 @@ pair restored error: 2.0816681711721685e-16
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%92%D1%81%D0%B5-%D0%BF%D1%8F%D1%82%D1%8C-%D0%BA%D1%80%D0%B8%D1%82%D0%B5%D1%80%D0%B8%D0%B5%D0%B2">Все пять критериев<a class="anchor-link" href="#%D0%92%D1%81%D0%B5-%D0%BF%D1%8F%D1%82%D1%8C-%D0%BA%D1%80%D0%B8%D1%82%D0%B5%D1%80%D0%B8%D0%B5%D0%B2">¶</a></h2>
+<h2 id="All-five-criteria">All five criteria<a class="anchor-link" href="#All-five-criteria">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8053,7 +8053,7 @@ threshold_probability 0.7 error 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%A1%D0%B5%D0%BC%D0%BF%D0%BB%D0%B5%D1%80-%D0%B8-%D0%BE%D0%B1%D0%B5-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D0%B8-%D0%BF%D0%B0%D1%80%D1%8B">Семплер и обе ориентации пары<a class="anchor-link" href="#%D0%A1%D0%B5%D0%BC%D0%BF%D0%BB%D0%B5%D1%80-%D0%B8-%D0%BE%D0%B1%D0%B5-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D0%B8-%D0%BF%D0%B0%D1%80%D1%8B">¶</a></h2>
+<h2 id="Sampler-and-both-pair-orientations">Sampler and both pair orientations<a class="anchor-link" href="#Sampler-and-both-pair-orientations">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8105,7 +8105,7 @@ threshold_probability 0.7 error 0.0
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="QAOAGPU:-%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5,-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-%D0%B8-readout">QAOAGPU: обучение, корреляции и readout<a class="anchor-link" href="#QAOAGPU:-%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5,-%D0%BA%D0%BE%D1%80%D1%80%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-%D0%B8-readout">¶</a></h2>
+<h2 id="QAOAGPU:-training,-correlations-and-readout">QAOAGPU: training, correlations and readout<a class="anchor-link" href="#QAOAGPU:-training,-correlations-and-readout">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8206,7 +8206,7 @@ resources: {'shots_used': 0, 'training_shots': 0, 'readout_shots': 0, 'objective
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="GPU-RQAOA-%D0%B8-GPU-LS">GPU-RQAOA и GPU-LS<a class="anchor-link" href="#GPU-RQAOA-%D0%B8-GPU-LS">¶</a></h2>
+<h2 id="GPU-RQAOA-and-GPU-LS">GPU-RQAOA and GPU-LS<a class="anchor-link" href="#GPU-RQAOA-and-GPU-LS">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8268,7 +8268,7 @@ resources: {'shots_used': 0, 'training_shots': 0, 'readout_shots': 0, 'objective
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-CPU-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">Сохранение и CPU-анализ<a class="anchor-link" href="#%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8-CPU-%D0%B0%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7">¶</a></h2>
+<h2 id="Saving-and-CPU-analysis">Saving and CPU analysis<a class="anchor-link" href="#Saving-and-CPU-analysis">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8336,7 +8336,7 @@ loaded algorithm: qaoa_gpu
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%D0%98%D1%82%D0%BE%D0%B3">Итог<a class="anchor-link" href="#%D0%98%D1%82%D0%BE%D0%B3">¶</a></h2>
+<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">¶</a></h2>
 </div>
 </div>
 </div>
