@@ -5,7 +5,7 @@
 ## Что проверено
 
 - CPU core/reduction/QAOA/RQAOA/LS/warm-start/fields/mean-field/distributed/
-  incremental/MI/plans/batch/quantized тесты: `217 passed, 1 skipped` (см. validation).
+  incremental/MI/plans/batch/quantized тесты: `218 passed, 1 skipped` (см. validation).
 - Wheel import без CuPy/CUDA/CVXPY/Qiskit; CLI и examples вне `src`.
 - Typed plans: vertex/induced/edge domains и coverage audit.
 - Benchmark297: 297/297 IDs materialized без solver calls.

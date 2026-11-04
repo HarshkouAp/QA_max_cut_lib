@@ -4,6 +4,28 @@
 
 Это ещё не перенос всего исследовательского архива. Сейчас доступны CPU-солверы, `QAOAGPU`, `RQAOAGPU`, `LSRQAOAGPU`, `QAOAInQAOACPU`, `QAOAInQAOAGPU`, `GoemansWilliamsonCPU`, `SimulatedAnnealingCPU`, `ExactBlockRefiner`, `RefinedSolver`, два построителя подграфов и `GraphReducer`. Классические эталоны GW/SA работают на CPU; CVXPY/SCS и dimod/dwave-samplers являются отдельным профилем `classical`. Laboratory и control-point resume остаются следующими этапами; общие серии экспериментов и `ParallelismProfiler` реализованы в `0.1.0a9`.
 
+## Публичный быстрый старт
+
+Минимальный воспроизводимый пример: точный перебор, QAOA с отрицательным
+ребром, 128 измерений и распределение по значениям разреза.
+
+```bash
+python -m pip install ".[cpu]"
+python examples/public_quickstart.py
+```
+
+| Величина | Значение |
+| --- | ---: |
+| Точный оптимум | 3.500000 |
+| Ожидаемый разрез QAOA | 3.044365 |
+| Лучший разрез за 128 измерений | 3.500000 |
+| Вероятность оптимума за одно измерение | 0.805755 |
+
+![Знаковый граф и распределение QAOA](docs/_static/signed-max-cut.svg)
+
+Подробный разбор формул и ограничений — в [главе о взвешенном Max-Cut](docs/weighted_max_cut.rst);
+инструкции по публичной сборке — в [PUBLISHING_RU.md](docs/PUBLISHING_RU.md).
+
 ## Checkpoint/resume
 
 ```python

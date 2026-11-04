@@ -1,7 +1,7 @@
 QA_max_cut_lib 0.1.0rc2
 ========================
 
-Четырнадцатый этап научной библиотеки взвешенного Max-Cut.
+Версия **0.1.0rc2** научной библиотеки взвешенного Max-Cut.
 Реализованы CPU-солверы, RQAOA, LS-RQAOA, NVIDIA GPU QAOA, QAOA-in-QAOA,
 GW/SA, точное улучшение блоков, ExperimentRunner, ParallelismProfiler и
 checkpoint/resume `QAOACPU`, Laboratory-каталог и warm-start CPU, warm-start RQAOA, условный QAOA с фиксированными внешними спинами и environment LS-RQAOA.
@@ -22,12 +22,14 @@ CVaR, Gibbs, Best-of-K и Threshold Probability.
    :maxdepth: 2
 
    api
+   weighted_max_cut
 
 Руководства
 -----------
 
 * :download:`Все конфигурационные поля, аргументы и атрибуты <API.md>`
 * :download:`Математические определения и численные ограничения <MATHEMATICS.md>`
+* :download:`Публикация и проверка публичной сборки <PUBLISHING_RU.md>`
 * :download:`Установка CPU и NVIDIA-профиля <INSTALLATION.md>`
 * :download:`Карта архитектуры и состояния переноса <ARCHITECTURE_MAP_RU.md>`
 * :download:`Рабочее окружение проекта <PROJECT_SETUP_RU.md>`
