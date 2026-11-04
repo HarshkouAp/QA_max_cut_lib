@@ -1,19 +1,19 @@
-# Проверка сборки 0.1.0a2
+# Build verification 0.1.0a2
 
-**Дата:** 2 ноября 2026 года.
-**Этап:** 02 — точное ядро парных редукций Max-Cut → Изинг.
-**Платформа:** Windows 10 (10.0.19043), 4 физических / 8 логических ядер,
-15.7 ГБ RAM.
-**Python:** 3.12.14 в отдельном окружении `.venv-stage02`.
+**Date:** 2 November 2026.
+**Stage:** 02 — exact core of pairwise Max-Cut → Ising reductions.
+**Platform:** Windows 10 (10.0.19043), 4 physical / 8 logical cores,
+15.7 GB RAM.
+**Python:** 3.12.14 in a separate environment `.venv-stage02`.
 
-**Входные материалы:** SHA-256 `QA_max_cut_lib_0.1.0a1.zip` —
+**Input artifacts:** SHA-256 of `QA_max_cut_lib_0.1.0a1.zip` —
 `c9b4f7ed86ecf39371957f93ba9c9e8521577c920ac8942f6da5e9ce10b8ba64`;
-SHA-256 архитектуры — `3252449e29026503de050852486b4ccb15578d5e3d4d7602e57f1aa32db39ee7`.
-Оба значения совпали с указанными в задании.
+SHA-256 of the architecture — `3252449e29026503de050852486b4ccb15578d5e3d4d7602e57f1aa32db39ee7`.
+Both values matched those stated in the assignment.
 
-## Окружение
+## Environment
 
-| Пакет | Версия |
+| Package | Version |
 |---|---|
 | NumPy | 2.5.4 |
 | SciPy | 1.18.1 |
@@ -29,10 +29,11 @@ SHA-256 архитектуры — `3252449e29026503de050852486b4ccb15578d5e3d4d
 | nbformat / nbclient | 5.11.1 / 0.11.0 |
 | ipykernel | 7.4.0 |
 
-CuPy в `.venv-stage02` отсутствует: этап 02 — CPU-этап. Рабочее окружение
-`.venv` с CuPy 14.2.0 существует отдельно и для этих проверок не использовалось.
+CuPy is absent from `.venv-stage02`: stage 02 is a CPU stage. The working
+environment `.venv` with CuPy 14.2.0 exists separately and was not used for
+these checks.
 
-## Выполненные команды
+## Commands executed
 
 ```bash
 uv venv --python 3.12 .venv-stage02
@@ -42,81 +43,84 @@ uv pip install --python .venv-stage02/Scripts/python.exe -e ".[cpu,notebooks,dev
 .venv-stage02/Scripts/python.exe -m sphinx -W -b html docs docs/_build/html
 ```
 
-## Автоматические проверки
+## Automated checks
 
-**56 passed, 0 failed.** Прежние 42 проверки сохранены; добавлены проверки
-ядра редукций: перевод графа в Изинг, оба знака ограничения, общий Изинг с
-полями, несмежные пары, компенсация рёбер, цепочки, отрицательные номера и
-изоляты, предельные задачи, JSON-round-trip, ошибочный ввод и метрики события.
-Эталонные значения считаются прямым суммированием разреза или полинома, а не
-вызовом проверяемого редуктора.
+**56 passed, 0 failed.** The previous 42 checks are preserved; checks for the
+reduction core were added: graph-to-Ising conversion, both signs of the
+constraint, a general Ising with fields, non-adjacent pairs, edge
+compensation, chains, negative indices and isolates, limit cases,
+JSON round-trip, invalid input and event metrics. Reference values are
+computed by direct summation of the cut or of the polynomial, not by calling
+the reducer under test.
 
-## Ноутбуки
+## Notebooks
 
-| Ноутбук | Кодовых ячеек | Изображений | Ошибок |
+| Notebook | Code cells | Images | Errors |
 |---|---:|---:|---:|
 | `01_quickstart.ipynb` | 8 | 5 | 0 |
 | `02_current_api_guide.ipynb` | 14 | 6 | 0 |
 | `03_reduction_core.ipynb` | 8 | 0 | 0 |
 
-Все три ноутбука выполнены сверху вниз в чистом ядре `qa-stage02`, которое
-указывает на `.venv-stage02`. Ноутбук 03 использует только реально
-реализованные классы и сохраняет снимок состояния в `notebooks/_outputs/`.
+All three notebooks ran top to bottom in the clean kernel `qa-stage02`, which
+points to `.venv-stage02`. Notebook 03 uses only classes that are actually
+implemented and saves a state snapshot to `notebooks/_outputs/`.
 
-## Сборка и установка wheel
+## Wheel build and installation
 
-Собраны:
+Built:
 
 - `dist/qa_max_cut_lib-0.1.0a2-py3-none-any.whl`;
 - `dist/qa_max_cut_lib-0.1.0a2.tar.gz`.
 
-Wheel установлен в отдельное чистое окружение `.venv-wheelcheck` без ссылки на
-`src`. Проверка выполнена из каталога вне проекта:
+The wheel was installed into a separate clean environment `.venv-wheelcheck`
+without a link to `src`. The check was run from a directory outside the
+project:
 
-- `QA_max_cut_lib.__file__` находится в `site-packages` этого окружения;
+- `QA_max_cut_lib.__file__` resolves inside `site-packages` of that
+  environment;
 - `__version__ == "0.1.0a2"`;
-- контрольный пример редукции даёт `fixed_energy=-2`, `cut_offset=5`,
-  `ising_constant=-6`, восстановленную энергию `-7`;
-- `ExactCPU` и `QAOACPU` работают, `result["package_version"]="0.1.0a2"`;
-- JSON/NPY-экспорт и чтение выбранного результата работают.
+- the reference reduction example yields `fixed_energy=-2`, `cut_offset=5`,
+  `ising_constant=-6`, restored energy `-7`;
+- `ExactCPU` and `QAOACPU` work, `result["package_version"]="0.1.0a2"`;
+- JSON/NPY export and reading of the selected result work.
 
-## Сверка с исследовательским архивом
+## Cross-check against the research archive
 
-Формулы `w'_{vk}=w_{vk}+σw_{uk}` и `Δb=(1-σ)/2·Σw_{uk}` совпадают с
-`Solvers/AnalyticalRQAOA.py::_reduce_graph` (строки 215–237): там также
-обновляется вес сохранённой вершины и накапливается `offset` по всем
-инцидентным рёбрам. Численного запуска legacy-кода не выполнялось; эта
-сверка структурная, а не заявление о численной эквивалентности всех
-исторических реализаций.
+The formulas `w'_{vk}=w_{vk}+σw_{uk}` and `Δb=(1-σ)/2·Σw_{uk}` agree with
+`Solvers/AnalyticalRQAOA.py::_reduce_graph` (lines 215–237): there the weight
+of the retained vertex is also updated and `offset` is accumulated over all
+incident edges. The legacy code was not run numerically; this check is
+structural, not a claim of numerical equivalence of all historical
+implementations.
 
-## Главный контрольный пример
+## Main control example
 
-Исходный граф: вершины `[10, 30, 80, 101]`, изолят `101`, рёбра
-`(10,30,2)`, `(10,80,3)`, `(30,80,5)`. Удалена вершина `10`, сохранена `30`,
-`σ=-1`.
+Source graph: vertices `[10, 30, 80, 101]`, isolate `101`, edges
+`(10,30,2)`, `(10,80,3)`, `(30,80,5)`. Vertex `10` was removed, `30` was
+retained, `σ=-1`.
 
-| Величина | Значение |
+| Quantity | Value |
 |---|---:|
-| Рабочий граф после шага | `[30, 80, 101]`, ребро `(30,80,2)` |
-| Накопленный сдвиг `b` | 5 |
-| Полная константа Изинга `c` | −6 |
+| Working graph after the step | `[30, 80, 101]`, edge `(30,80,2)` |
+| Accumulated shift `b` | 5 |
+| Full Ising constant `c` | −6 |
 | `fixed_energy` | −2 |
-| `expected_fixed_energy` при `c_uv=-0.6` | −1.6 |
+| `expected_fixed_energy` at `c_uv=-0.6` | −1.6 |
 | `ising_constant_delta` | −1 |
-| Восстановленное решение | `{10:-1, 30:+1, 80:-1, 101:+1}` |
+| Restored solution | `{10:-1, 30:+1, 80:-1, 101:+1}` |
 | `C_original` / `E_original` | 7 / −7 |
 
-Равенство `E_before(s_10=-s_30, s') = E_after(s')` проверено для всех
-8 назначений остатка.
+The equality `E_before(s_10=-s_30, s') = E_after(s')` was verified for all
+8 assignments of the remainder.
 
-## Ограничения проверки
+## Verification limitations
 
-- GPU, многопоточность и CUDA не использовались и не проверялись на этом
-  этапе.
-- `num_treads > 1` по-прежнему отклоняется.
-- Checkpoint/resume оптимизатора не реализован; снимок `ReductionState` —
-  математическое состояние, а не checkpoint.
-- RQAOA, LS-RQAOA, выбор пары и источники корреляций не реализованы.
-- Ноутбуки используют MathText; настоящий LaTeX-режим не входит в приёмку
-  этапа 02.
-- Формальная сертификация ASD-STE100 не выполнялась.
+- GPU, multithreading and CUDA were not used and were not verified at this
+  stage.
+- `num_treads > 1` is still rejected.
+- Optimizer checkpoint/resume is not implemented; a `ReductionState` snapshot
+  is a mathematical state, not a checkpoint.
+- RQAOA, LS-RQAOA, pair selection and correlation sources are not
+  implemented.
+- Notebooks use MathText; a real LaTeX mode is outside stage 02 acceptance.
+- No formal ASD-STE100 certification was performed.

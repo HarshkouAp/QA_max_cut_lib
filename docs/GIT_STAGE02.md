@@ -1,27 +1,27 @@
-# Git: этап 02
+# Git: stage 02
 
-Базовая точка: `8dc86ed` (окружение и документация перед этапом 02).
+Base point: `8dc86ed` (environment and documentation before stage 02).
 
-## Коммиты
+## Commits
 ```
 5d7cd11 Record input artifact hashes in stage 02 report
 457f20e Add stage 02 git summary and patch
 1b5833b Stage 02: add exact Max-Cut to Ising reduction core (0.1.0a2)
 ```
 
-Основной diff `docs/STAGE02_DIFF.patch` соответствует коммиту `1b5833b`
-(исходный код, тесты, документация и выполненные ноутбуки). Коммиты
-`457f20e` и `5d7cd11` добавляют только отчётные материалы.
+The main diff `docs/STAGE02_DIFF.patch` corresponds to commit `1b5833b`
+(source code, tests, documentation and executed notebooks). Commits `457f20e`
+and `5d7cd11` add reporting material only.
 
-## Изменённые файлы
+## Changed files
 ```
  .gitignore                                       |    1 +
  README.md                                        |   45 +-
  docs/API.md                                      |  127 +-
- docs/ARCHITECTURE_MAP_RU.md                      |   16 +-
+ docs/ARCHITECTURE_MAP.md                      |   16 +-
  docs/MATHEMATICS.md                              |   80 +
  docs/MIGRATION_STATUS.md                         |   65 +-
- docs/PROJECT_SETUP_RU.md                         |   17 +-
+ docs/PROJECT_SETUP.md                         |   17 +-
  docs/VALIDATION.md                               |    3 +
  docs/VALIDATION_0.1.0a2.md                       |  117 +
  docs/VALIDATION_LOCAL.md                         |   19 +-
@@ -50,4 +50,4 @@
  32 files changed, 11177 insertions(+), 199 deletions(-)
 ```
 
-Полный diff: `docs/STAGE02_DIFF.patch`.
+Full diff: `docs/STAGE02_DIFF.patch`.

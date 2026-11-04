@@ -1,53 +1,55 @@
-# Проверка 0.1.0a10
+# Verification 0.1.0a10
 
-Дата: 2 ноября 2026 года.
+Date: 2 November 2026.
 
-## Фактическая база
+## Actual base
 
-- Python 3.12.14, Windows 10; CPU 4 физических / 8 логических ядер;
+- Python 3.12.14, Windows 10; CPU 4 physical / 8 logical cores;
 - NumPy 2.5.4, SciPy 1.18.1, CVXPY 1.9.3, SCS 3.3.1,
   `dwave-samplers 1.8.0`, `dimod 0.12.23`;
-- GPU-профиль: NVIDIA GeForce RTX 3050 Laptop, CC 8.6, 4096 MiB,
-  CuPy 14.2.0, драйвер 591.74;
-- wheel `0.1.0a10` установлен в `.venv` и `.venv-wheelcheck` вне `src`.
-  `examples/checkpoint_resume.py` и CLI `tools.checkpoints` запущены из
-  установленного wheel.
+- GPU profile: NVIDIA GeForce RTX 3050 Laptop, CC 8.6, 4096 MiB,
+  CuPy 14.2.0, driver 591.74;
+- wheel `0.1.0a10` installed into `.venv` and `.venv-wheelcheck` outside
+  `src`. `examples/checkpoint_resume.py` and the `tools.checkpoints` CLI were
+  run from the installed wheel.
 
-## Обязательные проверки
+## Mandatory checks
 
 ```text
 CPU: 151 passed, 1 skipped, 1 warning
 GPU: 10 passed
-Sphinx -W: успешно
+Sphinx -W: success
 wheel: QA_max_cut_lib-0.1.0a10-py3-none-any.whl
 sdist: QA_max_cut_lib-0.1.0a10.tar.gz
 ```
 
-## A. QAOA/ADAM pause и resume
+## A. QAOA/ADAM pause and resume
 
-Контрольный p=1, `max_steps=4`, `M_train=32`, `M_readout=64`, `B=704`.
+Control p=1, `max_steps=4`, `M_train=32`, `M_readout=64`, `B=704`.
 
-| Точка | iterations | known training | held readout | available |
+| Point | iterations | known training | held readout | available |
 |---|---:|---:|---:|---:|
-| pause после 2 | 2 | 320 | 64 | 320 |
+| pause after 2 | 2 | 320 | 64 | 320 |
 | resumed completed | 4 | 640 | 0 | 0 |
 
-После паузы `status="paused"`, `readout_completed=false`; `inspect_checkpoint`
-показывает `phase="training"` и `next_operation={"optimizer_iteration": 3}`.
-`restore(path).resume()` в новом объекте дал:
-- тот же canonical `run_id`;
-- одинаковые `optimal_angles`, полное назначение, optimizer history и
+After the pause `status="paused"`, `readout_completed=false`;
+`inspect_checkpoint` shows `phase="training"` and
+`next_operation={"optimizer_iteration": 3}`.
+`restore(path).resume()` on a new object produced:
+- the same canonical `run_id`;
+- identical `optimal_angles`, complete assignment, optimizer history and
   `objective_evaluations=20`;
-- финальный `shots_used=704`.
+- final `shots_used=704`.
 
-Непрерывный a10 и resumed a10 совпали для p=1/p=2, exact и shots, при
-cvar/mean и при early gradient stop. `best_evaluation_id` сохраняется отдельно.
-Проверка выполнена на реальном `QAOACPU`, не на JSON round-trip.
+Continuous a10 and resumed a10 agreed for p=1/p=2, exact and shots, with
+cvar/mean and with early gradient stop. `best_evaluation_id` is stored
+separately. The check was performed on a real `QAOACPU`, not on a JSON
+round-trip.
 
-## B. Durable journal и потерянная попытка
+## B. Durable journal and a lost attempt
 
-После pause (known=320, held=64) в журнал добавлен BEGIN для третьей
-итерации с upper=160 без COMMIT.
+After the pause (known=320, held=64) a BEGIN for the third iteration with
+upper=160 was written to the journal without a COMMIT.
 
 ```text
 known_spent=544
@@ -58,45 +60,46 @@ optimizer_steps=3
 status=stopped
 ```
 
-Четвёртая итерация не помещается. Повторное reconciliation после RESOLVE не
-удваивает 160. Число 704 — консервативный charge, не доказанное физическое
-число shots неизвестной попытки. Readout token резервируется один раз; повтор
-completed generation не делает новые измерения.
+The fourth iteration does not fit. Repeated reconciliation after RESOLVE does
+not double the 160. The number 704 is a conservative charge, not a proven
+physical number of shots of the unknown attempt. The readout token is reserved
+once; repeating a completed generation does not make new measurements.
 
-## C. Readout и max_steps
+## C. Readout and max_steps
 
-- `max_steps=0`: ноль optimizer steps, initial angles сохраняются.
-- `gradient_tolerance`: phase `training_done`, update не выполняется повторно.
-- checkpoint после `readout_done`: `resume()` не запускает solver и не
-  добавляет generation.
-- новый `solve()` на восстановленном объекте имеет новый `run_id`.
+- `max_steps=0`: zero optimizer steps, initial angles are preserved.
+- `gradient_tolerance`: phase `training_done`, the update is not performed
+  again.
+- checkpoint after `readout_done`: `resume()` does not start the solver and
+  does not add a generation.
+- a new `solve()` on a restored object has a new `run_id`.
 
-## D–G. Формат, блокировка, повреждение
+## D–G. Format, locking, corruption
 
 - `json_npy_v1`: manifest + state.json + `theta/moment/variance/best_theta`
-  `.npy`; SHA-256, dtype/shape/size проверяются до использования.
-- `latest.json` обновляется после immutable generation; старые generation
-  остаются.
-- Подмена/порча нового payload даёт `CheckpointCorrupt`; старая generation
-  читается.
-- Второй writer одного managed run получает `CheckpointLocked`; после release
-  lock можно взять снова.
-- Копия generation tree в другой каталог восстанавливается; путь
-  `checkpoint.path` пересчитывается от фактического дерева.
+  `.npy`; SHA-256, dtype/shape/size are checked before use.
+- `latest.json` is updated after an immutable generation; older generations
+  remain.
+- Substitution or corruption of a new payload raises `CheckpointCorrupt`; the
+  old generation is still readable.
+- A second writer of the same managed run gets `CheckpointLocked`; after
+  release the lock can be taken again.
+- A copy of the generation tree in another directory is restored; the
+  `checkpoint.path` is recomputed from the actual tree.
 
 ## Capability matrix
 
-| Компонент | a10 |
+| Component | a10 |
 |---|---|
-| `QAOACPU` | полный codec: ADAM iteration, training_done, readout_done |
-| `QAOAGPU` | отклоняется; нужен переносимый CuPy sampler protocol |
-| `RQAOACPU`, `RQAOAGPU` | отклоняется; source/reduction codec не реализован |
-| `LSRQAOACPU`, `LSRQAOAGPU` | отклоняется; child task codec не реализован |
-| `QAOAInQAOACPU`, `QAOAInQAOAGPU` | отклоняется; level/local-pattern codec не реализован |
-| `ExactCPU`, `GW`, `SA`, `Refiner`, `Refined` | отклоняются явно |
-| `ExperimentRunner` | completed reuse работает; paused child codec не заявлен |
+| `QAOACPU` | full codec: ADAM iteration, training_done, readout_done |
+| `QAOAGPU` | rejected; a portable CuPy sampler protocol is required |
+| `RQAOACPU`, `RQAOAGPU` | rejected; source/reduction codec not implemented |
+| `LSRQAOACPU`, `LSRQAOAGPU` | rejected; child task codec not implemented |
+| `QAOAInQAOACPU`, `QAOAInQAOAGPU` | rejected; level/local-pattern codec not implemented |
+| `ExactCPU`, `GW`, `SA`, `Refiner`, `Refined` | rejected explicitly |
+| `ExperimentRunner` | completed reuse works; paused child codec not claimed |
 
-## Stage 09 повторно проверен на a10
+## Stage 09 re-verified on a10
 
 ```text
 small series: 56 planned / 56 valid / 0 failed; 2 exact refs
@@ -105,13 +108,13 @@ concurrent batch: 4 valid, 0 failed
 mixed CPU/GPU: 3 valid, qaoa_gpu completed, gpu_synchronized=true
 ```
 
-## Известные ограничения
+## Known limitations
 
-- RQAOA/LS/hierarchy/Exact/GW/SA/refiner resume не реализованы; включение
-  checkpoint для них отклоняется.
-- GPU checkpoint не заявлен; CuPy random state не сериализуется как NumPy.
-- Нет distributed ownership и exactly-once физических измерений.
-- Нет incremental/dedup generations; retention только `keep_all`.
-- Campaign paused child codec не реализован; завершённые trials
-  переиспользуются.
-- Checkpoint I/O и recovery rebuild не входят в active compute time.
+- RQAOA/LS/hierarchy/Exact/GW/SA/refiner resume are not implemented; enabling
+  checkpoint for them is rejected.
+- GPU checkpoint is not claimed; CuPy random state is not serialised like
+  NumPy.
+- There is no distributed ownership and no exactly-once physical measurement.
+- No incremental/dedup generations; retention is `keep_all` only.
+- Campaign paused child codec is not implemented; completed trials are reused.
+- Checkpoint I/O and recovery rebuild are not part of active compute time.

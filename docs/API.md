@@ -1,8 +1,61 @@
-# API версии 0.1.0rc2
+# API reference — QA_max_cut_lib 0.1.0rc2
 
-Все конфигурации ниже — обычные JSON-совместимые Python `dict`; файл читается через `tools.load_json(path)`. `solve()` возвращает словарь решения. `algorithm.result` возвращает JSON-совместимый словарь, а не текстовую строку. Для текстового JSON применяется стандартный `json.dumps`.
+This page is the exact reference for the public Python API of
+`QA_max_cut_lib` 0.1.0rc2: classes, functions, configuration fields,
+defaults, constraints, exceptions, result fields, and data formats. Use it
+when a signature or a default matters. Conceptual and mathematical
+explanations are linked at the end of each part.
 
-## Публичные импорты и жизненный цикл
+Every configuration is an ordinary JSON-compatible Python `dict`; a JSON
+file is read with `tools.load_json(path)`. `solve()` returns a spin
+dictionary `dict[int, int]`. `algorithm.result` returns a JSON-compatible
+`dict`, never a formatted string. Textual JSON is produced with the
+standard `json.dumps`.
+
+## Minimal call
+
+```python
+from QA_max_cut_lib import ExactCPU, WeightedGraph
+
+graph = WeightedGraph(
+    edges=[(10, 30, 1.5), (10, 80, 2.0), (30, 80, -0.5)],
+    nodes=[10, 30, 80, 101],
+)
+
+solver = ExactCPU()
+solution = solver.solve(graph)       # {10: 1, 30: -1, 80: -1, 101: 1}
+cut = graph.cut_value(solution)      # 3.5
+result = solver.result               # JSON-compatible dict
+last_run = solver.last_run           # independent RunRecord
+```
+
+`solution` contains one integer spin `+1` or `-1` for every original node
+label, including isolated nodes. `result["cut_value"]` is `C(s)`;
+`result["solution_energy"]` is `-C(s)`.
+
+## Reading this reference
+
+- A configuration object is a closed schema. Unknown fields raise
+  `ValueError` unless a table explicitly says otherwise.
+- Types are written as Python types. `mapping` means any `Mapping`;
+  `array_like` means anything accepted by `numpy.asarray`.
+- Integer fields reject `bool`, even though `bool` is an `int` subclass.
+- The spelling `num_treads` is part of the public API and is used
+  everywhere, including result fields.
+- A value of `None` means "not set" or "not applicable", as stated by the
+  field description. It is not a zero and not an empty table.
+
+| Exception | Raised for |
+|---|---|
+| `TypeError` | A Python type is wrong: non-integer label, boolean weight, non-mapping, non-`WeightedGraph` input |
+| `ValueError` | A value is syntactically valid but not allowed: unknown field, out-of-range number, duplicate label, spin not `±1`, unknown solver type |
+| `ArithmeticError` | A newly computed constant, field, coupling, offset, or reduction metric is not finite |
+| `RuntimeError` | The run state is wrong (an active run, a missing resume state) or a required backend is unavailable |
+| `KeyError` | `WeightedGraph.remove_edge` names an absent edge |
+| `FileNotFoundError`, `FileExistsError`, `NotADirectoryError` | Export destination problems |
+| `CheckpointError` | Base class for checkpoint corruption, incompatibility, and lock errors |
+
+## Public imports and run lifecycle
 
 ```python
 from QA_max_cut_lib import (
@@ -25,48 +78,107 @@ from QA_max_cut_lib.solvers.objectives import validate_objective, objective_valu
 from QA_max_cut_lib._version import __version__
 ```
 
-`SolverFactory.available()` возвращает `("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu", "qaoa_gpu", "rqaoa_gpu", "ls_rqaoa_gpu", "qaoa_in_qaoa_cpu", "qaoa_in_qaoa_gpu", "gw_cpu", "simulated_annealing_cpu", "refined")`. `from_config(config)` выбирает класс по `config["type"]`; неизвестный тип — `ValueError`. Фабрика не выполняет расчёт.
+`SolverFactory.available()` returns the tuple
 
-Общий конструктор солвера — `ClassName(config=None)`. Он копирует конфигурацию. `solve(graph, *, report=None, logs=None, num_treads=None)` принимает новый граф и возвращает `dict[int, int]`. Аргументы уровня вывода и числа потоков переопределяют конфигурацию данного запуска. Один экземпляр рассчитан на один активный запуск. Для одновременных расчётов нужны разные экземпляры.
+```text
+("exact_cpu", "qaoa_cpu", "rqaoa_cpu", "ls_rqaoa_cpu", "qaoa_gpu",
+ "rqaoa_gpu", "ls_rqaoa_gpu", "qaoa_in_qaoa_cpu", "qaoa_in_qaoa_gpu",
+ "gw_cpu", "simulated_annealing_cpu", "refined",
+ "laboratory.warm_start_qaoa_cpu", "laboratory.warm_start_rqaoa_cpu",
+ "laboratory.conditional_qaoa_cpu",
+ "laboratory.environment_ls_rqaoa_cpu",
+ "laboratory.block_mean_field_qaoa_cpu",
+ "laboratory.distributed_ls_rqaoa_cpu", "laboratory.qaoa_mi_cpu",
+ "laboratory.incremental_ls_rqaoa_cpu", "laboratory.batch_ls_rqaoa_cpu",
+ "laboratory.quantized_qaoa_cpu", "laboratory.rqaoa_mi_cpu")
+```
 
-Повторный `solve` заново создаёт RNG из настроенного seed, очищает предыдущий результат в солвере и не использует прежнее состояние. Явного warm start в этой версии нет. `last_run` — независимый снимок; сохраните его в список для собственной истории. После изменения графа прежний снимок остаётся прежним. Параллельно изменять переданный граф во время создания снимка не следует.
+`SolverFactory.from_config(config)` selects the class by `config["type"]`.
+An unknown type raises `ValueError` that names the requested type, the
+package version, and the available tuple. The factory performs no
+calculation.
 
-До первого запуска `result` и `last_run` равны `None`. Необязательные научные атрибуты до расчёта равны `None`. Ошибка предварительной проверки не оставляет прежний результат как новый. Ошибка вычисления создаёт доступный `last_run` со статусом `failed` и повторно возбуждает исключение. Ошибка экспорта после успешного расчёта оставляет научный результат доступным.
+The common constructor is `ClassName(config=None)`. It copies the
+configuration and validates it. If `config["type"]` is present, it must
+match the class. The common run method is
+
+```python
+solve(graph, *, report=None, logs=None, num_treads=None, control=None)
+```
+
+It accepts a `WeightedGraph`, returns `dict[int, int]`, and does not modify
+the input graph. `report`, `logs`, and `num_treads` override the stored
+configuration for that run only. `control` must be a `RunControl`
+(`TypeError` otherwise) and is accepted only by checkpoint-capable classes
+(`ValueError` otherwise). One solver instance supports one active run;
+starting a second concurrent call raises `RuntimeError`. Use separate
+instances for concurrent calculations.
+
+A repeated `solve` creates a fresh RNG from the configured `seed`, clears
+the previous result in the solver, and does not reuse prior state. There
+is no explicit warm start through `solve()`. `last_run` is an independent
+snapshot; keep it in your own list if you need a run history. A later
+graph change does not alter an existing snapshot. Do not mutate the input
+graph concurrently while the snapshot is created.
+
+Before the first run, `result` and `last_run` are `None`, and the optional
+scientific attributes in `BaseSolver.optional_fields` read as `None`.
+Once validation of a run starts, the previous record is discarded; a
+validation error therefore leaves `result` as `None`. A computation error
+produces an available `last_run` with `status="failed"`,
+`termination_reason` equal to the exception class name, an `error`
+message, and re-raises the exception. An export error after a successful
+calculation leaves the scientific result available.
+
+See also: [Quickstart](QUICKSTART.md); the repository-level
+``CONFIGURATION.md`` describes the configuration workflow.
 
 ## WeightedGraph
 
-Сигнатура: `WeightedGraph(edges=(), nodes=())`.
+Signature: `WeightedGraph(edges=(), nodes=())`.
 
-| Аргумент/атрибут | Тип | Смысл |
+| Argument or attribute | Type | Meaning |
 |---|---|---|
-| `edges` | iterable троек `(u,v,w)` | Явные конечные действительные веса |
-| `nodes` | iterable целых | В том числе изолированные вершины; исходный порядок сохраняется |
-| `.nodes` | tuple[int] | Порядок внешних меток; метки с пропусками и отрицательные допустимы |
-| `.edges` | tuple троек | Каждое неориентированное ребро один раз |
-| `.version` | int | Счётчик операций изменения экземпляра |
-| `len(graph)` | int | Число вершин |
+| `edges` | iterable of `(u, v, w)` | Explicit finite real weights |
+| `nodes` | iterable of `int` | Labels, including isolated nodes; insertion order is preserved |
+| `.nodes` | `tuple[int]` | External labels in fixed order; gaps and negative labels are allowed |
+| `.edges` | `tuple` of triples | Each undirected edge exactly once |
+| `.version` | `int` | Number of mutations of this instance |
+| `len(graph)` | `int` | Number of vertices |
 
-Булевы метки, петли, дубликаты меток в `nodes`, повторные неориентированные рёбра конструктора, NaN/Inf и булевы веса отклоняются. Отрицательный и нулевой вес допустимы. Ребро нулевого веса хранится как ребро и учитывается в структурной статистике; отсутствие ребра — отдельный случай.
+Boolean labels, self-loops, duplicate labels in `nodes`, duplicate
+undirected edges in the constructor, NaN/Inf weights, and boolean weights
+are rejected. Negative and zero weights are allowed. A zero-weight edge is
+stored as an edge and counted in structural statistics; an absent edge is a
+different case.
 
-| Метод | Возвращает | Действие |
+| Method | Returns | Action |
 |---|---|---|
-| `add_node(node)` | None | Добавляет отсутствующую вершину |
-| `set_weight(u,v,weight)` | None | Добавляет/обновляет ребро и отсутствующие концы |
-| `remove_edge(u,v)` | None | Удаляет ребро; концы сохраняются; отсутствующее ребро — KeyError |
-| `weight(u,v)` | float | Вес ребра либо 0 для отсутствующей пары |
-| `cut_value(solution)` | float | C(s) по рёбрам; проверяет точное совпадение вершин и целые спины ±1 |
-| `subgraph(nodes)` | WeightedGraph | Индуцированный подграф с заданным порядком исходных меток |
-| `snapshot()` | dict | Взвешенный снимок, версия, рецепт, SHA-256 fingerprint |
-| `from_snapshot(data)` | WeightedGraph | Восстановление снимка с проверкой fingerprint |
-| `copy()` | WeightedGraph | Независимая копия |
+| `add_node(node)` | `None` | Adds a missing vertex |
+| `set_weight(u, v, weight)` | `None` | Adds or updates an edge and any missing endpoints |
+| `remove_edge(u, v)` | `None` | Removes an edge; endpoints remain; an absent edge raises `KeyError` |
+| `weight(u, v)` | `float` | Edge weight, or `0.0` for an absent pair |
+| `cut_value(solution)` | `float` | `C(s)` by direct edge summation; checks the exact vertex set and integer spins `±1` |
+| `subgraph(nodes)` | `WeightedGraph` | Induced subgraph with the requested original-label order |
+| `snapshot()` | `dict` | Weighted snapshot, `version`, `recipe`, and SHA-256 `fingerprint` |
+| `from_snapshot(data)` | `WeightedGraph` | Restores a snapshot and verifies `fingerprint` when present |
+| `copy()` | `WeightedGraph` | Independent copy |
 
-Fingerprint учитывает содержимое задачи (метки, пары, веса), а не порядок вставки. Порядок отдельно фиксируется в `node_order`; его необходимо учитывать при интерпретации состояний и корреляций.
+`cut_value` raises `ValueError` if the solution does not contain every node
+exactly once, if a spin is not an integer `+1` or `-1`, or if the summed
+cut is not finite.
 
-## Редукция Max-Cut и Изинга
+The fingerprint covers task content (labels, pairs, weights), not insertion
+order. Insertion order is recorded separately in `node_order`; use that
+order when interpreting state-vector bits and correlation matrices.
 
-Ядро не выбирает корреляции и пару. Оно принимает явное ограничение
-`s_removed = sign * s_retained` и выполняет точное алгебраическое
-преобразование. Исходный `WeightedGraph` не изменяется.
+See also: [Concepts](CONCEPTS.md).
+
+## Reduction core: Max-Cut and Ising
+
+The core does not choose a correlation or a pair. It accepts an explicit
+constraint `s_removed = sign * s_retained` and performs the exact algebraic
+transformation. The original `WeightedGraph` is never modified.
 
 ```python
 from QA_max_cut_lib import GraphReducer, IsingProblem
@@ -80,118 +192,137 @@ snapshot = reducer.snapshot(state)
 restored_state = reducer.from_snapshot(snapshot)
 ```
 
-`GraphReducer` не хранит состояние. Все изменяемые данные находятся в
-`ReductionState`. Один объект `ReductionState` описывает один рабочий процесс.
-Для независимых процессов нужны разные состояния.
+`GraphReducer` holds no state. All mutable data lives in `ReductionState`.
+One `ReductionState` describes one working process; independent processes
+need separate states.
 
 ### IsingProblem
 
-Сигнатура: `IsingProblem(constant=0.0, fields=None, couplings=None, nodes=())`.
+Signature: `IsingProblem(constant=0.0, fields=None, couplings=None, nodes=())`.
 
-| Аргумент/атрибут | Тип | Смысл |
+The energy convention is
+
+```text
+E(s) = c + sum_i h_i s_i + sum_{i<j} J_ij s_i s_j.
+```
+
+| Argument or attribute | Type | Meaning |
 |---|---|---|
-| `constant` | float | Полная константа `c`; не сдвиг Max-Cut |
-| `fields` | mapping int → float | Локальные поля `h_i`; отсутствующее поле равно 0 |
-| `couplings` | mapping (int,int) → float | Пары `J_ij`, каждая неориентированная пара один раз |
-| `nodes` | iterable int | Все вершины, включая изолированные; порядок сохраняется |
-| `.nodes` | tuple[int] | Порядок вершин |
-| `.fields` | dict[int,float] | Только ненулевые поля |
-| `.couplings` | dict[(int,int),float] | Только ненулевые пары |
-| `.edge_count` | int | Число ненулевых пар |
-| `.sum_abs_couplings` | float | Сумма модулей ненулевых пар |
-| `.energy(solution)` | float | Прямая сумма полинома для полного назначения |
+| `constant` | `float` | Full constant `c`; not a Max-Cut offset |
+| `fields` | mapping `int -> float` | Local fields `h_i`; a missing field is zero |
+| `couplings` | mapping `(int, int) -> float` | Pairs `J_ij`; each unordered pair once |
+| `nodes` | iterable of `int` | All vertices, including isolated ones; order is preserved |
+| `.nodes` | `tuple[int]` | Vertex order |
+| `.fields` | `dict[int, float]` | Nonzero fields only |
+| `.couplings` | `dict[(int, int), float]` | Nonzero pairs only |
+| `.edge_count` | `int` | Number of nonzero pairs |
+| `.sum_abs_couplings` | `float` | Sum of absolute nonzero pairs |
+| `.energy(solution)` | `float` | Direct polynomial sum for a complete assignment |
 
-`IsingProblem.from_maxcut(graph)` задаёт `J_ij=w_ij/2`, `h_i=0`,
-`c=-Σw/2`. `to_weighted_graph()` возвращает граф `w=2J` только при нулевых
-полях; иначе `ValueError`. Нулевые пары не хранятся. Малые ненулевые пары
-сохраняются без скрытого порога.
+`IsingProblem.from_maxcut(graph)` sets `J_ij = w_ij / 2`, `h_i = 0`, and
+`c = -sum(w) / 2`. `to_weighted_graph()` returns the graph `w = 2J` only
+when every field is zero; otherwise it raises `ValueError`. Zero pairs are
+not stored. Small nonzero pairs are preserved without a hidden threshold.
+
+Additional members: `field(node)`, `coupling(u, v)`, `neighbors(node)`,
+`set_field(node, value)`, `set_coupling(u, v, value)`, `add_node(node)`,
+`copy()`, `snapshot()`, and `from_snapshot(data)`. Their snapshots carry
+`schema_version=1` and `problem_type="ising"`.
 
 ### SpinConstraint
 
-`SpinConstraint(removed, retained, sign)` — неизменяемая запись ограничения.
-`sign` принимает только целые `+1` или `-1`. `removed` и `retained` — исходные
-целые номера, не равные друг другу.
+`SpinConstraint(removed, retained, sign)` is an immutable record of one
+constraint. `sign` accepts only the integers `+1` and `-1`. `removed` and
+`retained` are original integer labels and must differ. The record exposes
+`to_dict()` and `from_dict(data)`.
 
 ### ReductionState
 
-| Атрибут/метод | Смысл |
+| Attribute or method | Meaning |
 |---|---|
-| `.original_nodes` | Все исходные номера в порядке вставки |
-| `.original_graph` | Независимая копия исходного графа для Max-Cut |
-| `.original_ising` | Независимая копия исходной задачи для общего Изинга |
-| `.ising` | Текущая рабочая задача; рассматривать как read-only |
-| `.current_nodes` | Текущие номера |
-| `.constraints` | Ограничения в порядке применения |
-| `.trace` | События редукций в порядке применения |
-| `.cut_offset` | Накопленный `b_t`; `None` для общего Изинга |
-| `.version` | Число применённых редукций |
-| `.current_graph()` | Текущий граф `w=2J` для Max-Cut-состояния |
-| `.current_cut_value(residual)` | `b_t + C_current(residual)` |
-| `.original_cut_value(solution)` | `C` на исходном графе |
-| `.original_energy(solution)` | `E=-C` или исходный полином Изинга |
-| `.current_energy(residual)` | Текущий полином Изинга |
-| `.apply_pair(...)` | Применить одну редукцию и вернуть событие |
-| `.restore(residual)` | Восстановить все исходные спины в обратном порядке |
-| `.snapshot()` | JSON-совместимый снимок математического состояния |
-| `ReductionState.from_snapshot(data)` | Восстановить состояние |
+| `.original_nodes` | All original labels in insertion order |
+| `.original_graph` | Independent copy of the original Max-Cut graph, or `None` for a general Ising origin |
+| `.original_ising` | Independent copy of the original general Ising problem, or `None` for a graph origin |
+| `.ising` | Current working problem; treat it as read-only |
+| `.current_nodes` | Current labels |
+| `.constraints` | Constraints in application order |
+| `.trace` | Reduction events in application order |
+| `.cut_offset` | Accumulated `b_t`; `None` for a general Ising origin |
+| `.version` | Number of applied reductions |
+| `.current_graph()` | Current graph `w = 2J` for a Max-Cut state; `ValueError` for an Ising origin or nonzero fields |
+| `.current_cut_value(residual)` | `b_t + C_current(residual)`; `ValueError` when cut metrics are undefined |
+| `.original_cut_value(solution)` | `C` on the original graph; `ValueError` if there is no original graph |
+| `.original_energy(solution)` | `E = -C`, or the original Ising polynomial |
+| `.current_energy(residual)` | Current Ising polynomial |
+| `.apply_pair(removed, retained, sign, *, correlation=None, selection_score=None)` | Applies one reduction and returns its event |
+| `.restore(residual)` | Restores all original spins in reverse constraint order |
+| `.snapshot()` | JSON-compatible snapshot of the mathematical state |
+| `ReductionState.from_snapshot(data)` | Restores a state |
 
-`GraphReducer.start(graph)` и `start_from_ising(problem)` создают состояние.
-`GraphReducer.reduce(state, ...)` делегирует `apply_pair`.
-`GraphReducer.restore(state, residual)` делегирует восстановление.
-`GraphReducer.snapshot/from_snapshot` сохраняют и читают состояние.
+`GraphReducer.start(graph)` and `start_from_ising(problem)` create a state.
+`GraphReducer.reduce(state, removed, retained, sign, *, correlation=None,
+selection_score=None)` delegates to `apply_pair`.
+`GraphReducer.restore(state, residual_solution)` delegates to `restore`.
+`GraphReducer.snapshot(state)` and `GraphReducer.from_snapshot(data)` save
+and read a state.
 
-### Событие редукции
+### Reduction event
 
-Каждый вызов `reduce` добавляет одно событие в `state.trace`.
+Every `reduce` call appends exactly one event to `state.trace`.
 
-| Поле | Значение |
+| Field | Meaning |
 |---|---|
-| `step`, `task_version_before/after` | Номер шага и версии рабочей задачи |
-| `removed_node`, `retained_node`, `sign` | Исходные номера и ограничение |
-| `selected_coupling` | `J_uv` до преобразования |
-| `selected_weight` | `w_uv=2J_uv` для Max-Cut-происхождения; иначе `None` |
-| `physical_correlation`, `correlation_reason` | Переданный `c_uv` или причина отсутствия |
-| `selection_score`, `selection_score_reason` | Отдельная оценка выбора, не корреляция |
-| `fixed_energy` | `-w_uv(1-sign)/2` для Max-Cut |
-| `expected_fixed_energy` | `-w_uv(1-c_uv)/2`, если есть корреляция |
-| `constraint_probability` | `(1+sign*c_uv)/2`, если есть корреляция |
-| `cut_offset`, `cut_offset_delta` | `b_t` и `Δb` |
-| `ising_constant`, `ising_constant_before`, `ising_constant_delta` | Полная константа Изинга |
-| `vertices_after`, `edges_after` | Структура после шага; рёбра — ненулевые пары |
-| `sum_abs_weight`, `mean_abs_weight` | Область ненулевых рёбер после шага |
-| `sum_abs_coupling`, `mean_abs_coupling` | То же для `J` |
-| `mean_abs_weight_reason` | Причина `None` для пустой области |
-| `maxcut_metrics_applicable`, `maxcut_metrics_reason` | Применимость графовых метрик |
+| `step`, `task_version_before`, `task_version_after` | Step number and working-task versions |
+| `removed_node`, `retained_node`, `sign` | Original labels and the applied constraint |
+| `selected_coupling` | `J_uv` before the transformation |
+| `selected_weight` | `w_uv = 2 J_uv` for a Max-Cut origin; otherwise `None` |
+| `physical_correlation`, `correlation_reason` | Supplied `c_uv`, or the reason it is absent |
+| `selection_score`, `selection_score_reason` | Separate selection score, not a correlation |
+| `fixed_energy`, `fixed_energy_reason` | `-w_uv (1 - sign) / 2` for Max-Cut; reason when not defined |
+| `expected_fixed_energy`, `expected_fixed_energy_reason` | `-w_uv (1 - c_uv) / 2` when a correlation exists |
+| `constraint_probability` | `(1 + sign * c_uv) / 2` when a correlation exists |
+| `cut_offset`, `cut_offset_delta` | `b_t` and its change `Delta b` |
+| `ising_constant`, `ising_constant_before`, `ising_constant_delta` | Full Ising constant and its change |
+| `vertices_after`, `edges_after` | Structure after the step; edges are nonzero pairs |
+| `sum_abs_weight`, `mean_abs_weight` | Nonzero-edge domain after the step |
+| `sum_abs_coupling`, `mean_abs_coupling` | The same quantities for `J` |
+| `mean_abs_weight_domain` | Literal domain marker `nonzero_edges_after` |
+| `mean_abs_weight_reason` | Why `mean_abs_weight` is `None`; `empty_nonzero_edge_set` for an empty domain |
+| `maxcut_metrics_applicable`, `maxcut_metrics_reason` | Whether graph cut metrics are defined |
 
-Для общего Изинга с ненулевыми полями `selected_weight`, `fixed_energy`,
-`cut_offset` и `mean_abs_weight` равны `None` с причиной
-`maxcut_metrics_reason`. Поля сохраняются в рабочей задаче и учитываются в
-`ising_constant` и `.current_energy`.
+For a general Ising problem with nonzero fields, `selected_weight`,
+`fixed_energy`, `cut_offset`, and `mean_abs_weight` are `None`, and
+`maxcut_metrics_reason` is `working_problem_has_fields` (or
+`original_problem_is_general_ising`). Fields remain in the working problem
+and are included in `ising_constant` and `.current_energy`.
 
-### Снимок состояния
+### State snapshot
 
-Снимок содержит `schema_version=1`, `state_type="reduction_state"`,
+A snapshot contains `schema_version=1`, `state_type="reduction_state"`,
 `energy_convention`, `version`, `maxcut_origin`, `original_nodes`,
-`original_graph`, `original_ising`, `ising`, `cut_offset`, `constraints` и
-`trace`. Он JSON-совместим, но не является checkpoint/resume оптимизатора.
-После `json.dumps`/`json.loads` снимок продолжает принимать редукции и
-восстанавливать решение.
+`original_graph`, `original_ising`, `ising`, `cut_offset`, `constraints`,
+and `trace`. It is JSON-compatible but is not an optimizer
+checkpoint/resume record. After `json.dumps`/`json.loads`, the snapshot
+still accepts reductions and restores a solution.
 
-### Ошибки редукции
+### Reduction errors
 
-`TypeError` — номер не целый, вес не действительный, передан bool.
-`ValueError` — самопара, отсутствующая или повторно удалённая вершина,
-`sign` не ±1, корреляция вне `[-1,1]`, неполный остаток.
-`ArithmeticError` — новая константа, поле или пара не конечны. Ошибочный
-запрос не изменяет состояние.
+`TypeError`: a label is not an integer, a weight is not a real number, or a
+boolean was supplied as a number. `ValueError`: self-pair, absent or
+already removed node, `sign` not `±1`, correlation outside `[-1, 1]`,
+incomplete residual. `ArithmeticError`: a new constant, field, or coupling
+is not finite. A failed request does not change the state.
 
-## RQAOA на CPU
+See also: [Mathematical conventions](MATHEMATICS.md).
 
-`RQAOACPU` — первый полный рекурсивный солвер. Он обучает QAOA на текущем
-рабочем графе, получает физические корреляции `⟨Z_uZ_v⟩`, выбирает одну
-разрешённую пару, применяет точное ограничение `s_u=σs_v` ядром этапа 02,
-повторяет цикл и решает остаток `ExactCPU`. Исходные спины восстанавливаются в
-обратном порядке. Это эвристика, а не точный солвер исходной задачи.
+## RQAOA on CPU
+
+`RQAOACPU` is the full recursive CPU solver. It trains QAOA on the current
+working graph, obtains physical correlations `⟨Z_u Z_v⟩`, selects one
+allowed pair, applies the exact constraint `s_u = σ s_v` through the
+reduction core, repeats the loop, and solves the residual with `ExactCPU`.
+Original spins are restored in reverse order. It is a heuristic for the
+original task, not an exact optimizer of it.
 
 ```python
 from QA_max_cut_lib import SolverFactory, tools
@@ -204,87 +335,91 @@ trajectory = algorithm.parameter_trajectory
 history = algorithm.reduction_history
 ```
 
-### Конфигурация
+### Configuration
 
-| Поле | Значение |
+| Field | Value |
 |---|---|
-| `parameters.finish_at` | Целое ≥1; остаток такого размера решает точный финишёр |
-| `parameters.max_reductions` | `null` или целое ≥0; 0 запрещает редукции |
-| `correlation_source.type` | В этой версии только `qaoa_statevector_cpu` |
-| `correlation_source.parameters.layers` | Глубина `p≥1`; порядок углов γ₀…γₚ₋₁,β₀…βₚ₋₁ |
-| `correlation_source.parameters.max_vertices` | Защитный предел полного вектора, не более 24 |
-| `correlation_source.objective` | Один из пяти критериев QAOA |
-| `correlation_source.objective_reference` | `working_graph` или `original_graph` |
-| `correlation_source.estimation` | `exact` или `shots` для критерия обучения |
-| `correlation_source.optimizer` | ADAM и центральные разности |
-| `correlation_source.initialization` | `fixed_angles` или `random_angles` |
-| `correlation_source.step_initialization` | `restart` или `previous_step` |
-| `correlation_source.correlations` | `exact` или `shots`; в shots обязателен `shots` |
-| `selection.parameters.pairs` | `edges` или `all_pairs` |
-| `selection.parameters.zero_sign` | `+1` или `-1` для точной нулевой корреляции |
+| `parameters.finish_at` | Integer `>= 1`, default `4`; a residual of this size is solved by the exact finisher |
+| `parameters.max_reductions` | `null` or integer `>= 0`, default `null`; `0` forbids reductions |
+| `correlation_source.type` | `qaoa_statevector_cpu`, `qaoa_analytic_p1_cpu`, `qaoa_statevector_gpu` (only in `RQAOAGPU`), or `warm_start_ensemble_cpu` |
+| `correlation_source.parameters.layers` | Depth `p >= 1`, default `1`; angle order is γ₀…γₚ₋₁, β₀…βₚ₋₁ |
+| `correlation_source.parameters.max_vertices` | Protective full-state limit, default `20`, at most `24` for the direct state-vector source |
+| `correlation_source.objective` | One of the five QAOA criteria |
+| `correlation_source.objective_reference` | `working_graph` (default) or `original_graph` |
+| `correlation_source.estimation` | `exact` or `shots` for the training criterion |
+| `correlation_source.optimizer` | ADAM with central differences |
+| `correlation_source.initialization` | `fixed_angles` or `random_angles` |
+| `correlation_source.step_initialization` | `restart` (default) or `previous_step` |
+| `correlation_source.correlations` | `exact` or `shots`; `shots` requires `shots` |
+| `selection.parameters.pairs` | `edges` (default) or `all_pairs` |
+| `selection.parameters.zero_sign` | `+1` (default) or `-1` for an exactly zero correlation |
 | `finisher.type` | `exact_cpu` |
-| `finisher.parameters.max_vertices` | Не меньше `finish_at` |
-| `limits.shots_total` | `null` или строгий общий лимит шотов |
-| `collect.reduction_history` | Компактные события редукций |
-| `collect.parameter_trajectory` | Углы перед каждым слиянием |
-| `collect.local_optimizer_history` | Истории локального ADAM |
-| `collect.correlation_tables` | Полные таблицы корреляций |
-| `collect.final_reduction_state` | JSON-снимок математического состояния |
+| `finisher.parameters.max_vertices` | Default `16`; must be at least `finish_at` |
+| `limits.shots_total` | `null` or a strict total shot limit |
+| `collect.reduction_history` | Compact reduction events |
+| `collect.parameter_trajectory` | Angles before each merge |
+| `collect.local_optimizer_history` | Local ADAM histories |
+| `collect.correlation_tables` | Full correlation tables |
+| `collect.final_reduction_state` | JSON snapshot of the mathematical state |
 
-Источник не имеет собственного `save`, публичного readout или отдельного
-`shots_total`. Неизвестные поля и несовместимые сочетания отклоняются.
-`num_treads` в этой версии принимает только 1. Значения `finish_at` и
-`max_vertices` проверяются до выделения полного вектора.
+The source has no `save` field, no public readout, and no separate
+`shots_total`. `num_treads` accepts only `1` for `RQAOACPU`. Unknown fields
+and incompatible combinations are rejected. `finish_at` and
+`max_vertices` are checked before a full state vector is allocated.
 
-### Результатные поля
+`qaoa_statevector_gpu` is accepted only by `RQAOAGPU`; the other GPU
+hierarchies enforce their own backend rules.
 
-Помимо общих полей `RunRecord` доступны:
+### Result fields
 
-| Поле | Смысл |
+In addition to the common `RunRecord` fields:
+
+| Field | Meaning |
 |---|---|
-| `reductions_completed` | Число применённых ограничений |
-| `remaining_node_order` | Внешние номера финального остатка |
-| `cut_offset` | Накопленный сдвиг `b_t` |
-| `ising_constant` | Полная константа `c_t` рабочей задачи |
-| `reduced_solution`, `reduced_cut_value` | Решение и разрез остатка |
-| `solution_source` | `exact_finisher`, zero-interaction или `all_plus_reduced_fallback` |
-| `termination_reason` | `finish_at`, `no_interactions`, `max_reductions`, `shot_budget` |
-| `reduction_history` | События с весом, корреляцией, `σ`, score, энергиями |
-| `parameter_trajectory` | Углы до соответствующего слияния |
-| `local_optimizer_history` | Локальные истории оптимизации |
-| `correlation_tables` | Таблицы с покрытием и версией |
-| `final_reduction_state` | Снимок математического состояния |
-| `resources` | Шоты, оценки, шаги, этапы, `num_treads` |
+| `reductions_completed` | Number of applied constraints |
+| `remaining_node_order` | External labels of the final residual |
+| `cut_offset` | Accumulated offset `b_t` |
+| `ising_constant` | Full constant `c_t` of the working problem |
+| `reduced_solution`, `reduced_cut_value` | Residual solution and residual cut |
+| `solution_source` | `exact_finisher`, `zero_interaction_initial`, `zero_interaction_residual`, `empty_graph`, or `all_plus_reduced_fallback` |
+| `termination_reason` | `empty_graph`, `no_interactions`, `finish_at`, `max_reductions`, or `shot_budget` |
+| `reduction_history` | Events with weight, correlation, `σ`, score, and energies |
+| `parameter_trajectory` | Angles before the corresponding merge |
+| `local_optimizer_history` | Local optimizer histories |
+| `correlation_tables` | Tables with coverage and task version |
+| `final_reduction_state` | Snapshot of the mathematical state |
+| `resources` | Shots, evaluations, steps, stages, `num_treads` |
 
-Для отсутствующего ребра `selected_weight=0`. `fixed_energy=-w(1-σ)/2`;
-`expected_fixed_energy=-w(1-c)/2`. Суммы этих вкладов не заменяют полную
-энергию решения или константу редукции. `score=abs(c)` хранится отдельно от
-знаковой корреляции.
+For an absent edge, `selected_weight=0`. `fixed_energy = -w (1 - σ) / 2`
+and `expected_fixed_energy = -w (1 - c) / 2`. Sums of these contributions
+do not replace the full solution energy or the reduction constant.
+`score = abs(c)` is stored separately from the signed correlation.
 
-При `status="stopped"` возвращается полное допустимое решение
-`all_plus_reduced_fallback`, а не частичный словарь. Глобальная оптимальность
-не заявляется.
+With `status="stopped"`, the solver returns a complete valid solution
+through `all_plus_reduced_fallback`, not a partial dictionary. No global
+optimality is claimed.
 
-### Инструменты RQAOA
+### RQAOA plotting tools
 
-| Функция | Назначение |
+| Function | Purpose |
 |---|---|
-| `tools.plot_reduction_weights(source, config)` | Вес выбранной пары и средний модуль ненулевого веса |
-| `tools.plot_reduction_energy(source, config)` | `fixed`, `expected`, накопленные суммы, `cut_offset`, `ising_constant` |
-| `tools.plot_parameter_trajectories(source, config)` | Все `binomial(2p,2)` плоских траекторий; при `layout.panels_per_page` — детерминированные страницы `filename_page_001` |
-| `tools.plot_parameter_trajectories_3d(source, config)` | Автономный HTML; Z — номер редукции |
-| `tools.plot_analytic_gamma_profile(source, config)` | `min_beta E(gamma,beta)` и `beta_star(gamma)` для выбранного шага |
+| `tools.plot_reduction_weights(source, config=None)` | Selected-pair weight and mean absolute nonzero weight |
+| `tools.plot_reduction_energy(source, config=None)` | `fixed`, `expected`, accumulated sums, `cut_offset`, `ising_constant` |
+| `tools.plot_parameter_trajectories(source, config=None)` | All `binomial(2p, 2)` flat trajectories; `layout.panels_per_page` produces deterministic pages named `filename_page_001` |
+| `tools.plot_parameter_trajectories_3d(source, config=None)` | Standalone HTML; Z is the reduction index |
+| `tools.plot_analytic_gamma_profile(source, config=None)` | `min_beta E(gamma, beta)` and `beta_star(gamma)` for a selected step |
 
-`source` — солвер, `RunRecord` или `result`. Графики читают сохранённую запись
-и не запускают солвер, оптимизатор или новые измерения. При `save.format="html"`
-3D-график встраивает Plotly.js и данные; файл открывается без сервера и сети.
-Пустая история даёт явную ошибку с указанием включить соответствующий `collect`.
+`source` is a solver, a `RunRecord`, or a `result` dictionary. Plots read
+the stored record and never run the solver, optimizer, or new
+measurements. With `save.format="html"`, the 3D plot embeds Plotly.js and
+the data, so the file opens without a server or network. An empty history
+raises an explicit error that names the required `collect` flag.
 
-## Аналитический источник p=1
+## Analytic p=1 source
 
-`AnalyticP1Evaluator` вычисляет моменты одного слоя без полного вектора
-состояния. `AnalyticP1CorrelationSource` с типом `qaoa_analytic_p1_cpu`
-организует поиск углов и возвращает общий `CorrelationResult` этапа 03.
+`AnalyticP1Evaluator` computes single-layer moments without a full state
+vector. `AnalyticP1CorrelationSource`, with type `qaoa_analytic_p1_cpu`,
+organizes the angle search and returns the common `CorrelationResult`.
 
 ```python
 from QA_max_cut_lib import AnalyticP1Evaluator, SolverFactory, tools
@@ -299,322 +434,482 @@ algorithm = SolverFactory.from_config(config)
 solution = algorithm.solve(graph)
 ```
 
-### Формулы и область
+### Formulas and scope
 
-Для `E=-C`, `J=w/2`, `|+>` и одного слоя
-
-\[
-c_{uv}=a_{uv}\sin(4\beta)+d_{uv}\sin^2(2\beta),
-\]
-
-где `a_{uv}=0.5 sin(gamma w_uv)(P_{u\setminus v}+P_{v\setminus u})`,
-`d_{uv}=0.5(P^-_{uv}-P^+_{uv})`. Произведения берутся по всем `k`, кроме `u,v`.
-Несмежная пара может иметь ненулевой коррелятор из-за общих соседей.
-
-Средняя энергия:
+For `E = -C`, `J = w / 2`, the initial state `|+>`, and one layer,
 
 \[
-E(\gamma,\beta)=E_0+A\sin(4\beta)+B\sin^2(2\beta),
+c_{uv} = a_{uv}\sin(4\beta) + d_{uv}\sin^2(2\beta),
+\]
+
+where `a_{uv} = 0.5 sin(gamma w_uv)(P_{u\setminus v} + P_{v\setminus u})` and
+`d_{uv} = 0.5(P^-_{uv} - P^+_{uv})`. Products run over all `k` except `u`
+and `v`. A non-adjacent pair can have a nonzero correlator because of
+shared neighbors.
+
+The mean energy is
+
+\[
+E(\gamma,\beta) = E_0 + A\sin(4\beta) + B\sin^2(2\beta),
 \]
 
 \[
-\min_\beta E=F_0-\operatorname{hypot}(F_s,F_c),\qquad
-\beta_*=\frac14\operatorname{atan2}(-F_s,-F_c)\bmod\frac{\pi}{2}.
+\min_\beta E = F_0 - \operatorname{hypot}(F_s, F_c), \qquad
+\beta_* = \frac14\operatorname{atan2}(-F_s, -F_c) \bmod \frac{\pi}{2}.
 \]
 
-`E0=-0.5 Σw`, `F0=E0+B/2`, `Fs=A`, `Fc=-B/2`. При `R=0` выбирается
-`beta_star=0`. Минимум по gamma — лучшая точка явной конечной сетки, не
-доказанный непрерывный глобальный оптимум.
+Here `E0 = -0.5 Σw`, `F0 = E0 + B/2`, `Fs = A`, and `Fc = -B/2`. When
+`R = 0`, `beta_star = 0`. The minimum over gamma is the best point of an
+explicit finite grid, not a proven continuous global optimum.
 
-### Параметры вычислителя
+### Evaluator parameters
 
-| Аргумент/поле | Значение |
+| Argument or field | Value |
 |---|---|
-| `AnalyticP1Evaluator(graph, pair_batch_size=2048)` | Плотная матрица `N×N`; пакеты пар `O(pair_batch_size*N)` |
-| `parameters.layers` | Только 1 |
-| `parameters.dtype` | Только `float64` |
-| `parameters.pair_batch_size` | Положительное целое |
+| `AnalyticP1Evaluator(graph, *, pair_batch_size=2048, dtype="float64")` | Dense `N×N` matrix; pair batches use `O(pair_batch_size * N)` memory |
+| `parameters.layers` | Only `1` |
+| `parameters.dtype` | Only `float64` |
+| `parameters.pair_batch_size` | Positive integer, default `2048` |
 | `optimizer.type` | `gamma_grid_exact_beta` |
-| `optimizer.parameters.gamma_bounds` | Две возрастающие конечные границы, включительно |
-| `optimizer.parameters.points` | Целое ≥2 |
-| `optimizer.parameters.gamma_batch_size` | Положительный размер планировочной группы |
-| `estimation.mode` | Только `exact` |
-| `correlations.mode` | Только `exact` |
-| `objective.type` | Только `mean_cut` |
+| `optimizer.parameters.gamma_bounds` | Two increasing finite bounds, inclusive |
+| `optimizer.parameters.points` | Integer `>= 2` |
+| `optimizer.parameters.gamma_batch_size` | Positive planning batch size, default `4` |
+| `estimation.mode` | Only `exact` |
+| `correlations.mode` | Only `exact` |
+| `objective.type` | Only `mean_cut` |
 
-Поля `initialization`, `step_initialization`, ADAM, `shots`, полное
-распределение, `readout`, CVaR/Gibbs/Best-of-K/Threshold Probability, локальные
-поля и `p>1` отклоняются. Источник не строит `2**N`; он не поддерживает
-дискретный readout. Аналитический запуск не расходует шоты, поэтому
-`limits.shots_total=0` допустим.
+`initialization`, `step_initialization`, ADAM, `shots`, a full
+distribution, `readout`, CVaR/Gibbs/Best-of-K/Threshold Probability, local
+fields, and `p > 1` are rejected. The source does not build `2**N` and does
+not support a discrete readout. An analytic run consumes no shots, so
+`limits.shots_total=0` is allowed.
 
-### Результат источника и RQAOA
+### Source result and RQAOA
 
-`CorrelationResult` содержит `node_order`, версию задачи, покрытие, физические
-корреляции, `[gamma,beta]`, `layers=1` и `training`:
+`CorrelationResult` contains `node_order`, the task version, coverage,
+physical correlations, `[gamma, beta]`, `layers=1`, and `training`:
 
-| Поле `training` | Смысл |
+| `training` field | Meaning |
 |---|---|
 | `gamma_profile.type` | `analytic_gamma_grid` |
-| `gamma_profile.gamma_values` | Полная сетка, включая границы |
-| `gamma_profile.profile_energy` | `min_beta E` на сетке |
-| `gamma_profile.profile_energy_original` | То же со сдвигом `-b_t` при `original_graph` |
-| `gamma_profile.beta_star` | Точный beta для каждой gamma |
-| `gamma_profile.A`, `B`, `E0` | Коэффициенты энергии |
-| `gamma_profile.best_index`, `best_gamma`, `best_beta` | Детерминированная лучшая точка |
+| `gamma_profile.gamma_values` | Full grid, including both bounds |
+| `gamma_profile.profile_energy` | `min_beta E` on the grid |
+| `gamma_profile.profile_energy_original` | The same profile shifted by `-b_t` when `objective_reference="original_graph"` |
+| `gamma_profile.beta_star` | Exact beta for every gamma |
+| `gamma_profile.A`, `B`, `E0` | Energy coefficients |
+| `gamma_profile.best_index`, `best_gamma`, `best_beta` | Deterministic best grid point |
 | `classical_counters` | `gamma_points`, `coefficient_passes`, `pair_correlators`, `classical_seconds` |
 
-Корневой `RQAOA` сохраняет `shots_used=0`, `training_shots=0`,
-`correlation_shots=0`, `readout_shots=0`, а также `gamma_points`,
-`coefficient_passes`, `pair_correlators` и `classical_seconds`. Профиль входит
-в `local_optimizer_history` с `profile_type="analytic_gamma_grid"`.
+The root `RQAOA` record keeps `shots_used=0`, `training_shots=0`,
+`correlation_shots=0`, `readout_shots=0`, and also exposes `gamma_points`,
+`coefficient_passes`, `pair_correlators`, and `classical_seconds`. The
+profile enters `local_optimizer_history` with
+`profile_type="analytic_gamma_grid"`.
 
-### Инструмент профиля
+The plotting tool `tools.plot_analytic_gamma_profile(source, config)` draws
+`min_beta E(gamma, beta)` and `beta_star(gamma)` for a selected reduction
+step. It reads `local_optimizer_history` and starts no new search. When no
+profile exists, the error names `collect.local_optimizer_history`.
 
-`tools.plot_analytic_gamma_profile(source, config)` строит `min_beta E(gamma,beta)`
-и `beta_star(gamma)` для выбранного шага редукции. Он читает
-`local_optimizer_history` и не запускает новый поиск. При отсутствии профиля
-выдаётся ошибка с указанием включить `collect.local_optimizer_history`.
+See also: [Mathematical conventions](MATHEMATICS.md).
 
 ## Generators
 
-`GraphFactory.from_recipe(recipe)` принимает:
+`GraphFactory.from_recipe(recipe)` accepts a schema-version-1 recipe:
 
-| Поле | Значение/по умолчанию |
+| Field | Value or default |
 |---|---|
-| `schema_version` | 1 |
+| `schema_version` | `1` |
 | `type` | `complete`, `gnm`, `erdos_renyi` |
-| `parameters.n_vertices` | Обязательное целое 0…1000 |
-| `parameters.nodes` | Список из n уникальных целых; по умолчанию 0…n−1 |
-| `parameters.n_edges` | Только для `gnm`, целое 0…n(n−1)/2 |
-| `parameters.probability` | Только для `erdos_renyi`, число в [0,1] |
-| `seed` | Seed топологии; по умолчанию null |
-| `weights.type` | `constant` по умолчанию, либо `signed_discrete`, `uniform` |
-| `weights.parameters.value` | Для `constant`, по умолчанию 1.0 |
-| `weights.parameters.values` | Для `signed_discrete`, непустой список конечных весов; равновероятная выборка с повторениями |
-| `weights.parameters.low`, `.high` | Для `uniform`, конечные low<high; интервал [low, high) |
-| `weights.seed` | Отдельный RNG весов; по умолчанию seed топологии |
+| `parameters.n_vertices` | Required integer `0…1000` |
+| `parameters.nodes` | List of `n` unique integers; defaults to `0…n−1` |
+| `parameters.n_edges` | `gnm` only; integer `0…n(n−1)/2` |
+| `parameters.probability` | `erdos_renyi` only; number in `[0, 1]` |
+| `seed` | Topology seed; default `null` |
+| `weights.type` | `constant` (default), `signed_discrete`, or `uniform` |
+| `weights.parameters.value` | `constant` only; default `1.0` |
+| `weights.parameters.values` | `signed_discrete` only; nonempty list of finite weights, sampled uniformly with replacement |
+| `weights.parameters.low`, `.high` | `uniform` only; finite `low < high`; interval `[low, high)` |
+| `weights.seed` | Separate weight RNG; defaults to the topology seed |
 
-Одинаковые фиксированные seeds дают одинаковые графы в той же программной среде. Для долговременной воспроизводимости сохраняется фактический снимок: один рецепт без версий зависимостей не обещает побитового совпадения во всех будущих NumPy.
+A recipe with `schema_version=2` selects the extended families
+`complete`, `gnm`, `erdos_renyi`, `wishart_projected_v1`,
+`hebbian_patterns_v1`, `gnm_density_v1`, `connected_path_fill_v1`,
+`regular_v1`, `barabasi_albert_v1`, `watts_strogatz_v1`, `sbm_v1`,
+`geometric_v1`, and `periodic_grid_v1`. Extended recipes also accept
+`limits.max_vertices` and `limits.max_edges`, and store a resolved recipe
+in the graph snapshot.
 
-`partition(graph, max_vertices, *, seed=0)` возвращает список непересекающихся индуцированных подграфов, покрывающих все вершины. Максимальный размер — положительное целое. Рёбра между частями не входят в подграфы; это не разложение исходной целевой функции без остатка. Пустому графу соответствует пустой список.
+Equal fixed seeds produce equal graphs in the same software environment.
+For long-term reproducibility, keep the actual snapshot: one recipe
+without dependency versions does not promise bit-identical results in
+every future NumPy release.
 
-## Общая конфигурация солвера
+`partition(graph, max_vertices, *, seed=0)` returns a list of disjoint
+induced subgraphs that cover every vertex. `max_vertices` is a positive
+integer. Edges between parts are not included in the subgraphs; this is
+not an exact decomposition of the original objective. An empty graph maps
+to an empty list.
 
-Неизвестные корневые поля отклоняются. Вложенные поля алгоритмов перечислены ниже.
+See also: [Generators and typed plans](GENERATORS_PLANS.md) for worked
+examples.
 
-| Поле | Тип/по умолчанию | Назначение |
+## Common solver configuration
+
+Unknown root fields are rejected. Algorithm-specific nested fields are
+listed in the corresponding section.
+
+| Field | Type or default | Purpose |
 |---|---|---|
-| `schema_version` | int, 1 | Версия схемы |
-| `type` | str | Тип класса; при прямом конструкторе можно опустить |
-| `seed` | int или null, null | Локальный NumPy RNG, заново на каждом запуске |
-| `num_treads` | int, 1 | В этой версии только 1; другие значения — ValueError |
-| `parameters` | dict | Физические/вычислительные параметры данного солвера |
-| `output.report` | 0/1/2, 0 | Нет/краткий/подробный терминальный отчёт |
-| `output.logs` | 0/1/2, 0 | Нет/начало и конец/дополнительно шаги |
-| `output.color` | auto/always/never, auto | ANSI-цвет; auto включается в TTY |
-| `collect` | dict | Необязательные массивы/история; по умолчанию отключены |
-| `save` | dict, отсутствует | Общий экспорт после вычисления |
-| `checkpoint.enabled` | bool, false | true вызывает ошибку: resume ещё не реализован |
+| `schema_version` | `int`, `1` | Schema version; any other value raises `ValueError` |
+| `type` | `str` | Class type; may be omitted for a direct constructor, but must match when present |
+| `seed` | `int` or `null`, `null` | Local NumPy RNG, recreated on every run |
+| `num_treads` | `int`, `1` | CPU budget; values `> 1` require a solver with `supports_parallel=True`, otherwise `ValueError` |
+| `parameters` | `dict` | Physical and computational parameters of the solver |
+| `output.report` | `0/1/2`, `0` | No / brief / detailed terminal report |
+| `output.logs` | `0/1/2`, `0` | No / start-and-end / additional step messages |
+| `output.color` | `auto/always/never`, `auto` | ANSI color; `auto` enables it on a TTY |
+| `collect` | `dict` | Optional arrays and histories; disabled by default |
+| `save` | `dict`, absent | Common export after computation |
+| `checkpoint.enabled` | `bool`, `false` | `true` raises `ValueError` for classes without a resume codec |
 
-`report` и `logs` независимы. Отчёт в JSON не зависит от терминального уровня. Импорт не выводит текст и не запускает примеры. Цвета отображаются терминалами с поддержкой ANSI; JSON не содержит цветовых кодов.
+`report` and `logs` are independent. The JSON report does not depend on
+the terminal level. Importing the package prints nothing and runs no
+examples. Colors appear only in ANSI-capable terminals; JSON never
+contains color codes.
 
 ## ExactCPU
 
-| Поле `parameters` | По умолчанию | Допустимость |
+| `parameters` field | Default | Constraint |
 |---|---|---|
-| `max_vertices` | 24 | Положительное целое ≤30; это защитный предел, а не гарантия быстрого расчёта |
-| `batch_size` | 65536 | Положительное целое, число представителей в рабочем блоке |
-| `tie_tolerance` | 0.0 | Конечное неотрицательное абсолютное отклонение C для подсчёта вырождения |
+| `max_vertices` | `24` | Positive integer `<= 30`; a protective limit, not a speed guarantee |
+| `batch_size` | `65536` | Positive integer; representatives per working block |
+| `tie_tolerance` | `0.0` | Finite nonnegative absolute deviation of `C` for counting degenerate optima |
 
-Поля обучения, readout и непустой `collect` для этого класса недопустимы. `limits.shots_total` допустим для общего интерфейса; классический перебор не использует шоты. Число проверенных представителей с учётом двух проходов — `states_evaluated`. Число этапов — число блоков обоих проходов.
+Training, readout, and a nonempty `collect` are rejected for this class
+with `ValueError`. `limits.shots_total` is accepted for interface
+uniformity; classical enumeration consumes no shots. The number of
+examined representatives across both passes is `states_evaluated`. The
+number of stages is the number of blocks in both passes.
 
-Дополнительные атрибуты: `worst_cut_value` (минимум C), `optimal_count` (число полных спиновых решений с учётом допуска), `states_evaluated`. Вероятности, состояние и история оптимизатора не применяются и равны `None`.
+Additional attributes: `worst_cut_value` (minimum `C`), `optimal_count`
+(number of full spin solutions within `tie_tolerance`, counting the global
+flip), and `states_evaluated`. Probabilities, state vector, and optimizer
+history are not applicable and read as `None`. The termination reason is
+`exhaustive_search`.
 
 ## QAOACPU
 
-### Схема и критерий
+### Circuit and criterion
 
-| Поле | По умолчанию | Ограничения |
+| Field | Default | Constraint |
 |---|---|---|
-| `parameters.layers` | 1 | Положительное целое p |
-| `parameters.max_vertices` | 20 | Положительное целое; дополнительный жёсткий предел симулятора 24 |
-| `parameters.dtype` | complex128 | complex128 или complex64; форма состояния (2^N,) |
-| `objective.type` | mean_cut | mean_cut/cvar/gibbs/best_of_k/threshold_probability |
-| `objective.parameters` | {} для mean_cut | cvar: alpha∈(0,1]; gibbs: eta>0; best_of_k: целое k≥1; threshold_probability: конечный threshold |
-| `estimation.mode` | exact | exact или shots |
-| `estimation.shots_per_evaluation` | 256 | Положительное целое; используется только в shots |
-| `initialization.type` | fixed_angles | fixed_angles или random_angles |
-| `initialization.parameters.values` | p значений 0.5, затем p значений 0.3 | Для fixed_angles: ровно 2p конечных углов в радианах |
+| `parameters.layers` | `1` | Positive integer `p` |
+| `parameters.max_vertices` | `20` | Positive integer; the simulator also enforces a hard cap of `24` |
+| `parameters.dtype` | `complex128` | `complex128` or `complex64`; state shape `(2**N,)` |
+| `objective.type` | `mean_cut` | `mean_cut`, `cvar`, `gibbs`, `best_of_k`, `threshold_probability` |
+| `objective.parameters` | `{}` for `mean_cut` | `cvar`: `alpha ∈ (0, 1]`; `gibbs`: `eta > 0`; `best_of_k`: integer `k >= 1`; `threshold_probability`: finite `threshold` |
+| `estimation.mode` | `exact` | `exact` or `shots` |
+| `estimation.shots_per_evaluation` | `256` | Positive integer; used only in `shots` mode |
+| `initialization.type` | `fixed_angles` | `fixed_angles` or `random_angles` |
+| `initialization.parameters.values` | `p` values `0.5`, then `p` values `0.3` | `fixed_angles` requires exactly `2p` finite angles in radians |
 
-У `random_angles` параметры отсутствуют: γ независимо выбираются из [−π,π), β из [−π/2,π/2). Это эвристическое окно инициализации, а не утверждение о периоде взвешенной задачи. Обучение не ограничивает последующие углы этим окном.
+`random_angles` takes no parameters: each γ is drawn independently from
+`[−π, π)` and each β from `[−π/2, π/2)`. This is a heuristic
+initialization window, not a claim about the period of a weighted problem.
+Training does not restrict later angles to this window.
 
-### Оптимизатор
+### Optimizer
 
-| Поле | По умолчанию | Назначение |
+| Field | Default | Purpose |
 |---|---|---|
-| `optimizer.type` | adam | Только adam в этом этапе |
-| `optimizer.parameters.max_steps` | 20 | Целое ≥0; 0 выполняет только readout начального состояния |
-| `.learning_rate` | 0.05 | Конечное положительное число |
-| `.beta1`, `.beta2` | 0.9, 0.999 | Коэффициенты моментов в [0,1) |
-| `.epsilon` | 1e-8 | Положительная стабилизирующая константа |
-| `.gradient_tolerance` | 0.0 | Неотрицательный порог нормы градиента; 0 отключает остановку |
-| `optimizer.gradient.type` | central_difference | Только центральные разности |
-| `optimizer.gradient.parameters.step` | 0.01 | Конечный положительный шаг h |
+| `optimizer.type` | `adam` | Only `adam` in 0.1.0rc2 |
+| `optimizer.parameters.max_steps` | `20` | Integer `>= 0`; `0` performs only the readout of the initial state |
+| `.learning_rate` | `0.05` | Finite positive number |
+| `.beta1`, `.beta2` | `0.9`, `0.999` | Moment coefficients in `[0, 1)` |
+| `.epsilon` | `1e-8` | Positive stabilizing constant |
+| `.gradient_tolerance` | `0.0` | Nonnegative gradient-norm threshold; `0` disables this stop |
+| `optimizer.gradient.type` | `central_difference` | Central differences only |
+| `optimizer.gradient.parameters.step` | `0.01` | Finite positive step `h` |
 
-### Readout, бюджет и накопление
+### Readout, budget, and collection
 
-| Поле | По умолчанию | Назначение |
+| Field | Default | Purpose |
 |---|---|---|
-| `readout.mode` | most_probable | Наиболее вероятное состояние либо best_of_shots |
-| `readout.shots` | Обязателен для best_of_shots | Положительное целое M; для most_probable не задаётся |
-| `limits.shots_total` | null | Общий целый бюджет ≥0 либо без ограничения |
-| `collect.optimizer_history` | false | Наблюдения в центрах шагов |
-| `collect.objective_history` | false | Все оценки центра и градиентных проб |
-| `collect.probabilities` | false | Полный вектор вероятностей, float64 |
-| `collect.statevector` | false | Полный комплексный вектор выбранного dtype |
-| `collect.correlations` | false | Физическая матрица ⟨ZᵢZⱼ⟩ формы (N,N), float64 |
+| `readout.mode` | `most_probable` | Most probable basis state, or `best_of_shots` |
+| `readout.shots` | Required for `best_of_shots` | Positive integer `M`; not allowed for `most_probable` |
+| `limits.shots_total` | `null` | Total integer budget `>= 0`, or no limit |
+| `collect.optimizer_history` | `false` | Observations at step centers |
+| `collect.objective_history` | `false` | Every center evaluation and gradient probe |
+| `collect.probabilities` | `false` | Full probability vector, `float64` |
+| `collect.statevector` | `false` | Full complex vector of the selected `dtype` |
+| `collect.correlations` | `false` | Physical `⟨Z_i Z_j⟩` matrix of shape `(N, N)`, `float64` |
 
-Шоты — выборки классического симулятора, без модели аппаратного шума. Конечный readout резервируется до обучения. Статус `stopped` с причиной `shot_budget` означает корректную раннюю остановку с решением. Значение `objective_value=None` допустимо, если обучение не выполнило ни одной оценки.
+Shots are samples of the classical simulator, without a hardware-noise
+model. The final readout is reserved before training starts. A `stopped`
+status with reason `shot_budget` is a correct early stop with a valid
+solution. `objective_value=None` is valid when training performed no
+evaluation.
 
-### Результаты и атрибуты
+### Results and attributes
 
-Каждое поле читается напрямую, например `algorithm.resources`, и через `algorithm.result["resources"]`. Прямой доступ возвращает независимые копии массивов/словарей; большие данные разумно получить один раз. Отсутствующие необязательные данные не вычисляются по запросу инструмента.
+Every field is readable directly, for example `algorithm.resources`, and
+through `algorithm.result["resources"]`. Direct access returns independent
+copies of arrays and dictionaries; fetch large data once. Missing optional
+data is not computed on demand.
 
-| Поле | Тип и смысл |
+| Field | Type and meaning |
 |---|---|
-| `solution` | dict[int,int], по одной ±1 на каждую исходную вершину |
-| `cut_value`, `solution_energy` | float: C и −C выбранного дискретного решения |
-| `expected_cut`, `expected_energy` | float: точные ожидания конечного состояния; для ExactCPU None |
-| `expected_cut_source` | У QAOA: exact_final_statevector |
-| `objective_value`, `optimizer_loss` | Лучшее оценённое F и −F; None, если оценок не было |
-| `objective_source` | best_training_evaluation либо not_evaluated |
-| `optimal_angles` | ndarray (2p,), лучший уже оценённый вектор; при отсутствии обучения начальный |
-| `optimizer_history` | list[dict] или None; поля optimizer_step, objective_evaluations, objective_value, optimizer_loss, gradient_norm, angles, shots_used |
-| `objective_history` | list[dict] или None; evaluation_id, optimizer_step, kind, objective_value, optimizer_loss, angles, shots_used |
-| `probabilities`, `statevector`, `correlations` | Массивы описанных выше форм либо None |
-| `data_status` | Собрано/не собрано/не применимо для дополнительных данных |
-| `node_order` | list[int], порядок соответствия индексов внешним вершинам |
-| `graph` | Фактически решённый взвешенный снимок и рецепт |
-| `config` | Полностью разрешённая конфигурация с использованными значениями по умолчанию |
-| `status`, `termination_reason` | completed/stopped/failed и конкретная причина |
-| `resources` | Счётчики, перечисленные далее |
-| `timing.compute_seconds` | Время создания снимка и вычисления до построения итоговой записи; без печати и файлового экспорта |
-| `report` | Структурированные итоговые качество, статус, время и ресурсы |
+| `solution` | `dict[int, int]`, one `±1` per original vertex |
+| `cut_value`, `solution_energy` | `float`: `C` and `-C` of the selected discrete solution |
+| `expected_cut`, `expected_energy` | `float`: exact expectations of the final state; `None` for `ExactCPU` |
+| `expected_cut_source` | For QAOA: `exact_final_statevector` |
+| `objective_value`, `optimizer_loss` | Best evaluated `F` and `-F`; `None` if no evaluation occurred |
+| `objective_source` | `best_training_evaluation` or `not_evaluated` |
+| `optimal_angles` | `ndarray (2p,)`: best already-evaluated vector, or the initial vector when training is absent |
+| `optimizer_history` | `list[dict]` or `None`; keys `optimizer_step`, `objective_evaluations`, `objective_value`, `optimizer_loss`, `gradient_norm`, `angles`, `shots_used` |
+| `objective_history` | `list[dict]` or `None`; keys `evaluation_id`, `optimizer_step`, `kind`, `objective_value`, `optimizer_loss`, `angles`, `shots_used` |
+| `probabilities`, `statevector`, `correlations` | Arrays of the shapes above, or `None` |
+| `data_status` | `collected`, `not_collected`, or `not_applicable` for each additional data field |
+| `node_order` | `list[int]` mapping matrix indices to external vertices |
+| `graph` | Weighted snapshot and recipe of the graph actually solved |
+| `config` | Fully resolved configuration, including defaults that were used |
+| `status`, `termination_reason` | `completed`, `stopped`, `paused`, or `failed`, plus the specific reason |
+| `resources` | Counters listed below |
+| `timing.compute_seconds` | Snapshot creation and computation time up to the final record; excludes printing and file export |
+| `report` | Structured quality, status, time, and resource summary |
 | `started_at`, `finished_at` | ISO 8601, UTC |
-| `run_id` | UUID данного запуска |
-| `algorithm_type`, `package_version`, `schema_version`, `seed`, `num_treads` | Происхождение и настройки запуска |
+| `run_id` | UUID of this run |
+| `algorithm_type`, `package_version`, `schema_version`, `seed`, `num_treads` | Run provenance and settings |
 
-`resources` QAOA: `shots_used`, `training_shots`, `readout_shots`, `objective_evaluations`, `optimizer_steps`, `num_stages`, `num_treads`. `num_stages` — полные оптимизационные шаги плюс конечный readout. Шоты в `optimizer_history` относятся к обучению; итоговые `shots_used` дополнительно включают readout.
+QAOA `resources` includes `shots_used`, `training_shots`,
+`readout_shots`, `objective_evaluations`, `optimizer_steps`,
+`num_stages`, and `num_treads`. `num_stages` is the number of completed
+optimization steps plus the final readout. Shots in `optimizer_history`
+belong to training; the final `shots_used` also includes the readout.
 
-## RunRecord и JSON
+The 0.1.0rc2 QAOA record additionally exposes budget-journal keys
+`known_spent`, `uncertain_upper_charge`, `total_charged`,
+`logical_training_shots`, `readout_reserved`, `shots_available`, and
+`checkpoint_writes`, plus `best_evaluation_id`, `readout_completed`,
+`resume_mode`, and `checkpoint_info`. A paused run reports
+`status="paused"` and `termination_reason="checkpoint_pause"`.
 
-`RunRecord(fields)` копирует исходные данные. `.get(name, default=None)` и `record.attribute` возвращают независимые нативные значения. `.field_names` содержит доступные имена. `.result` создаёт полный JSON-совместимый снимок. Это не журнал всех запусков солвера.
+## RunRecord and JSON
 
-Массив в JSON: `{"__type__":"ndarray","dtype":"<f8","shape":[...],"data":[...]}`. Для комплексного массива вместо `data` используются `real` и `imag`; dtype и shape сохраняются. Комплексный скаляр имеет `__type__="complex"`. Ключи спинового решения становятся строками по правилам JSON и восстанавливаются как целые при загрузке. NaN/Inf и неизвестные типы не сериализуются молча.
+`RunRecord(fields)` copies the input data. `.get(name, default=None)` and
+`record.attribute` return independent native values. `.field_names`
+contains the available names. `.result` builds a complete JSON-compatible
+snapshot. A record describes one run; it is not a log of every solver run.
 
-`tools.load_result(path, *, load_original_data=False)` читает полный результат либо выборочный экспорт и возвращает `RunRecord`. При `True` также читает `.npy` из той же папки без pickle. Если необходимые графику данные не были экспортированы/накоплены, инструмент сообщает об их отсутствии.
+An array in JSON is encoded as
 
-## Общий экспорт
+```json
+{"__type__": "ndarray", "dtype": "<f8", "shape": [2, 2], "data": [[1.0, 0.0], [0.0, 1.0]]}
+```
 
-`tools.save_result(source, config)` возвращает `SavedFiles` с `.primary` (Path JSON) и `.files` (tuple всех путей). `source` — солвер, RunRecord либо полный JSON-словарь.
+For a complex array, `real` and `imag` replace `data`; `dtype` and `shape`
+are retained. A complex scalar is
+`{"__type__": "complex", "real": ..., "imag": ...}`. Spin-solution keys
+become strings by the normal JSON rule and are restored as integers when
+loaded. NaN/Inf and unknown types are never serialized silently: a
+non-finite float raises `ValueError`, and an unknown object raises
+`TypeError`.
 
-| Поле save | По умолчанию | Правило |
+`tools.load_result(path, *, load_original_data=False)` reads either a full
+result or a selected export and returns a `RunRecord`. With `True` it also
+loads the referenced `.npy` files from the same folder without pickle. If
+data needed by a plotting tool was not exported or collected, the tool
+reports its absence.
+
+## Common export
+
+`tools.save_result(source, config)` returns `SavedFiles` with `.primary`
+(the JSON `Path`) and `.files` (a tuple of every published path). `source`
+is a solver, a `RunRecord`, or a full JSON result dictionary.
+
+| `save` field | Default | Rule |
 |---|---|---|
-| `path` | Обязательно | Папка назначения |
-| `filename` | Обязательно | Базовое имя без пути и зарезервированных символов |
-| `atts` | Все поля записи | Уникальные имена атрибутов для JSON; [] оставляет метаданные и отчёт |
-| `save_original_data` | [] | Имена собранных числовых ndarray для файлов filename_attribute.npy |
-| `makedir` | false | Создать отсутствующий родительский путь |
-| `savedir` | false | Создать новую папку path/filename и положить туда весь комплект |
+| `path` | Required | Destination folder |
+| `filename` | Required | Base name without a path or reserved characters |
+| `atts` | All record fields | Unique attribute names for JSON; `[]` keeps metadata and report only |
+| `save_original_data` | `[]` | Names of collected numeric `ndarray` fields to write as `filename_attribute.npy` |
+| `makedir` | `false` | Create a missing parent path |
+| `savedir` | `false` | Create a new `path/filename` folder and place the whole set there |
 
-Массивы, перечисленные одновременно в двух списках, сохраняются в обоих представлениях. Наборы независимы. Нативный экспорт иных специальных типов будет добавляться с соответствующими алгоритмами; текущий неподдерживаемый тип вызывает ошибку.
+An array named in both lists is stored in both representations; the lists
+are independent. Native export of other special types will be added with
+the algorithms that produce them; an unsupported type raises an error.
 
-Основной JSON содержит `metadata`, `attributes`, `original_data`, `saved_at` и `export_complete`. Метаданные и отчёт обязательны независимо от `atts` и уровней вывода. Ссылки на NPY относительные, с dtype/shape. Комплект можно переносить целиком. Файл JSON публикуется последним; нет гарантии атомарного появления всех файлов одновременно. При обычной ошибке выполняется очистка файлов текущей попытки. При аварийном завершении процесса могут остаться дополнительные файлы без основного JSON; они не считаются завершённым экспортом.
+The main JSON document contains `schema_version`, `export_type`
+(`"selected_result"`), `saved_at`, `metadata`, `attributes`,
+`original_data`, and `export_complete`. Metadata and the report are always
+included when the record carries them, regardless of `atts` and output
+levels. Every NPY reference is relative and records `file`, `format`,
+`dtype`, and `shape`.
 
-Существующая папка `path/filename` при `savedir=True`, даже пустая, вызывает `FileExistsError`. При `False` конфликт любого конечного файла также отклоняется. Экспорт не перезаписывает существующие данные даже при одновременных попытках с одним именем. Проверяется весь подготовленный комплект. Предварительная сериализация может требовать дополнительной памяти для больших массивов; потоковый экспорт ещё не реализован.
+The complete set can be moved as one directory. The JSON file is published
+last; simultaneous appearance of all files is not guaranteed. A normal
+error removes the files published by the current attempt. An abrupt
+process termination can leave extra files without the main JSON; they are
+not a completed export.
 
-## Численные инструменты
+An existing `path/filename` folder with `savedir=True`, even an empty one,
+raises `FileExistsError`. With `savedir=False`, a conflict on any final
+file is also rejected. A missing `path` with `makedir=False` raises
+`FileNotFoundError`; a `path` that is not a directory raises
+`NotADirectoryError`. Export never overwrites existing data, including
+simultaneous attempts with the same name. The entire prepared set is
+checked before publication. Pre-serialization can require extra memory
+for large arrays; streaming export is not implemented in 0.1.0rc2.
 
-| Функция | Аргументы | Результат |
+See also: the repository-level ``RESULTS_AND_SAVE.md`` for the full export
+workflow.
+
+## Numerical tools
+
+| Function | Arguments | Result |
 |---|---|---|
-| `correlation_matrix(probabilities)` | Нормированный конечный неотрицательный вектор длины 2^N | Физические ⟨ZᵢZⱼ⟩, ndarray (N,N); порядок тот же, что у битов |
-| `quality_score(cut_value, optimum, worst)` | Конечные значения одной задачи; optimum≥worst | (cut_value−worst)/(optimum−worst), либо None для нулевого диапазона |
-| `load_json(path)` | UTF-8 JSON-файл | Стандартный разобранный JSON |
+| `correlation_matrix(probabilities)` | Normalized finite nonnegative vector of length `2**N` | Physical `⟨Z_i Z_j⟩`, `ndarray (N, N)`; the order is the bit order |
+| `quality_score(cut_value, optimum, worst)` | Finite values for one task; `optimum >= worst` | `(cut_value − worst) / (optimum − worst)`, or `None` for a zero range |
+| `load_json(path)` | UTF-8 JSON file | Ordinary parsed JSON |
 
-`quality_score` не проверяет тождество графов: это обязанность вызывающего кода. В текущем этапе ориентир вычисляет ExactCPU; GW и база лучших известных решений пока отсутствуют.
+`quality_score` does not check that the graph identities match; that is the
+caller's responsibility. In 0.1.0rc2 the exact reference is produced by
+`ExactCPU`; a GW reference and a best-known database are also supported by
+the experiment layer.
 
-## Карты и графики
+## Parameter maps and plots
 
-`scan_landscape(graph, config)` не изменяет граф и возвращает RunRecord. Поля конфигурации: `gamma`, `beta` — строго возрастающие конечные списки длиной 2…256 каждый; `objective` — как выше; `quantity` — `optimizer_loss` по умолчанию либо `objective_value`; необязательный общий `save`. Допускается 1…16 вершин и p=1. Атрибуты записи: `gamma` (G,), `beta` (B,), `values` (B,G), graph, config, timestamps, timing, resources. Число `resources.grid_points` равно B·G; шотов нет.
+`scan_landscape(graph, config)` does not modify the graph and returns a
+`RunRecord`. Configuration fields: `gamma` and `beta` are strictly
+increasing finite lists of length `2…256`; `objective` is the criterion
+described above; `quantity` is `optimizer_loss` (default) or
+`objective_value`; an optional common `save` block is accepted. The graph
+may have `1…16` vertices and `p=1` only. Record attributes: `gamma` `(G,)`,
+`beta` `(B,)`, `values` `(B, G)`, `graph`, `config`, timestamps, `timing`,
+and `resources`. `resources.grid_points` equals `B·G`; no shots are used.
+The record type is `landscape_scanner_cpu` with termination reason
+`grid_complete`.
 
-Все графические функции возвращают Matplotlib `Figure`. `figure.qa_record` — результат инструмента с конфигурацией, происхождением, `plot_data` и временной отметкой; `figure.qa_saved_files` появляется при сохранении. Для пользовательской истории инструмента можно сохранить `.qa_record`. Построение не вызывает повторное обучение и не включает сбор пропущенных данных.
+All plotting functions return a Matplotlib `Figure`. `figure.qa_record` is
+the tool result with configuration, provenance, `plot_data`, and a
+timestamp; `figure.qa_saved_files` appears when a file is saved. Keep
+`.qa_record` for your own tool history. Plotting never retrains a model
+and never collects missing data.
 
-| Функция | Вход и дополнительные поля config |
+| Function | Input and additional `config` fields |
 |---|---|
-| `plot_graph(source, config=None)` | WeightedGraph или результат; рисует исходный снимок |
-| `plot_graph_solution(source, solution=None, config=None)` | Для графа явно передать dict решения; для солвера/записи можно опустить solution |
-| `plot_graph_info(source, config=None)` | Добавляет N, число рёбер, плотность, компоненты, изоляты, min/max/средний модуль веса |
-| `plot_probabilities(source, config=None)` | Требует probabilities; `selection.top_k=16`, положительное целое |
-| `plot_optimization(source, config=None)` | Требует непустую optimizer_history; `axes.x`: optimizer_step/objective_evaluations/shots_used; `axes.y`: optimizer_loss (по умолчанию)/objective_value/gradient_norm |
-| `plot_landscape(source, config=None)` | Запись scan_landscape, γ на X, β на Y, цвет — сохранённая величина |
+| `plot_graph(source, config=None)` | `WeightedGraph` or a result; draws the input snapshot |
+| `plot_graph_solution(source, solution=None, config=None)` | For a graph, pass the solution dictionary explicitly; for a solver or record, `solution` may be omitted |
+| `plot_graph_info(source, config=None)` | Adds `N`, edge count, density, components, isolates, weight min/max, and mean absolute weight |
+| `plot_probabilities(source, config=None)` | Requires `probabilities`; `selection.top_k=16`, a positive integer |
+| `plot_optimization(source, config=None)` | Requires a nonempty `optimizer_history`; `axes.x`: `optimizer_step`/`objective_evaluations`/`shots_used`; `axes.y`: `optimizer_loss` (default)/`objective_value`/`gradient_norm` |
+| `plot_landscape(source, config=None)` | A `scan_landscape` record; γ on X, β on Y, color is the stored quantity |
+| `plot_ls_coverage(source, config=None)` | An LS-RQAOA record; two panels: coverage fraction and allowed/observed pair counts |
 
-Общие поля визуализации:
+Common visualization fields:
 
-| Поле config | По умолчанию/смысл |
+| `config` field | Default or meaning |
 |---|---|
-| `title` | Заголовок конкретного инструмента |
-| `style.text_engine` | mathtext или latex; по умолчанию mathtext |
-| `style.figsize` | [10,6] в дюймах; при metadata снизу добавляется место подписи |
-| `style.label_size`, `.tick_size`, `.legend_size` | 19,16,15 |
-| `style.latex_preamble` | Пользовательская строка TeX при latex |
-| `output.show` | false; при true дополнительно plt.show() |
-| `graph.layout` | Для графов spring по умолчанию либо circular |
-| `graph.seed` | 0 для spring layout |
-| `graph.weight_labels` | true |
+| `title` | Tool-specific title |
+| `style.text_engine` | `mathtext` or `latex`; default `mathtext` |
+| `style.figsize` | `[10, 6]` inches; metadata adds caption space below |
+| `style.label_size`, `.tick_size`, `.legend_size` | `19`, `16`, `15` |
+| `style.latex_preamble` | Custom TeX preamble when `latex` is selected |
+| `output.show` | `false`; `true` also calls `plt.show()` |
+| `graph.layout` | `spring` (default) or `circular` |
+| `graph.seed` | `0` for the spring layout |
+| `graph.weight_labels` | `true` |
 
-Вероятностная диаграмма сохраняет исходные массы: top-K не перенормируется; заголовок показывает отображённую массу и остаток. Синие/оранжевые вершины обозначают +1/−1; пересечённые рёбра выделены, отрицательные показаны пунктиром. Для крупного плотного графа разумно отключить подписи весов; фильтр рёбер и специализированная диаграмма больших распределений будут добавлены позже.
+The probability chart preserves the original masses: top-K is not
+renormalized, and the title reports the shown mass and the remainder. Blue
+and orange vertices mean `+1` and `-1`; cut edges are emphasized and
+negative edges are dashed. For a large dense graph, disable weight labels;
+an edge filter and a specialized large-distribution chart are not part of
+0.1.0rc2.
 
-Для сохранения графика `save` использует общие `path`, `filename`, `makedir`, `savedir` и дополнительно `format` (png по умолчанию, также jpeg/pdf/svg), `DPI` (250) и `metadata` (false). При metadata=True под графиком отображаются дата/время результата, тип и параметры алгоритма, параметры графа и fingerprint. Полный взвешенный граф хранится в записи; видимая подпись не печатает таблицу всех рёбер. Для запуска без рецепта подпись содержит размер и fingerprint, а веса находятся в сохранённом снимке.
+For a saved plot, `save` uses the common `path`, `filename`, `makedir`, and
+`savedir` fields plus `format` (`png` by default; `jpeg`, `pdf`, `svg`),
+`DPI` (`250`), and `metadata` (`false`). With `metadata=True`, the caption
+below the figure shows the result timestamp, algorithm type and parameters,
+graph parameters, and fingerprint. The full weighted graph remains in the
+record; the visible caption does not print an edge table. For a run without
+a recipe, the caption shows size and fingerprint, and the weights remain in
+the stored snapshot.
 
-Указание `atts` или `save_original_data` в save графика включает дополнительный JSON результата инструмента. В первой версии числовые серии находятся внутри `plot_data`, поэтому нативный экспорт из этой записи не разбирает вложенные поля по точечным путям. Для нативного экспорта карты передайте сам RunRecord сканера в `save_result` и выберите `values`.
+Specifying `atts` or `save_original_data` in a plot `save` block adds a
+sidecar JSON document for the tool result. In this version numeric series
+live inside `plot_data`, so native export from that record does not resolve
+nested fields by dotted paths. For a native landscape export, pass the
+scanner `RunRecord` to `save_result` and select `values`.
 
-Интерактивный HTML, трёхмерные поверхности и траектории редукции реализованы для сохранённых траекторий `RQAOA`/`LS-RQAOA` через `plot_parameter_trajectories_3d`; Plotly.js встраивается в автономный HTML.
+Interactive HTML, 3D surfaces, and reduction trajectories are available for
+stored `RQAOA`/`LS-RQAOA` trajectories through
+`plot_parameter_trajectories_3d`; Plotly.js is embedded in the standalone
+HTML.
 
 ## LS-RQAOA (`ls_rqaoa_cpu`)
 
-`LSRQAOACPU.solve(graph, *, report=None, logs=None, num_treads=None)` выполняет один и тот же план локальных задач последовательно при `num_treads=1` и в пуле процессов `spawn` при большем значении. Явный аргумент `num_treads` переопределяет JSON. Запрошенное и фактически применённое значения находятся в `resources.num_treads_requested` и `resources.num_treads_applied`.
+`LSRQAOACPU.solve(graph, *, report=None, logs=None, num_treads=None,
+control=None)` executes the same local-task plan sequentially when
+`num_treads=1` and in a `spawn` process pool for a larger value. The explicit
+`num_treads` argument overrides JSON. Requested and applied values appear
+in `resources.num_treads_requested` and `resources.num_treads_applied`.
 
-### Секции конфигурации
+### Configuration sections
 
-| Секция | Обязательные поля | Смысл |
+| Section | Required fields | Meaning |
 |---|---|---|
-| `parameters` | `finish_at`, `max_reductions` | Размер точного остатка и необязательный предел числа глобальных редукций |
-| `subgraph_builder` | `type`, `parameters.max_size`, `parameters.rounds` | `random_partition` или `greedy_abs_weight_partition`; `boundary` только `induced_no_fields` |
-| `correlation_source` | `type`, `objective_reference` | `qaoa_statevector_cpu` p≥1 или `qaoa_analytic_p1_cpu`; локальная цель только `working_graph` |
-| `aggregation` | `type` | В этой версии только `mean`; среднее по числу наблюдений каждой пары |
-| `selection` | `type`, `parameters.pairs` | `max_abs_correlation`, `edges` или `all_pairs`, `zero_sign` |
-| `coverage` | `require_full`, `empty_policy` | `anchor_pair` — явная задача ремонта пустого покрытия |
-| `update` | `type` | Только `refresh_all`: на следующем шаге строится новый план |
+| `parameters` | `finish_at`, `max_reductions` | Exact-residual size, default `6`, and optional global reduction limit |
+| `subgraph_builder` | `type`, `parameters.max_size`, `parameters.rounds` | `random_partition` or `greedy_abs_weight_partition`; `boundary` only `induced_no_fields` |
+| `correlation_source` | `type`, `objective_reference` | `qaoa_statevector_cpu` with `p >= 1`, `qaoa_analytic_p1_cpu`, `qaoa_ising_statevector_cpu`, or `qaoa_statevector_gpu` (only `LSRQAOAGPU`); the local objective is `working_graph` except for the ising source |
+| `aggregation` | `type` | Only `mean`; average over the number of observations of each pair |
+| `selection` | `type`, `parameters.pairs` | `max_abs_correlation`, `edges` or `all_pairs`, `zero_sign` |
+| `coverage` | `require_full`, `empty_policy` | `require_full=false` and `empty_policy="anchor_pair"` by default; `anchor_pair` is the explicit repair task for an empty coverage |
+| `update` | `type` | Only `refresh_all`: a new plan is built at the next step |
 | `execution` | `backend`, `start_method`, `native_threads` | `process`, `spawn`, `1` |
-| `budget_policy` | `type` | Только `step_round_robin` |
-| `finisher` | `type`, `parameters.max_vertices` | Существующий `ExactCPUFinisher` |
-| `limits` | `shots_total`, `max_local_tasks_total` | Общий шотовый лимит и предел числа локальных вызовов на шаг |
-| `collect` | флаги | `reduction_history`, `parameter_trajectory`, `local_task_history`, `local_optimizer_history`, `correlation_tables`, `final_reduction_state` |
+| `budget_policy` | `type` | Only `step_round_robin` |
+| `finisher` | `type`, `parameters.max_vertices` | The existing `ExactCPUFinisher` |
+| `limits` | `shots_total`, `max_local_tasks_total` | Total shot limit and a cap on local calls per step |
+| `collect` | flags | `reduction_history`, `parameter_trajectory`, `local_task_history`, `local_optimizer_history`, `correlation_tables`, `final_reduction_state` |
 
-`full_graph_when_fits=true` у построителя создаёт одну локальную задачу на всём остатке, если он помещается в `max_size`; в этом режиме обычные повторные проходы не создаются. Дубли одного набора в разных проходах являются отдельными задачами с разными ID/seeds.
+`full_graph_when_fits=true` on the builder creates one local task over the
+whole residual when it fits within `max_size`; normal repeat passes are not
+created in that mode. Duplicate sets in different rounds are separate tasks
+with distinct IDs and seeds.
 
-### Покрытие и бюджеты
+### Coverage and budgets
 
-Разрешённая область `A_t` определяется `selection.parameters.pairs`. Наблюдаемая область — объединение разрешённых пар, обе вершины которых попали в запланированные задачи. При `require_full=true` неполное покрытие обнаруживается до обучения и вызывает `ValueError`. При `false` выбор идёт только по наблюдённым парам; отсутствующая оценка не считается нулём.
+The allowed domain `A_t` is defined by `selection.parameters.pairs`. The
+observed domain is the union of allowed pairs whose two endpoints appeared
+in planned tasks. With `require_full=true`, incomplete coverage is detected
+before training and raises `ValueError`. With `false`, selection uses only
+observed pairs; a missing estimate is never treated as zero.
 
-`budget_policy=step_round_robin` резервирует сумму обязательных корреляционных шотов всех задач шага, затем выдаёт полные итерации по одной каждой задаче в каноническом порядке. Для шотовой оценки statevector стоимость итерации — `(4*p+1)*M_train`; точные и аналитические итерации стоят 0. Квоты фиксируются до запуска worker-процессов. При недостатке минимума шаг не начинается, граф не меняется, возвращается полное решение и `status="stopped"`.
+`budget_policy=step_round_robin` reserves the sum of mandatory correlation
+shots for all tasks of a step, then grants full iterations one at a time to
+each task in canonical order. For a state-vector shot estimate, one
+iteration costs `(4p + 1) * M_train`; exact and analytic iterations cost
+zero. Quotas are fixed before worker processes start. When the minimum is
+unavailable, the step does not start, the graph does not change, a complete
+solution is returned, and `status="stopped"`.
 
-### Результаты LS
+### LS results
 
-Кроме общих полей: `cut_offset`, `ising_constant`, `reduced_solution`, `coverage_history`, `reduction_history`, `parameter_trajectory` (строки локальных задач), `local_task_history`, `local_optimizer_history`, `correlation_tables`, `final_reduction_state`. В событии редукции: `physical_correlation`, `correlation_origin="local_subgraph_mixture"`, `expected_fixed_energy_local`, `local_task_ids`, `aggregation_observations`, `coverage`, `global_expected_energy=None` и причина. Локальное среднее не объявляется глобальным ожиданием полного графа.
+Besides the common fields: `cut_offset`, `ising_constant`,
+`reduced_solution`, `coverage_history`, `reduction_history`,
+`parameter_trajectory` (rows of local tasks), `local_task_history`,
+`local_optimizer_history`, `correlation_tables`, `final_reduction_state`,
+and `budget_history`. A reduction event adds
+`physical_correlation`, `correlation_origin="local_subgraph_mixture"`,
+`expected_fixed_energy_local`, `local_task_ids`,
+`aggregation_observations`, `coverage`, `global_expected_energy=None`, and
+`global_expected_energy_reason="local_subgraph_mixture_not_global"`. A
+local average is never presented as the global expectation of the full
+graph.
 
-Построители:
+Builders:
 
 ```python
 from QA_max_cut_lib.generators import (
@@ -627,56 +922,152 @@ builder = GreedyAbsWeightPartitionBuilder({
 tasks = builder.build(graph, version=0)
 ```
 
-`build()` возвращает `round`, `block`, `nodes`, `task_id` и `boundary`; он не меняет граф и не вызывает QAOA.
+`build()` returns `round`, `block`, `nodes`, `task_id`, and `boundary`; it
+does not modify the graph and does not call QAOA. Both builders default to
+`max_size=10`, `rounds=1`, `full_graph_when_fits=True`, and
+`boundary="induced_no_fields"`. `max_size >= 2` is required.
 
-## Классические методы (`gw_cpu`, `simulated_annealing_cpu`, `refined`)
+See also: [Mathematical conventions](MATHEMATICS.md).
 
-`GoemansWilliamsonCPU` (`gw_cpu`) решает SDP через CVXPY/SCS и округляет независимыми гиперплоскостями. `parameters` содержит `num_hyperplanes`, `solver="SCS"`, `eps_abs`, `eps_rel`, `max_iters`, `allow_inaccurate`, `psd_tolerance`, `diag_tolerance` и `repair_tolerance`. `sdp_upper_bound` равен `null`: строгий dual certificate в этом этапе не строится; численное значение релаксации не выдаётся за сертифицированную границу.
+## Classical methods (`gw_cpu`, `simulated_annealing_cpu`, `refined`)
 
-`SimulatedAnnealingCPU` (`simulated_annealing_cpu`) строит spin BQM с `h=0`, `J=w/2`, `offset=-sum(w)/2` и вызывает классический `dwave.samplers.SimulatedAnnealingSampler` по одному логическому read на вызов. `parameters`: `num_reads`, `num_sweeps`, `beta_schedule_type` (`linear`/`geometric`), `beta_range`. `limits`: `anneal_reads_total`, `anneal_sweeps_total`. Это не quantum shots.
+`GoemansWilliamsonCPU` (`gw_cpu`) solves the SDP with CVXPY/SCS and rounds
+it with independent hyperplanes. `parameters` accepts `num_hyperplanes`
+(default `10`), `solver` (only `"SCS"`), `eps_abs` (`1e-6`), `eps_rel`
+(`1e-6`), `max_iters` (`10000`), `allow_inaccurate` (`false`),
+`psd_tolerance` (`1e-6`), `diag_tolerance` (`1e-6`), `repair_tolerance`
+(`1e-6`), and `time_limit_secs` (`null`). `limits.sdp_time_limit` is
+`null` by default. `collect` accepts `candidate_history`, `sdp_matrix`,
+`sdp_factor`, and `roundings`, all `false` by default.
 
-`ExactBlockRefiner` (`exact_block`) принимает `refine(graph, spins, context=...)` и возвращает улучшенную независимую копию. `selector` — `explicit_blocks` или `pair_greedy_abs_weight` с `max_seed_pairs`/`ranked_pairs`. Блоки применяются последовательно; поля пересчитываются после каждого принятого блока. `limits.refinement_states_total` резервирует полные `2**|S|` перечисления до старта блока.
+`sdp_upper_bound` is `null`, and `sdp_upper_bound_reason` states that no
+strict dual certificate is built; the numerical relaxation value is never
+presented as a certified bound. `positive_weight_upper_bound` and
+`bound_kind` are also reported. Nonpositive tolerance values, a non-`SCS`
+solver, and unknown fields raise `ValueError`; a non-boolean
+`allow_inaccurate` also raises `ValueError`.
 
-`RefinedSolver` (`refined`) принимает `base_solver` и `refiner`; `base_run` и `refinement_run` независимы. Итоговые `cut_value` и `solution` относятся к улучшенному назначению; квантовые углы и `expected_energy` остаются в `base_run`. `limits` допускает `anneal_reads_total`, `anneal_sweeps_total` и `refinement_states_total`.
+`SimulatedAnnealingCPU` (`simulated_annealing_cpu`) builds a spin BQM with
+`h=0`, `J=w/2`, `offset=-sum(w)/2` and calls the classical
+`dwave.samplers.SimulatedAnnealingSampler`, one logical read per call.
+`parameters`: `num_reads` (`10`), `num_sweeps` (`64`), `beta_schedule_type`
+(`linear` or `geometric`), `beta_range` (`null` or an increasing finite
+pair). `limits`: `anneal_reads_total`, `anneal_sweeps_total` (both `null`
+by default). `collect.candidate_history` defaults to `false`. These are
+annealing reads, not quantum shots; `resources.shots_used` is `0`.
+
+`ExactBlockRefiner` (`exact_block`) exposes
+`refine(graph, spins, *, context=None)` and returns an improved independent
+copy. `parameters`: `max_size` (`16`, integer `1…22`), `batch_size`
+(`4096`), `max_passes` (`1`), `max_blocks_total` (`null`),
+`improvement_atol` (`1e-10`), `improvement_rtol` (`1e-12`), and
+`max_states_per_block` (`2**20`). `selector` is `explicit_blocks` or
+`pair_greedy_abs_weight` with `max_seed_pairs` and `ranked_pairs`
+(`null` by default); `pair_greedy_abs_weight` requires `max_size >= 2`.
+Blocks are applied sequentially; fields are recomputed after each accepted
+block. `limits.refinement_states_total` reserves the full `2**|S|`
+enumeration of a block before the block starts. The returned solution is
+never worse than the input within the configured acceptance tolerance.
+
+`RefinedSolver` (`refined`) requires `base_solver` and `refiner`;
+`base_solver` must be a mapping and must not itself be `refined`
+(`ValueError`). `base_run` and `refinement_run` are independent records.
+Final `cut_value` and `solution` refer to the improved assignment; quantum
+angles and `expected_energy` remain in `base_run`. `limits` accepts
+`anneal_reads_total`, `anneal_sweeps_total`, and
+`refinement_states_total`. `collect` accepts `base_run`,
+`candidate_history`, and `refinement_history` (all `true` by default). The
+result also exposes `base_cut_value`, `base_energy`, `gain`,
+`base_solution`, and `solution_source` (`refined` or
+`refined_negative`).
 
 ## QAOA-in-QAOA (`qaoa_in_qaoa_cpu`, `qaoa_in_qaoa_gpu`)
 
-`QAOAInQAOACPU` и `QAOAInQAOAGPU` принимают `parameters.finish_at`, `parameters.max_levels`, `partitioner`, `local_solver`, `execution`, `budget_policy`, `finisher`, `limits` и `collect`. Блоки текущего уровня не пересекаются и покрывают все его вершины. Внутри блока фиксируется рисунок спинов; anchor каждого блока становится вершиной следующего метаграфа. `GraphReducer` применяет точные ограничения `s_u=r_u s_anchor` ко всему графу.
+`QAOAInQAOACPU` and `QAOAInQAOAGPU` accept `parameters.finish_at`
+(default `4`), `parameters.max_levels` (`null` by default), `partitioner`,
+`local_solver`, `execution`, `budget_policy`, `finisher`, `limits`, and
+`collect`. Blocks of the current level are disjoint and cover all of its
+vertices. A spin pattern is fixed inside each block; each block anchor
+becomes a vertex of the next meta-graph. `GraphReducer` applies exact
+constraints `s_u = r_u s_anchor` to the whole graph.
 
-`local_solver` — один из явных адаптеров:
+`local_solver` is one of the explicit adapters:
 
-- `qaoa_cpu` (`QAOACPU`), с `most_probable` или `best_of_shots`;
-- `qaoa_gpu` (`QAOAGPU`), только в `qaoa_in_qaoa_gpu`;
-- `exact_cpu` — явный тестовый компонент, не квантовый запуск.
+- `qaoa_cpu` (`QAOACPU`), with `most_probable` or `best_of_shots`;
+- `qaoa_gpu` (`QAOAGPU`), only in `qaoa_in_qaoa_gpu`;
+- `exact_cpu`, an explicit test component, not a quantum run.
 
-Локальный solver не содержит собственного корневого `limits`, `save`, `output` или `seed`. Координатор передаёт ему стабильный seed и фиксированную квоту. `execution.backend="process"` использует общий CPU-пул; `backend="gpu_owner"` обслуживает блоки одним устройством. `best_of_shots` резервирует M каждого readout; `level_round_robin` сначала покрывает все минимумы уровня, затем распределяет полные итерации.
+The local solver has no root `limits`, `save`, `output`, or `seed`. The
+coordinator passes a stable seed and a fixed quota. `execution.backend`
+must be `"process"` for the CPU hierarchy and `"gpu_owner"` for the GPU
+hierarchy; `start_method` is `"spawn"` and `native_threads` is `1`.
+`budget_policy.type` is `"level_round_robin"`: it first covers every
+level minimum, then distributes full iterations. `best_of_shots`
+reserves `M` for each readout.
 
-`hierarchy_history` содержит уровень, блоки, anchor, ID задач, raw/normalized рисунки, `Delta b`, `b`, квоты и времена. `hierarchy_tree` использует составные ID `L{level}:A{anchor}`; листья исходных вершин имеют `leaf:{node}`. Углы хранятся по локальным задачам в `parameter_trajectory`; они не усредняются в глобальный вектор.
+`hierarchy_history` contains the level, blocks, anchors, task IDs,
+`raw_pattern`/`normalized_pattern`, `delta_cut_offset`,
+`cut_offset_before`, `cut_offset_after`, quotas, and timings.
+`hierarchy_tree` uses composite IDs `L{level}:A{anchor}`; leaves of
+original vertices are `leaf:{node}`. Angles are stored per local task in
+`parameter_trajectory`; they are never averaged into a global vector.
 
-`limits.max_local_tasks_total` и `parameters.max_levels` дают полный `hierarchy_all_plus_fallback` со статусом `stopped`; ошибки partition, projection, worker или GPU не маскируются как лимит. `finish_at` решается `ExactCPUFinisher`; при `finish_at=0` малый остаток не обещается.
+`limits.max_local_tasks_total` and `parameters.max_levels` produce a
+complete `hierarchy_all_plus_fallback` with `status="stopped"`. Partition,
+projection, worker, and GPU errors are never masked as a limit. `finish_at`
+is solved by `ExactCPUFinisher`; with `finish_at=0` a small residual is not
+promised.
 
 ## NVIDIA GPU QAOA (`qaoa_gpu`)
 
-`QAOAGPU` принимает `parameters.layers`, `parameters.max_vertices`, `parameters.dtype` и `parameters.representation` (`full` или `spin_flip_pairs`). `gpu` содержит `device_id`, `diagonal_dtype`, `accumulation_dtype`, `memory.fraction_of_available`, `memory.reserve_bytes`, `kernels.mixer="pairwise"` и `kernels.cuda_graphs=false`.
+`QAOAGPU` accepts `parameters.layers` (`1`), `parameters.max_vertices`
+(`30`), `parameters.dtype` (`complex64`), and `parameters.representation`
+(`spin_flip_pairs` or `full`). `gpu` contains `device_id` (`0`),
+`diagonal_dtype` (`float64`), `accumulation_dtype` (`float64`),
+`memory.fraction_of_available` (`0.8`), `memory.reserve_bytes`
+(`268435456`), `kernels.mixer="pairwise"`, `kernels.cuda_graphs=false`, and
+`state_batch_size` (`1`).
 
-GPU-путь не импортирует CuPy при импорте пакета. Без CuPy/устройства вызов завершается `RuntimeError`; CPU-солверы не переключаются скрыто на NumPy. Preflight памяти выполняется до создания диагонали и состояния. `state_representation` содержит `type`, `n_vertices`, `node_order`, `dtype`, `amplitude_kind`, `probability_kind`, `representative_rule`, `normalization` и сведения об устройстве.
+The GPU path does not import CuPy when the package is imported. Without
+CuPy or a device, a call fails with `RuntimeError`; CPU solvers never switch
+to NumPy silently. The memory preflight runs before the diagonal and the
+state are created. `state_representation` contains `type`, `n_vertices`,
+`node_order`, `dtype`, `amplitude_kind`, `probability_kind`,
+`representative_rule`, `normalization`, and device information.
 
-Сборы в pair-режиме:
+Collection in pair mode:
 
-- `collect.compressed_statevector=true` — `chi`;
-- `collect.pair_probabilities=true` — `q`;
-- `collect.statevector=true` или `collect.probabilities=true` отклоняются, пока пользователь не выбрал full-представление. Это не позволяет молча вернуть `chi` как физический `psi`.
+- `collect.compressed_statevector=true` stores `chi`;
+- `collect.pair_probabilities=true` stores `q`;
+- `collect.statevector=true` or `collect.probabilities=true` is rejected
+  until the caller selects the full representation. This prevents `chi`
+  from being returned silently as a physical `psi`.
 
-`gradient.type="central_difference"` поддерживает все критерии и exact/shots. `gradient.type="adjoint"` поддерживает только exact Mean Cut; для остальных критериев или shots конфигурация отклоняется. Adjoint считает обратный проход по состоянию и не выдаёт себя за `4p+1` измерений.
+`gradient.type="central_difference"` supports every criterion and
+`exact`/`shots`. `gradient.type="adjoint"` supports exact Mean Cut only;
+any other criterion or `shots` mode is rejected with `ValueError`. The
+adjoint computes a reverse pass over the state and does not pretend to be
+`4p+1` measurements.
 
-`QAOAGPUCorrelationSource` (`qaoa_statevector_gpu`) использует собственный `gpu`-раздел и возвращает обычный `CorrelationResult` с исходными номерами и версией задачи. `RQAOAGPU` использует тот же редуктор и финишёр; `LSRQAOAGPU` требует `execution.backend="gpu_owner"` и обслуживает локальные задачи последовательно одним устройством.
+`QAOAGPUCorrelationSource` (`qaoa_statevector_gpu`) uses its own `gpu`
+section and returns a normal `CorrelationResult` with original labels and
+the task version. `RQAOAGPU` uses the same reducer and finisher;
+`LSRQAOAGPU` requires `execution.backend="gpu_owner"` and serves local
+tasks sequentially on one device.
 
-## Запуск модулей
+See also: [NVIDIA GPU guide](GPU.md).
 
-В каждом реализованном модуле солвера есть `main(argv=None)` и `if __name__ == "__main__":`. Аргументы CLI: `--graph` (JSON-рецепт), `--config` (JSON солвера), `--report` и `--logs` (0/1/2). Без файлов запускается небольшой воспроизводимый пример. Эти демонстрационные расчёты не выполняются при импорте.
+## Module execution
 
+Every implemented solver module provides `main(argv=None)` and an
+`if __name__ == "__main__":` entry point. CLI arguments: `--graph` (graph
+recipe JSON), `--config` (solver JSON), `--report` and `--logs` (`0/1/2`).
+Without files, the module runs a small reproducible example: a complete
+six-vertex graph with signed weights, topology seed `10`, weight seed `11`,
+and solver seed `42`. These demonstration calculations never run at import
+time.
 
-## Эксперименты и профилирование
+## Experiments and profiling
 
 ```python
 from QA_max_cut_lib import BenchmarkSpec, ExperimentRunner, ParallelismProfiler
@@ -689,19 +1080,48 @@ series = ExperimentRunner(spec).run()
 profile = ParallelismProfiler(spec, tools.load_json("tools/parallelism_sweep.json")).run()
 ```
 
-`BenchmarkSpec` принимает JSON-совместимый словарь и проверяет закрытую схему.
-`plan()` не вызывает солверы; `ExperimentPlan.result` содержит `counts`,
-`graph_instances`, `cases`, `trials`, `reference_jobs` и `rejected`.
-`ExperimentRunner.run()` возвращает `ExperimentSeries` с `result`, `trials`,
-`references`, `analysis`, `budget`, `environment` и `save_status`.
-`ParallelismProfiler.run()` возвращает `ParallelismProfile` с `result`,
-`measurements`, `aggregate`, `per_solver`, `recommended_num_treads`,
-`analysis["fit_amdahl"]` и `analysis["uncertainty"]`.
+`BenchmarkSpec` accepts a JSON-compatible dictionary and validates a closed
+schema. Top-level fields are `schema_version` (only `1`), `plan_seed`,
+`trial_seeds`, `graph_cases`, `solver_templates`, `solver_cases`,
+`references`, `execution`, `measurement`, `series_limits`, `metrics`,
+`failure_policy`, `collect`, `save`, `planner_limits`, and `profile`.
+`planner_limits.max_cases` defaults to `50000` and
+`planner_limits.max_trials` to `200000`. `metrics.success.type` is
+`fraction_of_exact_max` or `absolute_cut`. `failure_policy.on_trial_error`
+is `continue` (default) or `fail_fast`.
 
-`ReferencePolicy` принимает `type`, `exact`, `gw`, `best_known`. Политика
-возвращает `ReferenceJob`; `run_job` создаёт независимый reference record.
-Точный минимум выполняется отдельным запуском на графе с весами `-w`.
-GW-запись имеет `proof="heuristic"`; `sdp_upper_bound` не выдумывается.
+`plan()` does not call a solver. `ExperimentPlan.result` contains
+`counts`, `graph_instances`, `cases`, `trials`, `reference_jobs`,
+`rejected`, `seeds`, `execution`, `measurement`, `series_limits`,
+`summary`, and `profile`. `ExperimentPlan.plan_hash` is a separate hash
+property. `counts` includes
+`graph_instances`, `cases`, `raw_solver_configs`,
+`accepted_solver_configs`, `rejected_solver_configs`, `trials`,
+`reference_jobs`, and `planned_top_level_runs`.
+
+`ExperimentRunner.run()` returns `ExperimentSeries` with `result`, `trials`,
+`references`, `analysis`, `budget`, `environment`, and `save_status`. The
+result document has `record_type="experiment_series"`, `mode`, `summary`,
+`plan`, `references`, `trials`, `analysis`, `errors`, `environment`,
+`budget`, `timing` (`wall_seconds`, `makespan_seconds`), and `save`.
+
+`ParallelismProfiler.run()` returns `ParallelismProfile` with `result`,
+`measurements`, `aggregate`, `per_solver`, `recommended_num_treads`,
+`analysis["fit_amdahl"]`, and `analysis["uncertainty"]`. Its
+`ProfileSpec` requires `num_treads_values` to be a nonempty list that
+includes `1`; defaults include `warmup_runs=0`, `repetitions=1`,
+`execution_mode="isolated"`, `timing_scope="benchmark"`,
+`measurement_order="shuffle_within_case_repetition"`,
+`measurement_order_seed=2027`, `models=["amdahl", "karp_flatt"]`, and
+`recommendation.criterion="total_time"`.
+
+`ReferencePolicy` accepts `type` (`tiered` by default; also `exact`, `gw`,
+`best_known`, `none`), `exact`, `gw`, and `best_known`. The policy returns
+`ReferenceJob` objects; `run_job` creates an independent reference record.
+`exact.max_vertices` is `0…30` with `include_minimum=false`; `gw` uses
+`num_hyperplanes=10` by default. The exact minimum is computed by a
+separate run on the graph with weights `-w`. A GW record has
+`proof="heuristic"`; `sdp_upper_bound` is not invented.
 
 CLI:
 
@@ -711,18 +1131,74 @@ python -m QA_max_cut_lib.tools.experiments run --config experiments/benchmark_sm
 python -m QA_max_cut_lib.tools.parallelism --benchmark experiments/benchmark_small.json --config tools/parallelism_sweep.json
 ```
 
+`plan` also accepts `--json`; `run` accepts `--reuse-completed`. The
+parallelism CLI accepts `--plan-only` and `--json`.
 
-## Контрольные точки
+See also: [Experiment series and parallelism](EXPERIMENTS.md).
+
+## Checkpoints
 
 `QAOACPU.solve(..., control=RunControl(pause_after={"optimizer_iterations": 2}))`
-возвращает полное anytime-назначение и `last_checkpoint`. `tools.inspect_checkpoint`
-читает manifest без solver. `restore(path)` создаёт объект; `resume()` продолжает
-тот же canonical run. Новый `solve()` на восстановленном объекте — новый run.
-CLI: `python -m QA_max_cut_lib.tools.checkpoints inspect --checkpoint PATH`.
-Полная матрица границ — в `CHECKPOINTS_RU.md`.
+returns a complete anytime assignment and sets `last_checkpoint`.
+`tools.inspect_checkpoint(path)` reads a manifest without constructing a
+solver. `restore(path, *, overrides=None)` creates the solver object;
+`resume()` continues the same canonical run. A new `solve()` on a restored
+object starts a new run. Checkpoint events supported by `QAOACPU` are
+limited to `optimizer_iterations`.
 
+```python
+from QA_max_cut_lib import RunControl, restore, tools
 
-## Laboratory и warm-start
+solver = restore("checkpoints/run/checkpoint.json")
+print(tools.inspect_checkpoint("checkpoints/run/checkpoint.json"))
+solution = solver.resume()
+```
+
+`RunControl(pause_after=None, *, request_pause=False)` stores a mapping
+from event name to an absolute completed count; counts must be nonnegative
+integers, otherwise `ValueError`, and a non-mapping raises `TypeError`.
+`request_pause()` and `request_cancel()` set a flag for the next supported
+boundary. `should_pause(event, completed)` returns `True` once per reached
+trigger; a consumed trigger does not fire again after resume.
+`snapshot()` and `from_snapshot(data)` serialize the control.
+
+`CheckpointManager` exposes `write_generation`, `load`, and
+`list_generations`. `ResourceJournal` exposes `begin`, `commit`, `resolve`,
+`read`, and `reconcile`. `inspect_checkpoint` returns `schema_version`,
+`checkpoint_id`, `run_id`, `generation`, `phase`, `component_id`,
+`package_version`, `next_operation`, `array_payloads`, `journal_cutoff`,
+and `path`.
+
+`restore` overrides may contain only `output` and `checkpoint`; any other
+key raises `CheckpointIncompatible`. A missing component codec, a changed
+config or graph fingerprint, or an unsupported checkpoint format raises
+one of `CheckpointCorrupt`, `CheckpointIncompatible`, or `CheckpointLocked`,
+all subclasses of `CheckpointError`.
+
+In 0.1.0rc2, resume codecs are registered for `qaoa_cpu`,
+`laboratory.warm_start_qaoa_cpu`, `laboratory.block_mean_field_qaoa_cpu`,
+`laboratory.distributed_ls_rqaoa_cpu`, and `laboratory.qaoa_mi_cpu`.
+Other components report `supports_checkpoint=False`; enabling
+`checkpoint.enabled` for them raises `ValueError`.
+
+Checkpoint configuration fields when enabled: `path` (required), `format`
+(only `json_npy_v1`), `every` (subset of `optimizer_iterations`,
+`reductions`, `levels`, `local_tasks`, positive integers),
+`at_phase_boundaries` (`true`), `on_pause` (`true`),
+`durable_resource_journal` (`true`), `durability` (`local_fsync` or
+`best_effort`), `on_write_error` (`stop` or `raise`), and `retention`
+(only `{"type": "keep_all"}`).
+
+CLI:
+
+```bash
+python -m QA_max_cut_lib.tools.checkpoints inspect --checkpoint PATH
+python -m QA_max_cut_lib.tools.checkpoints resume --checkpoint PATH --report 1
+```
+
+See also: [Checkpoints](CHECKPOINTS.md).
+
+## Laboratory and warm start
 
 ```python
 from QA_max_cut_lib import GraphFactory, tools
@@ -734,7 +1210,8 @@ solver = WarmStartQAOACPU(config)
 solution = solver.solve(graph)
 ```
 
-`type="laboratory.warm_start_qaoa_cpu"`. Обязательный раздел `warm_start`:
+`type="laboratory.warm_start_qaoa_cpu"`. The `warm_start` section is
+required:
 
 ```json
 {
@@ -744,36 +1221,41 @@ solution = solver.solve(graph)
 }
 ```
 
-Источники: `provided_spins`, `provided_probabilities`, `classical_solver`
-(`gw_cpu`, `simulated_annealing_cpu`, `exact_cpu`). Mixer: `x`,
-`warm_aligned`, `rounded_modified`. `epsilon` фиксирован на run.
-Source entries должны покрывать все метки текущего графа без повторов.
-Classical child не запускается в конструкторе; его `source_cost` отдельно.
+`epsilon` defaults to `0.25` and must lie in `[0, 0.5]`; it is frozen for
+the run. Sources: `provided_spins`, `provided_probabilities`,
+`classical_solver` (`gw_cpu`, `simulated_annealing_cpu`, `exact_cpu`).
+Mixers: `x`, `warm_aligned`, `rounded_modified`. Source entries must cover
+every label of the current graph exactly once, without duplicates
+(`WarmStartError`, a `ValueError` subclass, otherwise). A classical child
+is not run in the constructor; its `source_cost` is reported separately.
 
-`result` дополнительно содержит `variant_id`, `warm_start_data`
-(`q_raw`, `q_clipped`, `warm_start_angles`, `node_order`), `mixer_id`,
-`source_type`, `source_cut`, `source_run`, `source_cost`,
-`initial_expected_cut`, `initial_expected_energy`. `source_cut` — дискретный
-seed cut, а не ожидание product state. `warm_start_angles` не входят в
-`optimal_angles` и не являются trainable параметрами.
+`result` additionally contains `variant_id`, `warm_start_data` (`q_raw`,
+`q_clipped`, `warm_start_angles`, `node_order`), `mixer_id`, `source_type`,
+`source_cut`, `source_run`, `source_cost`, `source_cost_status`,
+`initial_expected_cut`, and `initial_expected_energy`. `source_cut` is a
+discrete seed cut, not the expectation of the product state.
+`warm_start_angles` are not part of `optimal_angles` and are not trainable
+parameters.
 
-Каталог:
+Catalog:
 
 ```bash
 python -m QA_max_cut_lib.laboratory list
 python -m QA_max_cut_lib.laboratory show --id warm_start_product_qaoa_cpu_v1
 ```
 
-`list/show` не требуют CuPy/CVXPY. Полный обзор — `LABORATORY_RU.md`.
+`list` and `show` do not require CuPy or CVXPY. `list` also accepts
+`--implemented-only` and `--json`; `show` accepts `--json`.
 
+See also: [Laboratory catalog and warm start](LABORATORY.md).
 
 ## Warm-start ensemble RQAOA
 
-`WarmStartRQAOACPU` (`type="laboratory.warm_start_rqaoa_cpu"`) использует
-`correlation_source.type="warm_start_ensemble_cpu"`. Source принимает
-`candidate_source` `gw_rounds_cpu` или `provided_by_graph`, дискретные
-старты, `warm_start`, objective/estimation/optimizer/initialization и
-`correlations` с `aggregation="uniform_components"`.
+`WarmStartRQAOACPU` (`type="laboratory.warm_start_rqaoa_cpu"`) uses
+`correlation_source.type="warm_start_ensemble_cpu"`. The source accepts
+`candidate_source` (`gw_rounds_cpu` or `provided_by_graph`), discrete
+starts, `warm_start`, objective/estimation/optimizer/initialization, and
+`correlations` with `aggregation="uniform_components"`.
 
 ```python
 from QA_max_cut_lib.laboratory import WarmStartRQAOACPU
@@ -782,21 +1264,30 @@ solution = solver.solve(graph)
 print(solver.warm_start_history)
 ```
 
-Результат дополнительно содержит `warm_start_history`, `variant_id`,
-`aggregate_statevector=None` и статус `not_applicable_statistical_mixture`.
-`source_cost` classical preprocessing находится в `resources.source_cost`.
-Checkpoint/resume для этой сборки в a12 не заявлен.
+The result additionally contains `warm_start_history`, `variant_id`,
+`aggregate_statevector=None`, and
+`aggregate_statevector_status="not_applicable_statistical_mixture"`.
+Classical preprocessing cost is in `resources.source_cost`, with
+`resources.source_cost_status`. Checkpoint/resume is not available for this
+component in 0.1.0rc2.
 
-## Incremental LS-RQAOA (0.1.0a17)
+## Incremental LS-RQAOA
 
 `QA_max_cut_lib.laboratory.IncrementalLSRQAOACPU` /
-`type="laboratory.incremental_ls_rqaoa_cpu"` принимает compact recipe:
+`type="laboratory.incremental_ls_rqaoa_cpu"` accepts a compact recipe:
 `initial_builder`, `update`, `bank`, `selection`, `correlation_source`,
-`limits`, `finish_at`, `pairs`. Он сохраняет
-`solve(graph, *, report=None, logs=None, num_treads=None)`, возвращает
-полный словарь исходных labels → ±1 и независимый `RunRecord`.
+`local_problem`, `finisher`, `execution`, `limits`, top-level `finish_at`
+(default `min(6, max(1, len(graph)))`), `pairs` (`edges` by default),
+`zero_sign` (`1`), and `require_full_coverage` (`false`). It keeps
+`solve(graph, *, report=None, logs=None, num_treads=None, control=None)`,
+returns a complete dictionary from original labels to `±1`, and provides an
+independent `RunRecord`.
 
-Основные result-поля: `epoch_history`, `bank_history`,
-`selection_history`, `coverage_history`, `budget_history`, `final_bank`,
-`reductions_completed`, `resources`. `selection.physical_correlation` и
-`selection.score` — разные величины.
+Main result fields: `epoch_history`, `bank_history`, `selection_history`,
+`coverage_history`, `budget_history`, `local_task_history`,
+`final_bank`, `reductions_completed`, `remaining_node_order`, `cut_offset`,
+`ising_constant`, `reduced_solution`, `reduced_cut_value`,
+`solution_source`, and `resources`. `selection.physical_correlation` and
+`selection.score` are different quantities.
+
+See also: [Incremental LS-RQAOA](INCREMENTAL_LS.md).

@@ -1,11 +1,11 @@
 # Git stage 13
 
-Коммит `e1958a2` содержит Stage 13: общий `ConditionalCutProblem`, полный CPU
-statevector для активного блока, `ConditionalQAOACPU`,
-`EnvironmentLSRQAOACPU`, Laboratory-маршруты, source cards, конфигурации,
-примеры, тесты, документацию и ноутбук 14.
+Commit `e1958a2` contains Stage 13: the shared `ConditionalCutProblem`, a full
+CPU statevector for the active block, `ConditionalQAOACPU`,
+`EnvironmentLSRQAOACPU`, Laboratory routes, source cards, configurations,
+examples, tests, documentation and notebook 14.
 
-Ограничения: checkpoint/resume новой LS recipe не реализован; GPU-поля,
-soft/mean-field exchange и correlation-weighted fields не заявлены.
-Старые LS/QAOA-контракты сохранены; общий `LSRQAOACPU` получил только
-neutral hooks `_fallback_solution` и `_on_reduction`.
+Limitations: checkpoint/resume of the new LS recipe is not implemented; GPU
+fields, soft/mean-field exchange and correlation-weighted fields are not
+claimed. The old LS/QAOA contracts are preserved; the shared `LSRQAOACPU`
+gained only the neutral hooks `_fallback_solution` and `_on_reduction`.

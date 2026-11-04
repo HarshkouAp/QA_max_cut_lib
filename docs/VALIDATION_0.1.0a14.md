@@ -1,19 +1,19 @@
-# Проверка 0.1.0a14
+# Verification 0.1.0a14
 
-Дата: 2 ноября 2026 года.
+Date: 2 November 2026.
 
-## База
+## Base
 
 - `QA_max_cut_lib 0.1.0a14`, Python 3.12.14, NumPy 2.5.4.
 - CPU: `184 passed, 1 skipped, 1 warning`.
-- Sphinx `-W`: успешно.
-- Wheel установлен в `.venv` и `.venv-wheelcheck`; примеры/CLI запускаются
-  вне дерева `src`.
-- GPU: не перезапускался; field/mean-field GPU modes не заявлены.
+- Sphinx `-W`: success.
+- Wheel installed into `.venv` and `.venv-wheelcheck`; examples/CLI run
+  outside the `src` tree.
+- GPU: not re-run; field/mean-field GPU modes are not claimed.
 
-## A — model cut и округление
+## A — model cut and rounding
 
-Два singleton-блока, ребро веса 2, means `(0.2,-0.4)`:
+Two singleton blocks, edge of weight 2, means `(0.2,-0.4)`:
 
 ```text
 model mean cut = 1.08
@@ -21,46 +21,47 @@ rounded solution = (+1,-1)
 full cut = 2
 ```
 
-Сумма двух local affected means равна `2.16`; это не global cut.
+The sum of the two local affected means is `2.16`; that is not the global cut.
 
 ## B — damping
 
-Старые `(m,q)=((1,1),1)`, candidate `z=(-1,1)`, `r=-1`, `lambda=1/2`
-дают `m'=(0,1)`, `q'=0` и pair probabilities `(1/2,0,1/2,0)`. Сырой `q=-1`
-с уже сглаженным `m` даёт отрицательную pair probability и отклоняется.
+Old `(m,q)=((1,1),1)`, candidate `z=(-1,1)`, `r=-1`, `lambda=1/2` give
+`m'=(0,1)`, `q'=0` and pair probabilities `(1/2,0,1/2,0)`. A raw `q=-1`
+with an already smoothed `m` gives a negative pair probability and is
+rejected.
 
 ## D — applied angles
 
-Один спин, `h=1`, `theta_old=(0,0)`, candidate `(-pi/4,pi/4)`,
-`kappa=1/4`: applied `(-pi/16,pi/16)` даёт
+One spin, `h=1`, `theta_old=(0,0)`, candidate `(-pi/4,pi/4)`,
+`kappa=1/4`: applied `(-pi/16,pi/16)` gives
 `z=-(2-sqrt(2))/4 ≈ -0.1464466094`.
 
 ## Budget / status
 
-- `B=47`, 3 обязательных moment jobs по 16: sweep не начинается,
+- `B=47`, 3 mandatory moment jobs of 16 each: the sweep does not start,
   `moment_reserve_unavailable`, 0 shots.
-- `B=48`: все три job выполняют только moments, `shots_used=48`,
+- `B=48`: all three jobs perform moments only, `shots_used=48`,
   `training_shots=0`.
-- target Jacobi 3 блока × 3 sweep × (`2×5×8+16`)=864 shots; реальный
-  прогон использовал 864 и 9 logical jobs.
-- `max_sweeps=0`: 0 local jobs, sign-rounded result и полный cut.
-- empty graph: `{}` без quantum работы.
+- target Jacobi 3 blocks × 3 sweeps × (`2×5×8+16`)=864 shots; the actual run
+  used 864 and 9 logical jobs.
+- `max_sweeps=0`: 0 local jobs, sign-rounded result and full cut.
+- empty graph: `{}` without quantum work.
 
 ## Checkpoint
 
-Реализован compact checkpoint на границе полного sweep:
-`initialized` и `gauss_seidel_sweep_commit`/`jacobi_sweep_commit`.
-`restore(path)` + `resume()` сохраняет m/q/theta, budget, RNG, histories
-и не повторяет уже завершённые sweeps. Проверка выполнена в том же
-процессе; отдельный cross-process test и fault injection в этой версии
-**не заявлены**. Mid-sweep child checkpoint и replay receipt также не
-заявлены.
+A compact checkpoint is implemented at the boundary of a full sweep:
+`initialized` and `gauss_seidel_sweep_commit`/`jacobi_sweep_commit`.
+`restore(path)` + `resume()` preserve m/q/theta, budget, RNG, histories and do
+not repeat already completed sweeps. The check was performed in the same
+process; a separate cross-process test and fault injection are **not claimed**
+in this version. A mid-sweep child checkpoint and a replay receipt are also
+not claimed.
 
 ## Not run
 
 - overlapping blocks, adaptive damping, nonlinear/correlation-weighted
   fields, GPU/chi/analytic path;
-- полный Jacobi multiprocessing pool с memory-limited resident jobs;
-- GS/Jacobi completion permutations на production-размерах;
-- 16-trial comparative series и profile P=1/2/4;
-- fault-injection I до/после BEGIN/receipt/commit.
+- a full Jacobi multiprocessing pool with memory-limited resident jobs;
+- GS/Jacobi completion permutations at production sizes;
+- the 16-trial comparative series and the P=1/2/4 profile;
+- fault injection I before/after BEGIN/receipt/commit.

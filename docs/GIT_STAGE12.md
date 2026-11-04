@@ -1,8 +1,8 @@
 # Git Stage 12
 
-Основной коммит: `29224e8` — `Stage 12: add warm-start ensemble RQAOA (0.1.0a12)`.
+Main commit: `29224e8` — `Stage 12: add warm-start ensemble RQAOA (0.1.0a12)`.
 
-## Состав
+## Contents
 
 - `solvers/warm_start_ensemble.py`: bounded `gw_rounds_cpu`/`provided_by_graph`,
   global-flip dedup, current-cut ranking, child quotas, equal-weight
@@ -13,9 +13,9 @@
 - public Laboratory module/CLI and factory route;
 - GW `candidate_roundings` collection (one SDP, L logical rounds);
 - provided/GW examples, benchmark spec and notebook 13;
-- `WARM_START_RQAOA_RU.md`, validation report and tests.
+- `WARM_START_RQAOA.md`, validation report and tests.
 
-## Проверки
+## Checks
 
 ```text
 inventory: 89/89 parsed

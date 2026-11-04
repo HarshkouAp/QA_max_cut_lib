@@ -1,28 +1,28 @@
 # Git Stage 08
 
-Коммит реализации: `d31cf13` — `Stage 08: add classical baselines and exact block refinement (0.1.0a8)`.
+Implementation commit: `d31cf13` — `Stage 08: add classical baselines and exact block refinement (0.1.0a8)`.
 
-## Состав
+## Contents
 
-- `solvers/goemans_williamson_cpu.py` — CVXPY/SCS SDP, контролируемый
-  спектральный ремонт и hyperplane rounding;
-- `solvers/simulated_annealing_cpu.py` — dimod spin BQM и классический
+- `solvers/goemans_williamson_cpu.py` — CVXPY/SCS SDP, controlled spectral
+  repair and hyperplane rounding;
+- `solvers/simulated_annealing_cpu.py` — dimod spin BQM and the classical
   `dwave.samplers.SimulatedAnnealingSampler`;
-- `solvers/exact_block_refiner.py` — условные поля, последовательный exact
-  block enumeration и явные лимиты состояний;
-- `solvers/refined.py` — обёртка base solver → refiner с независимыми
-  `base_run` и `refinement_run`;
-- `tools/classical_plots.py` — `analyze_solution` и графики GW/SA/refinement;
-- конфигурации, тесты, ноутбук `09`, отчёт и профиль `classical`.
+- `solvers/exact_block_refiner.py` — conditional fields, sequential exact
+  block enumeration and explicit state limits;
+- `solvers/refined.py` — wrapper base solver → refiner with independent
+  `base_run` and `refinement_run`;
+- `tools/classical_plots.py` — `analyze_solution` and GW/SA/refinement plots;
+- configurations, tests, notebook `09`, the report and the `classical` profile.
 
-## Проверки
+## Checks
 
 ```text
 CPU: 134 passed, 1 skipped, 1 warning
 GPU: 10 passed
-Sphinx -W: успешно
+Sphinx -W: success
 wheel/sdist: 0.1.0a8
-CLI из установленного wheel: GW, SA, refined
+CLI from the installed wheel: GW, SA, refined
 ```
 
-`dist/` исключён из Git и добавляется в передаваемый zip отдельно.
+`dist/` is excluded from Git and is added separately to the delivered zip.

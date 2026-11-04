@@ -1,40 +1,53 @@
-Взвешенный Max-Cut и QAOA
+Weighted Max-Cut and QAOA
 =========================
 
-От графа к гамильтониану
-------------------------
+This chapter takes one object — an undirected graph with real weights, some of
+them negative — and carries it to numbers you can reproduce: the exact optimum of
+a four-vertex example, the QAOA expectation at fixed angles, the probability that
+one measurement reaches the optimum, and the identity a recursive reduction uses
+when it removes a vertex. The energy sign and the bit order are fixed first,
+because every later chapter reads cuts and energies through them. Exact field
+types and defaults live in the [API reference](API.md); the full convention table
+is in `MATHEMATICS.md`.
 
-Пусть :math:`G=(V,\mathcal E)` — неориентированный граф с вещественными весами
-:math:`w_{ij}`. Спины :math:`s_i\in\{-1,+1\}` задают две части разбиения.
-Ребро пересекает разрез, если его концы лежат в разных частях.
+Cut, energy, and the cost Hamiltonian
+-------------------------------------
+
+Let :math:`G=(V,\mathcal E)` be an undirected graph with finite real weights
+:math:`w_{ij}`. A spin :math:`s_i\in\{-1,+1\}` says which side of the partition
+contains vertex :math:`i`; an edge is cut when its endpoints lie on different
+sides. The cut weight and the energy are
 
 .. math::
 
    C_G(s) = \sum_{(i,j)\in\mathcal E} w_{ij}\frac{1-s_i s_j}{2},
    \qquad E(s)=-C_G(s).
 
-Положительный вес увеличивает целевую величину, когда ребро разрезано.
-Отрицательный вес её уменьшает. Изолированная вершина не влияет на
-:math:`C_G`. Одновременная смена знаков всех спинов сохраняет разрез.
+A positive weight increases the objective when its edge is cut, a negative weight
+decreases it, and an isolated vertex does not enter :math:`C_G` at all. Flipping
+every spin at once leaves each product :math:`s_i s_j` unchanged, so a cut and its
+global flip are the same partition. Lower energy therefore means a better cut.
 
-Оператор Паули :math:`Z_i` имеет собственное значение :math:`s_i=1-2b_i`
-на вычислительном базисном состоянии с битом :math:`b_i`. Значит,
-:math:`H_E|b\rangle=E(s(b))|b\rangle` для
+QAOA works in the computational basis. A Pauli operator :math:`Z_i` has eigenvalue
+:math:`s_i=1-2b_i` on the basis state whose bit for vertex :math:`i` is
+:math:`b_i`. Substituting that relation into :math:`C_G` gives
+:math:`H_E|b\rangle=E(s(b))|b\rangle` for
 
 .. math::
 
    H_E = \sum_{(i,j)\in\mathcal E}\frac{w_{ij}}2(Z_iZ_j-I).
 
-Скалярный член задаёт ноль энергии. Его удаление меняет только глобальную
-фазу в унитарном операторе :math:`e^{-i\gamma H_E}`, но сдвигает собственные
-значения и все пороги, выраженные в абсолютных единицах энергии.
+The scalar term only sets the zero of energy: dropping it changes the global phase
+of :math:`e^{-i\gamma H_E}` but shifts every eigenvalue and every threshold that
+is stated in absolute energy units. The library keeps the constant in
+`IsingProblem.constant` so a reduction does not silently lose it.
 
-Схема и аналитическая проверка
-------------------------------
+Depth-one circuit and a closed-form check
+-----------------------------------------
 
-В ``ExactCPU`` эталон :math:`C^\star=\max_s C_G(s)` вычисляется перебором.
-``QAOACPU`` начинает с :math:`|+\rangle^{\otimes n}` и на слое
-:math:`\ell` последовательно применяет фазовый оператор и миксер.
+`ExactCPU` supplies the reference :math:`C^\star=\max_s C_G(s)` by enumeration.
+`QAOACPU` starts from :math:`|+\rangle^{\otimes n}` and, on layer :math:`\ell`,
+applies a phase operator and then a mixer:
 
 .. math::
 
@@ -42,86 +55,107 @@
    \exp\!\left(-i\beta_\ell\sum_{i\in V}X_i\right)
    \exp\!\left(-i\gamma_\ell H_E\right).
 
-Множитель справа действует первым. В конфигурации сначала записывают
-:math:`\gamma_1,\dots,\gamma_p`, затем :math:`\beta_1,\dots,\beta_p`.
-Исходную постановку вариационной схемы описали
-`Farhi, Goldstone и Gutmann <https://arxiv.org/abs/1411.4028>`_.
+The right-hand factor acts first. A configuration lists
+:math:`\gamma_1,\dots,\gamma_p` before :math:`\beta_1,\dots,\beta_p`. The original
+variational construction is due to
+`Farhi, Goldstone, and Gutmann <https://arxiv.org/abs/1411.4028>`_.
 
-Для графа из одного ребра веса :math:`w` при :math:`p=1` после фазового
-оператора амплитуды разрезающих состояний :math:`|01\rangle` и
-:math:`|10\rangle` равны :math:`e^{i\gamma w}/2`. После миксера
-:math:`e^{-i\beta X}\otimes e^{-i\beta X}` амплитуда каждого разрезающего
-состояния равна :math:`(e^{i\gamma w}\cos(2\beta)-i\sin(2\beta))/2`. Сумма квадратов модулей
-этих двух амплитуд даёт вероятность разрезать ребро. Умножая на вес, получаем
+One edge of weight :math:`w` is small enough to solve by hand. At :math:`p=1`,
+after the phase operator the two cutting states :math:`|01\rangle` and
+:math:`|10\rangle` carry amplitude :math:`e^{i\gamma w}/2`. After the mixer
+:math:`e^{-i\beta X}\otimes e^{-i\beta X}`, each cutting amplitude is
+:math:`(e^{i\gamma w}\cos(2\beta)-i\sin(2\beta))/2`. Adding the squared moduli
+gives the probability that the edge is cut; multiplying by the weight gives
 
 .. math::
 
    \mathbb E[C]=\frac{w}{2}
    \left[1-\sin(\gamma w)\sin(4\beta)\right].
 
-При :math:`w=1,\ \gamma=-\pi/2,\ \beta=\pi/8` ожидаем
-:math:`\mathbb E[C]=1`, :math:`\langle H_E\rangle=-1` и
-:math:`\langle Z_1Z_2\rangle=-1`. Этот частный случай проверяет знаки
-гамильтониана, фазового оператора и миксера.
+At :math:`w=1,\ \gamma=-\pi/2,\ \beta=\pi/8` the expectation is
+:math:`\mathbb E[C]=1`, with :math:`\langle H_E\rangle=-1` and
+:math:`\langle Z_1Z_2\rangle=-1`. This single case checks three signs at once: the
+sign of the cost Hamiltonian, the sign of the phase operator, and the sign of the
+mixer. A sign error in any of them changes the correlator immediately. The same
+one-edge family also shows the asymmetry of signed weights: at
+:math:`\gamma=\pi/(2|w|)` and :math:`\beta=-\pi/8` the expected energy is
+:math:`-|w|` for :math:`w>0` but :math:`0` for :math:`w<0`, because cutting a
+negative edge lowers :math:`C`.
 
-Обучение и измерение
---------------------
-
-Для состояния :math:`|\psi\rangle` вероятность базисного исхода
-:math:`b` равна :math:`P(b)=|\langle b|\psi\rangle|^2`. Цель ``mean_cut``
-усредняет :math:`C_G` по этому распределению. Другие конфигурации
-оптимизируют среднее по лучшей доле массы (CVaR), логарифм экспоненциального
-момента с масштабированием (Gibbs), среднее максимума из :math:`K`
-независимых выборок или вероятность пройти порог по :math:`C_G`.
-``expected_cut`` всегда относится к физическому ожиданию :math:`C_G`
-в конечном состоянии симулятора.
-
-``estimation.mode="exact"`` вычисляет критерий по всему вектору вероятностей.
-``estimation.mode="shots"`` оценивает его по выборкам симулятора. Один полный
-шаг с центральными разностями при :math:`p` слоях содержит одну оценку в
-центре и две пробы на каждый из :math:`2p` углов. Если каждая оценка
-использует :math:`M_{\rm train}` выборок, шаг расходует
-:math:`(4p+1)M_{\rm train}` обучающих шотов. Шоты для чтения результата
-учитываются отдельно. Эти режимы моделируют идеальное измерение
-без аппаратного шума.
-
-Если при фиксированных углах вероятность пройти порог за один шот равна
-:math:`q`, вероятность пройти его хотя бы раз за :math:`M` независимых
-шотов равна :math:`1-(1-q)^M`. Увеличение :math:`M` меняет статистику
-выбора лучшего измерения при неизменном состоянии.
-
-Пример с отрицательным весом
-----------------------------
-
-Рёбра имеют веса :math:`w_{10,30}=1.5`, :math:`w_{10,80}=2`,
-:math:`w_{30,80}=-0.5`. Вершина 101 изолирована. Возможные значения
-:math:`C_G` равны :math:`0,\ 1,\ 1.5,\ 3.5`. Максимум 3,5 достигается,
-когда 10 лежит по одну сторону разреза, а 30 и 80 по другую. С учётом
-глобального переворота и двух значений спина 101 максимуму соответствуют
-четыре базисных состояния.
-
-Индекс состояния использует младший бит для первой вершины из
-``node_order``. Скрипт ``examples/public_quickstart.py`` восстанавливает
-спины по этому порядку и суммирует вероятности по каждому значению
-разреза. При фиксированной инициализации и ``seed=42`` оптимальное значение
-получено за 128 шотов чтения. Среднее по конечному состоянию составляет
-3,044365, вероятность оптимума в одном измерении составляет 0,805755.
-
-.. figure:: _static/signed-max-cut.svg
-   :alt: Разбиение взвешенного графа и вероятности четырёх возможных значений разреза
-   :width: 100%
-
-   Слева показано возвращённое разбиение. Справа — распределение по
-   значениям разреза, вычисленное из конечного вектора состояния.
-
-Ограничение спинов при редукции
+Training objectives and readout
 -------------------------------
 
-Для документации рекурсивного алгоритма полезно отдельно проверять
-тождество редукции и качество выбора ограничения. Пусть
-:math:`s_u=\sigma s_v`, где :math:`\sigma\in\{-1,+1\}`. При исключении
-:math:`u` положим :math:`w_{ij}=0` для отсутствующих рёбер. Каждое ребро
-:math:`(u,k)` раскладывается по формуле
+For a state :math:`|\psi\rangle` the probability of a basis outcome :math:`b` is
+:math:`P(b)=|\langle b|\psi\rangle|^2`. The `mean_cut` objective averages
+:math:`C_G` over that distribution. The other criteria act on the same
+distribution: `cvar` averages the best :math:`\alpha` share of the probability
+mass, `gibbs` returns a scaled log-sum-exp,
+:math:`\log\!\left(\sum_b P(b)e^{\eta C(b)}\right)/\eta`, `best_of_k` returns the
+expected maximum over :math:`K` independent draws, and `threshold_probability`
+returns the mass of outcomes with :math:`C_G` at or above a threshold.
+`expected_cut` is a different field: it is always the physical expectation of
+:math:`C_G` in the final simulator state, not the optimized criterion.
+
+`estimation.mode="exact"` evaluates a criterion over the whole probability vector;
+`estimation.mode="shots"` estimates it from simulator samples. One full
+central-difference step at :math:`p` layers needs one evaluation at the centre and
+two probes for each of the :math:`2p` angles. If every evaluation uses
+:math:`M_{\rm train}` shots, the step spends :math:`(4p+1)M_{\rm train}` training
+shots; shots used for readout are counted separately. Both modes model an ideal
+measurement without hardware noise.
+
+Readout is a separate random choice. If one shot clears a cut threshold with
+probability :math:`q`, then :math:`M` independent shots clear it at least once with
+probability :math:`1-(1-q)^M`. Raising :math:`M` changes how the best measured
+outcome is selected; it does not change the state or its expectation.
+
+Worked example: four vertices, one negative edge
+------------------------------------------------
+
+`examples/public_quickstart.py` uses vertices `10, 30, 80, 101` with weights
+:math:`w_{10,30}=1.5`, :math:`w_{10,80}=2`, and :math:`w_{30,80}=-0.5`; vertex
+`101` is isolated. Enumerating the four possibilities gives
+:math:`C_G\in\{0,\ 1,\ 1.5,\ 3.5\}`, so the optimum is `3.5`, attained when `10`
+sits on one side and `30` and `80` on the other. Accounting for the global flip and
+for the two values of spin `101`, four basis states reach that optimum.
+
+.. code-block:: bash
+
+   python examples/public_quickstart.py
+
+The script builds `QAOACPU` with `seed=42`, one layer, `mean_cut`, exact
+estimation, fixed initial angles `[-0.8, 0.4]`, and readout `best_of_shots` with
+128 shots. Its printed result is:
+
+.. code-block:: text
+
+   Exact optimum                    3.500000
+   Expected QAOA cut               3.044365
+   Best cut in 128 simulated shots 3.500000
+   Final-state optimal mass        0.805755
+   Readout spins                   {10: 1, 30: -1, 80: -1, 101: 1}
+
+The state index uses the least-significant bit for the first vertex of
+`node_order`. The script rebuilds spins in that order and sums probability mass by
+cut value; that reconstruction reproduces `expected_cut` to `1e-12`. The optimal
+mass `0.805755` is the probability that a single ideal measurement returns an
+optimal partition. It is close to, but not equal to, one: a good state is not the
+same object as the optimum.
+
+.. figure:: _static/signed-max-cut.svg
+   :alt: Partition of the signed four-vertex graph and probabilities of the four possible cut values
+   :width: 100%
+
+   Left: the partition returned by readout. Right: the distribution over cut
+   values computed from the final statevector.
+
+Removing a vertex without changing the objective
+------------------------------------------------
+
+A recursive method removes a vertex by fixing its spin relative to a neighbour. The
+identity and the choice of constraint deserve separate checks. Let
+:math:`s_u=\sigma s_v` with :math:`\sigma\in\{-1,+1\}`, and write
+:math:`w_{ij}=0` for pairs that are not edges. Each edge :math:`(u,k)` splits as
 
 .. math::
 
@@ -129,19 +163,41 @@
    = \frac{1-\sigma}2w_{uk}
    + \frac{\sigma w_{uk}}2(1-s_v s_k).
 
-Для :math:`k=v` последнее слагаемое равно нулю. Поэтому в новом графе
-:math:`w'_{vk}=w_{vk}+\sigma w_{uk}` для :math:`k\notin\{u,v\}`, а
-для всех допустимых спинов выполняется
+For :math:`k=v` the second term vanishes. Hence the reduced graph has
+:math:`w'_{vk}=w_{vk}+\sigma w_{uk}` for :math:`k\notin\{u,v\}`, and for every
+admissible spin assignment
 
 .. math::
 
    C_G(s) = b + C_{G'}(s|_{V\setminus\{u\}}),
    \qquad b = \frac{1-\sigma}2 \sum_{k\ne u} w_{uk}.
 
-В примере исключаем 10 и сохраняем 30. Для :math:`\sigma=-1` имеем
-:math:`b=3.5` и :math:`w'_{30,80}=-2.5`. Ограниченный максимум исходной
-задачи равен 3,5. Для :math:`\sigma=+1` получаем :math:`b=0` и
-:math:`w'_{30,80}=1.5`, поэтому ограниченный максимум равен 1,5.
-Тождество верно в обоих случаях. Сохранение глобального оптимума зависит
-от выбранного ограничения. Рекурсивный подход через корреляции описан
-в работе `Bravyi et al. <https://arxiv.org/abs/1910.08980>`_.
+Apply this to the worked example, removing `10` and keeping `30`. With
+:math:`\sigma=-1` the offset is :math:`b=3.5` and :math:`w'_{30,80}=-2.5`; the
+best cut compatible with that constraint is :math:`3.5`, the global optimum. With
+:math:`\sigma=+1` the offset is :math:`b=0` and :math:`w'_{30,80}=1.5`, so the
+best compatible cut is :math:`1.5`. The identity holds in both cases; preserving
+the global optimum is a property of the chosen constraint, not of the identity. A
+recursive scheme that picks constraints from measured correlations is described by
+`Bravyi et al. <https://arxiv.org/abs/1910.08980>`_.
+
+What these statements do not give
+---------------------------------
+
+- The closed form holds for one edge at depth one. Larger graphs have no such
+  expression; use `AnalyticP1Evaluator` for exact depth-one values or `QAOACPU`
+  for the circuit itself.
+- `best_of_shots` returns the best measured outcome, which is not a certificate of
+  a global optimum. Only enumeration or another certified method proves
+  optimality.
+- The simulator has no hardware noise. Shot noise in `estimation.mode="shots"`
+  affects the optimizer trace, not the physics of the state.
+
+Where next
+----------
+
+- [Concepts](CONCEPTS.md) — spins, bits, `node_order`, and what a solver returns.
+- [Choosing an algorithm](CHOOSE_ALGORITHM.md) — when exact enumeration stops
+  being affordable.
+- [API reference](API.md) — objective fields, estimation modes, and exceptions.
+- `MATHEMATICS.md` — the convention table behind every formula above.

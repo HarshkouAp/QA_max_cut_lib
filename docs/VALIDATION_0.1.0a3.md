@@ -1,31 +1,32 @@
-# Проверка сборки 0.1.0a3
+# Build verification 0.1.0a3
 
-**Версия:** `QA_max_cut_lib 0.1.0a3`, 2 ноября 2026 года.  
-**Назначение:** базовый CPU RQAOA на точном ядре редукций этапа 02.
+**Version:** `QA_max_cut_lib 0.1.0a3`, 2 November 2026.  
+**Purpose:** basic CPU RQAOA on the exact reduction core of stage 02.
 
-## Проверенное состояние
+## Verified state
 
-- Реализованы `RQAOACPU`, `QAOAStatevectorCorrelationSource`,
-  `MaxAbsCorrelationSelector`, `ExactCPUFinisher`.
-- Работают точный и шотовый режимы, общий `ShotBudget`, `edges`/`all_pairs`,
-  `restart`/`previous_step`, точный остаток и `all_plus_reduced_fallback`.
+- `RQAOACPU`, `QAOAStatevectorCorrelationSource`,
+  `MaxAbsCorrelationSelector`, `ExactCPUFinisher` are implemented.
+- Exact and shot modes work, as do a shared `ShotBudget`, `edges`/`all_pairs`,
+  `restart`/`previous_step`, an exact remainder and
+  `all_plus_reduced_fallback`.
 - `reduction_history`, `parameter_trajectory`, `local_optimizer_history`,
-  `correlation_tables` и `final_reduction_state` подключаются отдельными
-  флагами.
-- Добавлены графики весов, энергий, всех `binomial(2p,2)` траекторий и
-  автономный 3D HTML.
-- Полный набор проверок на локальной базе: **80 passed, 1 warning**.
-- Wheel `0.1.0a3` собирался и устанавливался в чистое окружение; ноутбук 04
-  исполнялся; CLI `rqaoa_cpu` выполнял реальный запуск.
+  `correlation_tables` and `final_reduction_state` are enabled by separate
+  flags.
+- Plots of weights, energies, all `binomial(2p,2)` trajectories and a
+  standalone 3D HTML were added.
+- Full check set on the local base: **80 passed, 1 warning**.
+- The `0.1.0a3` wheel was built and installed into a clean environment;
+  notebook 04 executed; the `rqaoa_cpu` CLI performed a real run.
 
-## Известные ограничения
+## Known limitations
 
-- Источник использует полный вектор состояния и ограничен его размером.
-- Аналитический `p=1`, GPU, LS-RQAOA, QAOA-in-QAOA и Laboratory ещё не
-  перенесены.
-- `num_treads=1`; checkpoint/resume не реализован.
-- RQAOA не гарантирует глобальный оптимум.
+- The source uses the full state vector and is bounded by its size.
+- Analytic `p=1`, GPU, LS-RQAOA, QAOA-in-QAOA and Laboratory are not yet
+  ported.
+- `num_treads=1`; checkpoint/resume is not implemented.
+- RQAOA does not guarantee a global optimum.
 
-Финальная документация и экспорт архива этапа 03 не были завершены до перехода
-к этапу 04; локальный код и тесты этой базы сохранены и использованы в
-`0.1.0a4`.
+Final documentation and archive export for stage 03 were not completed before
+work moved to stage 04; the local code and tests of this base were preserved
+and used in `0.1.0a4`.

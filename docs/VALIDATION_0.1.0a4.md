@@ -1,107 +1,111 @@
-# Проверка сборки 0.1.0a4
+# Build verification 0.1.0a4
 
-**Версия:** `QA_max_cut_lib 0.1.0a4`, 2 ноября 2026 года.  
-**Основа:** локальная сборка после этапа 03 (`0.1.0a3`).  
-**Назначение:** аналитические моменты взвешенного QAOA p=1, точная
-beta-минимизация и подключение к существующему `RQAOACPU`.
+**Version:** `QA_max_cut_lib 0.1.0a4`, 2 November 2026.  
+**Base:** local build after stage 03 (`0.1.0a3`).  
+**Purpose:** analytic moments of weighted QAOA p=1, exact beta minimisation
+and integration with the existing `RQAOACPU`.
 
-## 1. Что добавлено
+## 1. What was added
 
-- `AnalyticP1Evaluator`: средний разрез, средняя энергия, коэффициенты
-  `E0,A,B`, физические ZZ-корреляции и полная матрица корреляций.
-- Источник `qaoa_analytic_p1_cpu` с покрытием `edges`/`all_pairs`, конечной
-  сеткой gamma, точным beta и профилем `min_beta E(gamma,beta)`.
-- Подключение к `RQAOA` через прежний `type="rqaoa_cpu"`; рекурсивный
-  координатор, точный редуктор и exact-финишёр не заменялись.
-- Профиль сохраняется в `local_optimizer_history` с явным типом
-  `analytic_gamma_grid`; `shots_used=0` и `limits.shots_total=0` допустимы.
-- Конфигурация `configs/solvers/rqaoa_analytic_p1_cpu.json`.
-- Ноутбук `notebooks/05_analytic_p1_rqaoa.ipynb`; обновлены ноутбуки 01 и 02.
-- Профиль времени/памяти `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json`.
+- `AnalyticP1Evaluator`: mean cut, mean energy, coefficients `E0,A,B`,
+  physical ZZ correlations and the full correlation matrix.
+- Source `qaoa_analytic_p1_cpu` with `edges`/`all_pairs` coverage, a finite
+  gamma grid, exact beta and a `min_beta E(gamma,beta)` profile.
+- Integration into `RQAOA` through the existing `type="rqaoa_cpu"`; the
+  recursive coordinator, exact reducer and exact finisher were not replaced.
+- The profile is stored in `local_optimizer_history` with the explicit type
+  `analytic_gamma_grid`; `shots_used=0` and `limits.shots_total=0` are
+  allowed.
+- Configuration `configs/solvers/rqaoa_analytic_p1_cpu.json`.
+- Notebook `notebooks/05_analytic_p1_rqaoa.ipynb`; notebooks 01 and 02 were
+  updated.
+- Time/memory profile `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json`.
 
-## 2. Математические проверки
+## 2. Mathematical checks
 
-Проверки используют независимую матричную эволюцию/плотный statevector, а не
-аналитические функции. Сводка `scripts/verify_analytic_p1.py`:
+The checks use independent matrix evolution / dense statevector, not the
+analytic functions. Summary from `scripts/verify_analytic_p1.py`:
 
-| Проверка | Результат |
+| Check | Result |
 |---|---:|
-| Случаи «граф × углы» для N=2…8 | 100 |
-| Максимальная ошибка корреляций | `8.88e-16` |
-| Максимальная ошибка средней энергии | `1.78e-15` |
-| Максимальное превышение плотной beta-сетки над точным минимумом | `1.15e-05` (сетка 2001 точка) |
+| "Graph × angles" cases for N=2…8 | 100 |
+| Maximum correlation error | `8.88e-16` |
+| Maximum mean-energy error | `1.78e-15` |
+| Maximum excess of the dense beta grid over the exact minimum | `1.15e-05` (2001-point grid) |
 
-Контрольные примеры:
+Control examples:
 
-- одно ребро при `gamma=pi/(2|w|)`, `beta=-pi/8`: `c=-sign(w)`; для
-  положительного веса `E=-w`, для отрицательного `E=0`;
-- путь `u-k-v` с двумя единичными весами при `gamma=pi/2`, `beta=pi/4`:
-  `c_uv=1` для несмежной пары;
-- при `gamma=0` или `beta=0` все различные корреляции равны нулю;
-- пустой граф даёт энергию 0, одна вершина не даёт корреляционных пар;
-- сдвиг редукции `b_t` не меняет корреляции и углы; при
-  `objective_reference="original_graph"` профиль энергии сдвигается на `-b_t`.
+- one edge at `gamma=pi/(2|w|)`, `beta=-pi/8`: `c=-sign(w)`; for a positive
+  weight `E=-w`, for a negative one `E=0`;
+- path `u-k-v` with two unit weights at `gamma=pi/2`, `beta=pi/4`:
+  `c_uv=1` for the non-adjacent pair;
+- at `gamma=0` or `beta=0` all distinct correlations are zero;
+- an empty graph gives energy 0, a single vertex gives no correlation pairs;
+- the reduction shift `b_t` changes neither correlations nor angles; with
+  `objective_reference="original_graph"` the energy profile shifts by `-b_t`.
 
-## 3. Полные проверки
+## 3. Full checks
 
-Команда из корня:
+Command from the repository root:
 
 ```bash
 .venv-stage02/Scripts/python.exe -m pytest -q
 ```
 
-Результат этой сборки: **92 passed, 1 warning**. Предупреждение относится к
-`tight_layout` при 15 панелях p=3 в тесте визуализации; это не ошибка
-математики или API.
+Result for this build: **92 passed, 1 warning**. The warning concerns
+`tight_layout` with 15 panels at p=3 in the visualisation test; it is not a
+mathematics or API error.
 
-Проверены, в частности:
+Verified in particular:
 
-- корреляции и энергия при фиксированных углах для `p=1`, включая нулевые и
-  отрицательные веса, несмежные пары, отрицательные/пропущенные номера;
-- точная beta-минимизация и два независимых восстановления `F0,Fs,Fc`;
-- минимальная точка явной gamma-сетки и детерминированное разрешение равенства;
-- `edges`/`all_pairs`, отсутствие подмены полного покрытия рёбрами;
-- отказ от `p>1`, полей, шотов, CVaR/Gibbs/Best-of-K/Threshold Probability,
-  `initialization`/ADAM и неизвестных полей;
-- пакетные размеры пар и gamma, отсутствие `2**N`;
-- RQAOA с `shots_total=0`, полное решение и `C=b+C_reduced`;
-- прежние ExactCPU, QAOACPU, statevector-RQAOA, сохранение и графики.
+- correlations and energy at fixed angles for `p=1`, including zero and
+  negative weights, non-adjacent pairs, negative/missing indices;
+- exact beta minimisation and two independent recoveries of `F0,Fs,Fc`;
+- the minimum point of an explicit gamma grid and deterministic tie-breaking;
+- `edges`/`all_pairs`, with no substitution of full coverage by edges;
+- rejection of `p>1`, fields, shots, CVaR/Gibbs/Best-of-K/Threshold
+  Probability, `initialization`/ADAM and unknown fields;
+- pair and gamma batch sizes, absence of `2**N`;
+- RQAOA with `shots_total=0`, complete solution and `C=b+C_reduced`;
+- the earlier ExactCPU, QAOACPU, statevector RQAOA, saving and plots.
 
-## 4. Задача больше statevector-предела
+## 4. A problem larger than the statevector limit
 
-Ноутбук 05 запускает разреженный граф `N=30` (предел statevector-источника 24)
-с аналитическим источником и короткий полный RQAOA:
+Notebook 05 runs a sparse graph `N=30` (the statevector source limit is 24)
+with the analytic source and a short full RQAOA:
 
-- вершин: 30, рёбер: 95;
-- статус: `completed`, редукций: 27;
+- vertices: 30, edges: 95;
+- status: `completed`, reductions: 27;
 - cut: 23.25;
 - `shots_used=0`;
-- время: примерно `0.13 s` на ноутбуке.
+- time: about `0.13 s` in the notebook.
 
-Полная цепочка на 1000 вершин не заявляется. Для `N=1000` проверены подготовка
-матрицы весов и один проход коэффициентов/корреляций; это не полный RQAOA.
+A full chain on 1000 vertices is not claimed. For `N=1000`, weight-matrix
+preparation and a single pass of coefficients/correlations were verified;
+that is not a full RQAOA.
 
-## 5. Профиль времени и памяти
+## 5. Time and memory profile
 
-Источник данных: `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json`. Измерения
-выполнены на CPU, `num_treads=1`, `float64`, `pair_batch_size=2048`,
-41 точка gamma для N≤256. Время — wall-clock, память — peak `tracemalloc`.
-Числа являются локальным ориентиром, не обещанием производительности.
+Data source: `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json`. Measurements were
+taken on CPU, `num_treads=1`, `float64`, `pair_batch_size=2048`, 41 gamma
+points for N≤256. Time is wall-clock, memory is peak `tracemalloc`. The
+numbers are a local reference, not a performance promise.
 
-| N | Рёбер | Пар | Профиль 41 gamma, s | Память профиля, MiB | Корреляции, s | Память корреляций, MiB |
+| N | Edges | Pairs | 41-gamma profile, s | Profile memory, MiB | Correlations, s | Correlation memory, MiB |
 |---:|---:|---:|---:|---:|---:|---:|
 | 32 | 110 | 496 | 0.020 | 0.21 | 0.014 | 0.94 |
 | 64 | 314 | 2016 | 0.163 | 1.11 | 0.058 | 7.32 |
 | 128 | 828 | 8128 | 0.803 | 5.80 | 0.316 | 17.57 |
 | 256 | 1673 | 1673 (edges) | 2.858 | 23.35 | 0.089 | 23.51 |
-| 1000 | 9838 | 9838 (edges) | не измерялся | — | 1.66 | 128.51 |
+| 1000 | 9838 | 9838 (edges) | not measured | — | 1.66 | 128.51 |
 
-Для `N=32` полный RQAOA с 41 gamma-точками: `0.265 s`, 28 редукций,
-`completed`, `shots_used=0`. Память не содержит объекта размера `2**N`.
+For `N=32`, a full RQAOA with 41 gamma points: `0.265 s`, 28 reductions,
+`completed`, `shots_used=0`. Memory does not contain an object of size
+`2**N`.
 
-## 6. Сборка и установка
+## 6. Build and installation
 
-Выполнены:
+Executed:
 
 ```bash
 .venv-stage02/Scripts/python.exe -m build
@@ -111,32 +115,32 @@ beta-минимизация и подключение к существующе�
   --config configs/solvers/rqaoa_analytic_p1_cpu.json --report 1 --logs 0
 ```
 
-CLI вернул `completed`, `Cut=6`, `shots_used=0`, `reductions=3`. Wheel
-устанавливался в `.venv-wheelcheck` без CuPy/CUDA; импорт шёл из
-`site-packages`, аналитический пример и ноутбук 05 исполнялись.
+The CLI returned `completed`, `Cut=6`, `shots_used=0`, `reductions=3`. The
+wheel was installed into `.venv-wheelcheck` without CuPy/CUDA; the import
+came from `site-packages`, and the analytic example and notebook 05 executed.
 
-## 7. Ограничения и незакрытые пункты
+## 7. Limitations and open items
 
-- Поддерживается только `p=1`, стандартное `|+>`, X-миксер и Mean Cut.
-- Нет полного распределения, амплитуд, семплирования, дискретного readout,
-  CVaR, Gibbs, Best-of-K и Threshold Probability.
-- Нет локальных полей, warm-start с другим состоянием/миксером, GPU, LS,
-  QAOA-in-QAOA и параллельного `num_treads>1`.
-- Минимум gamma известен только на просмотренной сетке; непрерывный глобальный
-  оптимум не сертифицирован.
-- Полная RQAOA-цепочка на 1000 вершин не запускалась; проверены подготовка и
-  пакетные проходы.
-- Автономный 3D HTML сгенерирован и не содержит внешних `script src`; в
-  headless-браузере этой среды WebGL недоступен, поэтому вращение/масштабирование
-  интерактивной сцены не подтверждены. Это ограничение среды, а не заявление о
-  успешной браузерной проверке.
-- Один warning теста `tight_layout` при 15 панелях p=3 остаётся косметическим.
+- Only `p=1`, the standard `|+>`, an X mixer and Mean Cut are supported.
+- There is no full distribution, no amplitudes, no sampling, no discrete
+  readout, CVaR, Gibbs, Best-of-K or Threshold Probability.
+- There are no local fields, no warm start with another state/mixer, no GPU,
+  LS, QAOA-in-QAOA or parallel `num_treads>1`.
+- The gamma minimum is known only on the scanned grid; a continuous global
+  optimum is not certified.
+- A full RQAOA chain on 1000 vertices was not run; preparation and batch
+  passes were verified.
+- The standalone 3D HTML was generated and contains no external `script src`;
+  WebGL is unavailable in this environment's headless browser, so rotation
+  and scaling of the interactive scene are not confirmed. This is an
+  environment limitation, not a claim of a successful browser check.
+- One `tight_layout` test warning with 15 panels at p=3 remains cosmetic.
 
-## 8. Артефакты
+## 8. Artifacts
 
 - `dist/qa_max_cut_lib-0.1.0a4-py3-none-any.whl`;
 - `dist/qa_max_cut_lib-0.1.0a4.tar.gz`;
 - `notebooks/05_analytic_p1_rqaoa.ipynb`;
-- `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json` и `.txt`;
+- `docs/PERFORMANCE_ANALYTIC_P1_0.1.0a4.json` and `.txt`;
 - `docs/notebook_previews/05_analytic_p1_rqaoa.html`;
 - `tests/test_analytic_p1.py`.

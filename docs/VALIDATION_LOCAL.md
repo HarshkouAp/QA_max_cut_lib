@@ -1,32 +1,36 @@
-# Локальная проверка окружения
+# Local environment check
 
-**Дата:** 2 ноября 2026 года.
-**Машина:** Windows 10 (10.0.19043), 4 физических / 8 логических ядер, 15.7 ГБ RAM.
-**Python:** 3.12.14 в `.venv-stage02`.
-**Проверяемая сборка:** `QA_max_cut_lib 0.1.0a2`.
-**Подробный отчёт этапа:** `VALIDATION_0.1.0a2.md`.
+> **Historical record.** This is the Windows 10 check of `0.1.0a2`, dated
+> 2 November 2026. It is kept as acceptance evidence and does not describe the
+> current build; current counts are in
+> [`VALIDATION_0.1.0rc2.md`](VALIDATION_0.1.0rc2.md).
 
-## Выполненные проверки
+**Machine:** Windows 10 (10.0.19043), 4 physical / 8 logical cores, 15.7 GB RAM.
+**Python:** 3.12.14 in `.venv-stage02`.
+**Build under test:** `QA_max_cut_lib 0.1.0a2`.
+**Detailed stage report:** `VALIDATION_0.1.0a2.md`.
 
-| Проверка | Команда | Результат |
+## Checks performed
+
+| Check | Command | Result |
 |---|---|---|
-| Автоматические тесты | `.venv-stage02/Scripts/python.exe -m pytest -q` | **56 passed** |
-| ExactCPU, CLI | `python -m QA_max_cut_lib.solvers.exact_cpu --report 1 --logs 0` | `completed`, Cut = 5 |
-| QAOACPU, CLI | `python -m QA_max_cut_lib.solvers.qaoa_cpu --report 1 --logs 0` | `completed`, 20 шагов ADAM |
-| Quickstart | `python examples/quickstart.py` | Exact и QAOA дали энергию −6, quality = 1.000 |
-| Ноутбук 01 | `jupyter nbconvert --execute notebooks/01_quickstart.ipynb` | выполнен целиком, 5 изображений, сохранённые JSON/NPY |
-| Ноутбук 02 | `jupyter nbconvert --execute notebooks/02_current_api_guide.ipynb` | выполнен целиком, 6 изображений, карта и графики |
-| Ноутбук 03 | `jupyter nbconvert --execute notebooks/03_reduction_core.ipynb` | 8 кодовых ячеек, 0 ошибок |
-| Сборка wheel | `python -m build` | созданы wheel и sdist `0.1.0a2` |
-| Чистая установка wheel | `.venv-wheelcheck` вне проекта | импорт из `site-packages`, редукция и солверы работают |
-| Сборка Sphinx | `python -m sphinx -W -b html docs docs/_build/html` | успешно, без предупреждений |
-| GPU-окружение `.venv` (отдельно) | CuPy 14.2.0, CUDA 13.0, `RawKernel` | проверено ранее; в этапе 02 не используется |
-| Целостность исходников | SHA-256 89 Python-файлов | 89/89 совпадают с распаковкой `RQAOA_main.rar` |
-| Импорт профиля | `import QA_max_cut_lib, cvxpy, plotly, dimod, dwave.samplers, community` | успешно |
+| Automated tests | `.venv-stage02/Scripts/python.exe -m pytest -q` | **56 passed** |
+| `ExactCPU` CLI | `python -m QA_max_cut_lib.solvers.exact_cpu --report 1 --logs 0` | `completed`, Cut = 5 |
+| `QAOACPU` CLI | `python -m QA_max_cut_lib.solvers.qaoa_cpu --report 1 --logs 0` | `completed`, 20 ADAM steps |
+| Quickstart | `python examples/quickstart.py` | Exact and QAOA both gave energy -6, quality = 1.000 |
+| Notebook 01 | `jupyter nbconvert --execute notebooks/01_quickstart.ipynb` | executed completely, 5 images, JSON/NPY saved |
+| Notebook 02 | `jupyter nbconvert --execute notebooks/02_current_api_guide.ipynb` | executed completely, 6 images, map and plots |
+| Notebook 03 | `jupyter nbconvert --execute notebooks/03_reduction_core.ipynb` | 8 code cells, 0 errors |
+| Wheel build | `python -m build` | wheel and sdist `0.1.0a2` created |
+| Clean wheel install | `.venv-wheelcheck` outside the project | import from `site-packages`, reduction and solvers work |
+| Sphinx build | `python -m sphinx -W -b html docs docs/_build/html` | success, no warnings |
+| GPU environment `.venv` (separate) | CuPy 14.2.0, CUDA 13.0, `RawKernel` | checked earlier; not used by stage 02 |
+| Source integrity | SHA-256 of 89 Python files | 89/89 match the `RQAOA_main.rar` extraction |
+| Profile import | `import QA_max_cut_lib, cvxpy, plotly, dimod, dwave.samplers, community` | success |
 
-## Версии основных пакетов
+## Principal package versions
 
-| Пакет | Версия |
+| Package | Version |
 |---|---|
 | NumPy | 2.5.4 |
 | SciPy | 1.18.1 |
@@ -43,25 +47,26 @@
 | Sphinx | 9.1.1 |
 | CuPy | 14.2.0 (`cupy-cuda13x`) |
 
-Полный список: `requirements/freeze-local-py312-win.txt`; разрешённые версии
-профилей — `requirements/lock-cpu-py312-win.txt` и
+Full list: `requirements/freeze-local-py312-win.txt`; allowed profile versions:
+`requirements/lock-cpu-py312-win.txt` and
 `requirements/lock-gpu-cu13-py312-win.txt`.
 
-## Что подтверждено
+## What is confirmed
 
-- Пакет устанавливается в отдельное окружение в режиме `-e`.
-- 42 прежние проверки и 14 новых проверок ядра редукций проходят на Windows и Python 3.12.
-- Импорт пакета не загружает Matplotlib и CuPy.
-- Модульные CLI-примеры работают без запуска вычислений при импорте.
-- Графики строятся в локальной теме и не меняют глобальные `matplotlib.rcParams`.
-- Сохранение JSON/NPY, защита от перезаписи и одновременные экспорты проходят тесты.
+- The package installs into a separate environment in editable mode.
+- The earlier 42 checks and 14 new reduction-core checks pass on Windows and
+  Python 3.12.
+- Importing the package does not load Matplotlib or CuPy.
+- The module CLI examples run without starting a computation at import.
+- Plots are built in a local theme and do not change global `matplotlib.rcParams`.
+- JSON/NPY saving, the overwrite guard, and simultaneous exports pass the tests.
 
-## Что не проверялось этой командой
+## What this check did not cover
 
-- Полный GPU-солвер: проверены только CuPy, устройство и компиляция ядра.
-- Сборка Sphinx и wheel проверены; их содержимое не сверялось с исходным
-  `ARTIFACTS.json` прежней сборки.
-- Численное качество QAOA на больших графах: стартовая сборка ограничена
-  полным вектором состояния и небольшими задачами.
-- Режим `style.text_engine="latex"`: ноутбуки этапа 02 используют MathText;
-  настоящий LaTeX не входит в приёмку этапа.
+- The full GPU solver: only CuPy, the device, and kernel compilation were checked.
+- The Sphinx and wheel builds were verified, but their contents were not compared
+  with the earlier `ARTIFACTS.json`.
+- Numerical QAOA quality on large graphs: the starting build is limited to the full
+  statevector and small problems.
+- `style.text_engine="latex"`: the stage 02 notebooks use MathText; real LaTeX is
+  outside that stage's acceptance.

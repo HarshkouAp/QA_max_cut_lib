@@ -1,108 +1,110 @@
-# Проверка 0.1.0a6
+# Verification 0.1.0a6
 
-Дата: 2 ноября 2026 года. База: `0.1.0a5` (Stage 05 завершён и проверен
-отдельно). Цель этапа: NVIDIA GPU QAOA, семплер, пять критериев и подключение
-GPU-источника к RQAOA/LS.
+Date: 2 November 2026. Base: `0.1.0a5` (stage 05 completed and verified
+separately). Stage goal: NVIDIA GPU QAOA, the sampler, five criteria and
+connection of the GPU source to RQAOA/LS.
 
-## 1. Что проверено
+## 1. What was verified
 
-| Область | Проверка | Результат |
+| Area | Check | Result |
 |---|---|---|
-| CPU-регрессия | `.venv-stage02` без CuPy, `pytest -m "not gpu"` | **109 passed, 1 skipped, 1 warning** |
-| Реальный GPU | `.venv` с CuPy 14.2.0, `pytest -m gpu` | **9 passed** |
-| Full GPU | `psi`, нормировка, вероятности и ZZ-корреляции при p=1,2,3 | Совпадает с CPU |
-| Pair GPU | `chi`, восстановление `psi`, `q`, N=1 и последний миксер | Совпадает с CPU |
-| Пять критериев | Mean Cut, CVaR с частичным хвостом, Gibbs, Best-of-K, Threshold | Совпадает с float64-эталоном |
-| Семплер | 20 000 физических шотов, обе ориентации пары | Частоты сходятся к `q/2` |
-| Adjoint | exact Mean Cut против центральных разностей, p=2 | Совпадает |
-| Readout | `most_probable`, `best_of_shots`, бюджет | Реальные шоты; полное решение |
-| RQAOA/LS | GPU-источник, общий reducer, `gpu_owner` | Малые полные решения |
-| Память | preflight невозможного full-состояния | `MemoryError` до тяжёлого выделения |
-| Ноутбук | `07_nvidia_gpu_qaoa.ipynb` с чистого GPU-ядра | Исполнен сверху вниз |
+| CPU regression | `.venv-stage02` without CuPy, `pytest -m "not gpu"` | **109 passed, 1 skipped, 1 warning** |
+| Real GPU | `.venv` with CuPy 14.2.0, `pytest -m gpu` | **9 passed** |
+| Full GPU | `psi`, normalisation, probabilities and ZZ correlations at p=1,2,3 | Matches CPU |
+| Pair GPU | `chi`, restoration of `psi`, `q`, N=1 and the last mixer | Matches CPU |
+| Five criteria | Mean Cut, CVaR with a partial tail, Gibbs, Best-of-K, Threshold | Matches the float64 reference |
+| Sampler | 20 000 physical shots, both orientations of a pair | Frequencies converge to `q/2` |
+| Adjoint | exact Mean Cut against central differences, p=2 | Matches |
+| Readout | `most_probable`, `best_of_shots`, budget | Real shots; complete solution |
+| RQAOA/LS | GPU source, shared reducer, `gpu_owner` | Small complete solutions |
+| Memory | preflight of an impossible full state | `MemoryError` before a heavy allocation |
+| Notebook | `07_nvidia_gpu_qaoa.ipynb` from a clean GPU kernel | Executed top to bottom |
 
-Максимальные расхождения на малых задачах (`complex128`, p=1,2,3):
+Maximum deviations on small problems (`complex128`, p=1,2,3):
 
-| Величина | Максимум |
+| Quantity | Maximum |
 |---|---:|
 | full state, abs | `2.01e-16` |
 | pair restored state, abs | `1.67e-16` |
-| пять критериев, abs | `4.44e-16` |
-| матрица ZZ-корреляций, abs | `2.78e-16` |
-| adjoint против центральной разности, abs | `1.64e-10` |
+| five criteria, abs | `4.44e-16` |
+| ZZ correlation matrix, abs | `2.78e-16` |
+| adjoint against central difference, abs | `1.64e-10` |
 
-Ошибка семплера при 20 000 шотах: максимум `4.21e-3` по физической массе
-(статистическая проверка, не побитовое совпадение RNG).
+Sampler error at 20 000 shots: maximum `4.21e-3` in physical mass (a
+statistical check, not bitwise RNG agreement).
 
-## 2. Устройство и окружения
+## 2. Device and environments
 
-| Поле | Фактическое значение |
+| Field | Actual value |
 |---|---|
 | GPU | NVIDIA GeForce RTX 3050 Laptop GPU |
 | Compute capability | 8.6 |
-| VRAM | 4 294 508 544 байт (около 3.46 ГБ свободно в начале тестов) |
-| CUDA runtime процесса | 13020 |
-| Драйвер | 13010 (591.74) |
+| VRAM | 4 294 508 544 bytes (about 3.46 GB free at the start of the tests) |
+| Process CUDA runtime | 13020 |
+| Driver | 13010 (591.74) |
 | CuPy | 14.2.0 |
 | Python | 3.12.14 |
-| CPU-окружение | `.venv-stage02`, CuPy отсутствует |
+| CPU environment | `.venv-stage02`, CuPy absent |
 
-RTX 5060 Laptop из ориентира задания не была доступна. V100 и CUDA 12-профиль
-не проверялись. Эти строки не объявляются аппаратно проверенными.
+The RTX 5060 Laptop from the assignment reference was not available. V100 and
+the CUDA 12 profile were not verified. Those rows are not declared as
+verified on hardware.
 
-## 3. Команды приёмки
+## 3. Acceptance commands
 
 ```bash
-# CPU-регрессия без CuPy
+# CPU regression without CuPy
 .venv-stage02/Scripts/python.exe -m pytest -q -m "not gpu"
 
-# Явная GPU-приёмка: при отсутствии CuPy/устройства тест завершается ошибкой,
-# а не успехом с нулём выполненных GPU-проверок
+# Explicit GPU acceptance: without CuPy/device the test fails
+# rather than succeeding with zero GPU checks executed
 QA_MAX_CUT_REQUIRE_GPU=1 .venv/Scripts/python.exe -m pytest -q -m gpu
 
-# Ноутбук
+# Notebook
 .venv-stage02/Scripts/jupyter nbconvert --to notebook --execute \
   notebooks/07_nvidia_gpu_qaoa.ipynb \
   --ExecutePreprocessor.kernel_name=qa-max-cut-lib-gpu
 ```
 
-`-m gpu` использует `pytest.importorskip` в обычном режиме для CPU-CI.
-Переменная `QA_MAX_CUT_REQUIRE_GPU=1` отключает skip: отсутствие CuPy или
-устройства даёт ошибку.
+`-m gpu` uses `pytest.importorskip` in normal mode for CPU CI. The variable
+`QA_MAX_CUT_REQUIRE_GPU=1` disables the skip: a missing CuPy or device is an
+error.
 
-## 4. Составные примеры
+## 4. Composite examples
 
-- `QAOAGPU`: pair, complex64, exact Mean Cut, 2 шага ADAM, корреляции;
-  `shots_used=0`; полное решение.
-- `RQAOAGPU`: 2 редукции, общий `GraphReducer`, exact-финишёр, полное решение.
-- `LSRQAOAGPU`: `backend="gpu_owner"`, запрошено 2 потока, фактически 1
-  последовательность обслуживания; полное решение.
-- `best_of_shots`: 576 фактических шотов при лимите 2000; корреляции и
-  обучение не списывают финальный readout повторно.
+- `QAOAGPU`: pair, complex64, exact Mean Cut, 2 ADAM steps, correlations;
+  `shots_used=0`; complete solution.
+- `RQAOAGPU`: 2 reductions, shared `GraphReducer`, exact finisher, complete
+  solution.
+- `LSRQAOAGPU`: `backend="gpu_owner"`, 2 threads requested, in fact 1 service
+  sequence; complete solution.
+- `best_of_shots`: 576 actual shots against a limit of 2000; correlations and
+  training do not charge the final readout twice.
 
-## 5. Производительность
+## 5. Performance
 
-Измерения `complex64`, p=2, полная эволюция после прогрева:
+`complex64` measurements, p=2, full evolution after warm-up:
 
 | N | full | pairs |
 |---:|---:|---:|
-| 16 | 8.7 мс | 6.8 мс |
-| 20 | 50.6 мс | 25.6 мс |
-| 24 | 906 мс | 448 мс |
+| 16 | 8.7 ms | 6.8 ms |
+| 20 | 50.6 ms | 25.6 ms |
+| 24 | 906 ms | 448 ms |
 
-Первое выделение и компиляция ядер могут занимать сотни миллисекунд и не
-смешиваются с прогретым временем. Это профиль запуска ядер, а не обещание
-ускорения всего алгоритма. N=24 — максимальный стабильно проверенный размер
-для обоих представлений в `complex64` на 4 GiB. N=26 не объявляется
-поддерживаемым профилем.
+The first allocation and kernel compilation can take hundreds of
+milliseconds and are not mixed with warmed time. This is a kernel-launch
+profile, not a promise of end-to-end speedup. N=24 is the largest stably
+verified size for both representations in `complex64` on 4 GiB. N=26 is not
+declared a supported profile.
 
-## 6. Ограничения и честный статус
+## 6. Limitations and honest status
 
-- CUDA Graphs, Walsh-плитки, batch>1, несколько GPU и распределённый запуск
-  не реализованы.
-- Compute Sanitizer не запускался; отсутствие гонок доказано только
-  математическими/численными проверками и отсутствием ошибок в тестах.
-- Pair-режим не применяется к задачам с полями, другим начальным состоянием
-  или миксером.
-- Полный `psi`/`probabilities` в pair-режиме не собирается автоматически;
-  `chi` не выдаётся за физический `psi`.
-- GPU-путь не переключается на CPU при OOM или отсутствии CuPy.
+- CUDA Graphs, Walsh tiles, batch>1, multiple GPUs and distributed execution
+  are not implemented.
+- Compute Sanitizer was not run; the absence of races is supported only by
+  mathematical/numerical checks and the absence of test failures.
+- Pair mode does not apply to problems with fields, another initial state or
+  another mixer.
+- The full `psi`/`probabilities` is not assembled automatically in pair mode;
+  `chi` is not passed off as a physical `psi`.
+- The GPU path does not fall back to CPU on OOM or when CuPy is missing.

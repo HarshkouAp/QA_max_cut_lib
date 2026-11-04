@@ -1,8 +1,23 @@
-Справочник Python
-=================
+Python API reference
+====================
 
-Граф и результат
-----------------
+Generated reference for ``QA_max_cut_lib`` 0.1.0rc2. Every directive on this
+page resolves to an installed public class or function. Signatures, defaults,
+configuration fields, constraints, exceptions, and result fields are specified
+in :download:`API.md <API.md>`; this page is the docstring-level companion.
+
+The package is importable without optional plotting or GPU dependencies.
+CuPy is imported only when a GPU implementation is called, and Matplotlib,
+seaborn, NetworkX, and Plotly are imported only by plotting functions.
+
+.. note::
+
+   The class and function signatures below are generated from the installed
+   package. When a docstring and ``API.md`` disagree about a default, the
+   resolved configuration reported in ``result["config"]`` is authoritative.
+
+Core graph and result objects
+-----------------------------
 
 .. autoclass:: QA_max_cut_lib.core.graph.WeightedGraph
    :members:
@@ -14,8 +29,25 @@
 
 .. autofunction:: QA_max_cut_lib.core.saving.save_result
 
-Фабрики и генераторы
---------------------
+.. autoclass:: QA_max_cut_lib.core.saving.SavedFiles
+
+Reduction core
+--------------
+
+.. autoclass:: QA_max_cut_lib.core.reduction.IsingProblem
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.SpinConstraint
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.ReductionState
+   :members:
+
+.. autoclass:: QA_max_cut_lib.core.reduction.GraphReducer
+   :members:
+
+Factories and generators
+------------------------
 
 .. autoclass:: QA_max_cut_lib.core.factory.SolverFactory
    :members:
@@ -33,15 +65,79 @@
 
 .. autofunction:: QA_max_cut_lib.generators.subgraphs.build_subgraph_builder
 
-Солверы
--------
+.. autoclass:: QA_max_cut_lib.generators.plans.SubproblemPlan
+   :members: to_dict, from_dict
+
+Solver base and shared components
+---------------------------------
 
 .. autoclass:: QA_max_cut_lib.solvers.base.BaseSolver
    :members: solve
 
+.. autoclass:: QA_max_cut_lib.solvers.components.CorrelationResult
+
+.. autoclass:: QA_max_cut_lib.solvers.components.SelectionResult
+
+.. autoclass:: QA_max_cut_lib.solvers.components.QAOAStatevectorCorrelationSource
+   :members: estimate
+
+.. autoclass:: QA_max_cut_lib.solvers.components.MaxAbsCorrelationSelector
+   :members: select
+
+.. autoclass:: QA_max_cut_lib.solvers.components.ExactCPUFinisher
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_components.MeanCorrelationAggregator
+   :members: aggregate, make_table
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_components.ObservedMaxAbsCorrelationSelector
+   :members: select
+
+.. autofunction:: QA_max_cut_lib.solvers.objectives.validate_objective
+
+.. autofunction:: QA_max_cut_lib.solvers.objectives.objective_value
+
+.. autofunction:: QA_max_cut_lib.solvers.qaoa_cpu.state_at_angles
+
+Analytic p=1 source
+~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1Evaluator
+   :members: correlations, correlation_matrix, energy_min_beta, expected_energy, expected_cut, scan_gamma
+
+.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1CorrelationSource
+   :members: estimate
+
+CPU solvers
+-----------
+
 .. autoclass:: QA_max_cut_lib.solvers.exact_cpu.ExactCPU
 
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_cpu.QAOACPU
+
+.. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_cpu.LSRQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_cpu.QAOAInQAOACPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.goemans_williamson_cpu.GoemansWilliamsonCPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.simulated_annealing_cpu.SimulatedAnnealingCPU
+   :members: solve
+
+.. autoclass:: QA_max_cut_lib.solvers.exact_block_refiner.ExactBlockRefiner
+   :members: refine
+
+.. autoclass:: QA_max_cut_lib.solvers.refined.RefinedSolver
+   :members: solve
+
+Laboratory solvers and warm start
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: QA_max_cut_lib.solvers.warm_start_qaoa_cpu.WarmStartQAOACPU
 
@@ -65,31 +161,23 @@
 .. autoclass:: QA_max_cut_lib.solvers.distributed_ls.DistributedLSRQAOACPU
    :members: solve
 
+.. autoclass:: QA_max_cut_lib.solvers.incremental_ls.IncrementalLSRQAOACPU
+   :members: solve
+
 .. autoclass:: QA_max_cut_lib.solvers.mi_observer.QAOAWithMIObserverCPU
    :members: solve
 
 .. autoclass:: QA_max_cut_lib.solvers.mi_observer.RQAOAWithMIObserverCPU
    :members: solve
 
-.. autoclass:: QA_max_cut_lib.solvers.incremental_ls.IncrementalLSRQAOACPU
-   :members: solve
+.. automodule:: QA_max_cut_lib.laboratory.catalog
+   :members: load_catalog, load_inventory, list_variants, get_variant, get_file, source_to_variant, catalog_summary
 
-.. autoclass:: QA_max_cut_lib.generators.plans.SubproblemPlan
-   :members: to_dict, from_dict
+.. automodule:: QA_max_cut_lib.solvers.warm_start
+   :members: validate_warm_start_section, prepare_warm_start, product_state, state_at_warm_angles, mixer_unitary
 
-.. autofunction:: QA_max_cut_lib.tools.partition_analysis.analyze_plan
-
-.. automodule:: QA_max_cut_lib.tools.mutual_information
-   :members: reduced_density_matrix, von_neumann_entropy, quantum_mutual_information, classical_from_probabilities, classical_from_counts, classical_from_moments, map_summary, hop_distances
-
-.. automodule:: QA_max_cut_lib.tools.mi_plots
-   :members: plot_mutual_information_map, plot_mutual_information_frames, plot_mutual_information_distance
-
-.. autoclass:: QA_max_cut_lib.solvers.rqaoa_cpu.RQAOACPU
-   :members: solve
-
-.. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_cpu.LSRQAOACPU
-   :members: solve
+GPU solvers
+-----------
 
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_gpu.QAOAGPU
    :members: solve
@@ -101,87 +189,14 @@
 
 .. autoclass:: QA_max_cut_lib.solvers.ls_rqaoa_gpu.LSRQAOAGPU
 
-.. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_cpu.QAOAInQAOACPU
-   :members: solve
-
 .. autoclass:: QA_max_cut_lib.solvers.qaoa_in_qaoa_gpu.QAOAInQAOAGPU
    :members: solve
-
-.. autoclass:: QA_max_cut_lib.solvers.goemans_williamson_cpu.GoemansWilliamsonCPU
-   :members: solve
-
-.. autoclass:: QA_max_cut_lib.solvers.simulated_annealing_cpu.SimulatedAnnealingCPU
-   :members: solve
-
-.. autoclass:: QA_max_cut_lib.solvers.exact_block_refiner.ExactBlockRefiner
-   :members: refine
-
-.. autoclass:: QA_max_cut_lib.solvers.refined.RefinedSolver
-   :members: solve
-
-.. automodule:: QA_max_cut_lib.laboratory.catalog
-   :members: load_catalog, load_inventory, list_variants, get_variant, get_file, source_to_variant, catalog_summary
-
-.. automodule:: QA_max_cut_lib.solvers.warm_start
-   :members: validate_warm_start_section, prepare_warm_start, product_state, state_at_warm_angles, mixer_unitary
-
-.. automodule:: QA_max_cut_lib.tools.classical_plots
-   :members: analyze_solution, plot_gw_convergence, plot_sa_reads, plot_refinement, plot_classical_comparison
-
-.. automodule:: QA_max_cut_lib.tools.hierarchy_plots
-   :members: plot_hierarchy_overview, plot_hierarchy_parameters, plot_hierarchy_parameters_3d, plot_hierarchy_tree
 
 .. automodule:: QA_max_cut_lib.solvers.gpu_state
    :members: gpu_available, gpu_device_info, cut_diagonal_gpu, state_at_angles_gpu, restore_full_gpu, correlations_gpu, objective_value_gpu, sample_full_indices_gpu, adjoint_mean_cut_gradient_gpu
 
-.. autoclass:: QA_max_cut_lib.solvers.ls_components.MeanCorrelationAggregator
-   :members: aggregate, make_table
-
-.. autoclass:: QA_max_cut_lib.solvers.ls_components.ObservedMaxAbsCorrelationSelector
-   :members: select
-
-.. autoclass:: QA_max_cut_lib.solvers.components.QAOAStatevectorCorrelationSource
-   :members: estimate
-
-.. autoclass:: QA_max_cut_lib.solvers.components.MaxAbsCorrelationSelector
-   :members: select
-
-.. autoclass:: QA_max_cut_lib.solvers.components.ExactCPUFinisher
-   :members: solve
-
-.. autoclass:: QA_max_cut_lib.solvers.components.CorrelationResult
-
-.. autoclass:: QA_max_cut_lib.solvers.components.SelectionResult
-
-.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1Evaluator
-   :members: correlations, correlation_matrix, energy_min_beta, expected_energy, expected_cut, scan_gamma
-
-.. autoclass:: QA_max_cut_lib.solvers.analytic_p1.AnalyticP1CorrelationSource
-   :members: estimate
-
-.. autofunction:: QA_max_cut_lib.solvers.objectives.validate_objective
-
-.. autofunction:: QA_max_cut_lib.solvers.objectives.objective_value
-
-.. autofunction:: QA_max_cut_lib.solvers.qaoa_cpu.state_at_angles
-
-Редукции
---------
-
-.. autoclass:: QA_max_cut_lib.core.reduction.IsingProblem
-   :members:
-
-.. autoclass:: QA_max_cut_lib.core.reduction.SpinConstraint
-   :members:
-
-.. autoclass:: QA_max_cut_lib.core.reduction.ReductionState
-   :members:
-
-.. autoclass:: QA_max_cut_lib.core.reduction.GraphReducer
-   :members:
-
-Инструменты
------------
+Analysis and diagnostics
+------------------------
 
 .. autofunction:: QA_max_cut_lib.tools.numerics.correlation_matrix
 
@@ -189,14 +204,31 @@
 
 .. autofunction:: QA_max_cut_lib.tools.landscape.scan_landscape
 
+.. autofunction:: QA_max_cut_lib.tools.partition_analysis.analyze_plan
+
+.. automodule:: QA_max_cut_lib.tools.mutual_information
+   :members: reduced_density_matrix, von_neumann_entropy, quantum_mutual_information, classical_from_probabilities, classical_from_counts, classical_from_moments, map_summary, hop_distances
+
+.. automodule:: QA_max_cut_lib.tools.mi_plots
+   :members: plot_mutual_information_map, plot_mutual_information_frames, plot_mutual_information_distance
+
+Plotting
+--------
+
 .. automodule:: QA_max_cut_lib.tools.plotting
    :members: plot_graph, plot_graph_solution, plot_graph_info, plot_probabilities, plot_optimization, plot_landscape
 
 .. automodule:: QA_max_cut_lib.tools.reduction_plots
    :members: plot_reduction_weights, plot_reduction_energy, plot_parameter_trajectories, plot_parameter_trajectories_3d, plot_analytic_gamma_profile, plot_ls_coverage
 
-Эксперименты и профилирование
-------------------------------
+.. automodule:: QA_max_cut_lib.tools.hierarchy_plots
+   :members: plot_hierarchy_overview, plot_hierarchy_parameters, plot_hierarchy_parameters_3d, plot_hierarchy_tree
+
+.. automodule:: QA_max_cut_lib.tools.classical_plots
+   :members: analyze_solution, plot_gw_convergence, plot_sa_reads, plot_refinement, plot_classical_comparison
+
+Experiments and profiling
+-------------------------
 
 .. autoclass:: QA_max_cut_lib.core.experiment_spec.BenchmarkSpec
    :members: plan
@@ -207,6 +239,8 @@
    :members: run
 
 .. autoclass:: QA_max_cut_lib.core.runner.ExperimentSeries
+
+.. autoclass:: QA_max_cut_lib.core.references.ReferenceJob
 
 .. autoclass:: QA_max_cut_lib.core.references.ReferencePolicy
    :members: jobs_for, run_job, run_all

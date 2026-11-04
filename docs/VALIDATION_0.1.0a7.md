@@ -1,45 +1,45 @@
-# Проверка 0.1.0a7
+# Verification 0.1.0a7
 
-Дата: 2 ноября 2026 года. База: `0.1.0a6`; CPU/GPU-проверки этапа 06
-сохранены. Новый объект — `QAOAInQAOACPU` / `QAOAInQAOAGPU`.
+Date: 2 November 2026. Base: `0.1.0a6`; the CPU/GPU checks of stage 06 are
+preserved. The new object is `QAOAInQAOACPU` / `QAOAInQAOAGPU`.
 
-## 1. Что проверено
+## 1. What was verified
 
-| Область | Проверка | Результат |
+| Area | Check | Result |
 |---|---|---|
-| CPU-регрессия | `.venv-stage02` без CuPy, `pytest -m "not gpu"` | **124 passed, 1 skipped, 1 warning** |
-| Реальный GPU | `.venv` с CuPy 14.2.0, `pytest -m gpu` | **10 passed** |
-| Один уровень | `C_original(r*tau)=Delta b+C_meta(tau)` для всех 4 tau | Совпадает |
-| Контроль W/offset | блоки `[10,30]`, `[80,101]` | `W=-2`, `Delta b=10`, `b=10`, `c_Ising=-9` |
-| Core vs формула | N-K ограничений через `GraphReducer`; веса, b, c | Совпадает с прямым расчётом |
-| Несколько уровней | N=8, k=2, finish_at=2 | 2 уровня, 6 локальных вызовов, 6 слияний |
-| Восстановление | все исходные номера, спины ±1, `C` исходного графа | Полное |
-| Параллелизм | num_treads=1/2, одинаковый план и результат | Совпадает; в параллельном уровне разные worker PID |
-| Readout | `best_of_shots` с реальными шотами | 32 шота при лимите 32; M не умножается на вершины |
-| Бюджет | недостаточный резерв readout | Уровень не стартует, полный fallback, 0 шотов |
-| Лимиты | `max_levels`, `max_local_tasks_total` | Полный fallback со статусом stopped |
-| Ошибки | неверный partitioner и backend | Ошибка до проекции |
-| Tools | overview, parameters, 3D, tree | Строятся из сохранённого результата |
-| Ноутбук | `08_qaoa_in_qaoa.ipynb` с GPU-ядра | Исполнен сверху вниз |
-| Масштаб | N=64 и N=128, k=8, 1/2/4 потока | Полные результаты |
+| CPU regression | `.venv-stage02` without CuPy, `pytest -m "not gpu"` | **124 passed, 1 skipped, 1 warning** |
+| Real GPU | `.venv` with CuPy 14.2.0, `pytest -m gpu` | **10 passed** |
+| One level | `C_original(r*tau)=Delta b+C_meta(tau)` for all 4 tau | Matches |
+| W/offset control | blocks `[10,30]`, `[80,101]` | `W=-2`, `Delta b=10`, `b=10`, `c_Ising=-9` |
+| Core vs formula | N-K constraints through `GraphReducer`; weights, b, c | Matches direct computation |
+| Several levels | N=8, k=2, finish_at=2 | 2 levels, 6 local calls, 6 merges |
+| Restoration | all source indices, spins ±1, `C` of the source graph | Complete |
+| Parallelism | num_treads=1/2, same plan and result | Matches; different worker PIDs in the parallel level |
+| Readout | `best_of_shots` with real shots | 32 shots against a limit of 32; M is not multiplied by vertices |
+| Budget | insufficient readout reserve | Level does not start, full fallback, 0 shots |
+| Limits | `max_levels`, `max_local_tasks_total` | Full fallback with status stopped |
+| Errors | invalid partitioner and backend | Error before projection |
+| Tools | overview, parameters, 3D, tree | Built from the saved result |
+| Notebook | `08_qaoa_in_qaoa.ipynb` with a GPU kernel | Executed top to bottom |
+| Scale | N=64 and N=128, k=8, 1/2/4 threads | Complete results |
 
-Контрольная проекция из задания:
+Control projection from the assignment:
 
 ```text
 W(10,80) = 5 - 1 - 4 - 2 = -2
-Delta b = 5 (внутренние) + 5 (граничные) = 10
-C = 10 для одинаковых tau; C = 8 для противоположных
+Delta b = 5 (internal) + 5 (boundary) = 10
+C = 10 for equal tau; C = 8 for opposite
 ```
 
-Максимальная арифметическая ошибка контрольной проверки — на уровне
-округления float64 (`< 1e-12`). Это проверка формул и Core, а не аппаратной
-части.
+The maximum arithmetic error of the control check is at the float64 rounding
+level (`< 1e-12`). This checks the formulas and the Core, not the hardware
+part.
 
-## 2. Масштаб
+## 2. Scale
 
-Полные CPU-прогоны, локальный QAOA p=1, 3 шага Adam, `most_probable`:
+Full CPU runs, local QAOA p=1, 3 Adam steps, `most_probable`:
 
-| N | k | threads | уровни | локальные вызовы | слияния | время, с | cut |
+| N | k | threads | levels | local calls | merges | time, s | cut |
 |---:|---:|---:|---:|---:|---:|---:|---:|
 | 64 | 8 | 1 | 2 | 9 | 63 | 0.12 | 55.148331 |
 | 64 | 8 | 2 | 2 | 9 | 63 | 0.93 | 55.148331 |
@@ -48,21 +48,23 @@ C = 10 для одинаковых tau; C = 8 для противоположн�
 | 128 | 8 | 2 | 2 | 18 | 126 | 1.78 | 91.329203 |
 | 128 | 8 | 4 | 2 | 18 | 126 | 1.81 | 91.329203 |
 
-На таких малых локальных задачах процессный пул на Windows может быть
-медленнее последовательного режима из-за запуска процессов. Это не
-объявляется ускорением. Большие времена не скрываются; параллельный режим
-проверен на одинаковый план/результат и реальные worker PID.
+On such small local problems the process pool on Windows can be slower than
+sequential mode because of process startup. This is not declared a speedup.
+The larger times are not hidden; parallel mode was verified for the same
+plan/result and for real worker PIDs.
 
-Для GPU-варианта на RTX 3050 Laptop проверен N=8, 2 уровня, локальный
-`qaoa_gpu`, один владелец: `num_treads_applied=1`, `backend=cupy`, полное
-восстановление. N=128 GPU не объявляется проверенным.
+For the GPU variant on the RTX 3050 Laptop, N=8, 2 levels, local `qaoa_gpu`,
+one owner were verified: `num_treads_applied=1`, `backend=cupy`, complete
+restoration. N=128 on GPU is not declared verified.
 
-## 3. Что не входит
+## 3. Out of scope
 
-- Обновляемое окружение/поля, несколько последовательных проходов
-  согласования, перекрывающиеся блоки, CE-fixed и общий quantum state — не
-  реализованы.
-- `finish_at=0` не даёт малый точный остаток; используется явный finisher.
-- Нет checkpoint/resume и общего Benchmark/ParallelismProfiler.
-- Моментный аналитический источник не является локальным readout.
-- GPU-часть не заменяет CPU-проверку, а CPU-прогон не подтверждает CUDA.
+- An updatable environment/fields, several consecutive reconciliation passes,
+  overlapping blocks, CE-fixed and a shared quantum state are not
+  implemented.
+- `finish_at=0` does not produce a small exact remainder; an explicit finisher
+  is used.
+- No checkpoint/resume and no shared Benchmark/ParallelismProfiler.
+- The moment-based analytic source is not a local readout.
+- The GPU part does not replace the CPU check, and a CPU run does not confirm
+  CUDA.

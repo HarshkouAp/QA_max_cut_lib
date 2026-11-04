@@ -1,9 +1,9 @@
 # Git stage 14
 
-Коммит `368b6bb` содержит Stage 14: `BlockMeanFieldQAOACPU`, компактный
-банк `m/q`, два расписания Gauss–Seidel/Jacobi, angle/moment damping,
-local surrogate criteria, полный sign-rounded output, catalog cards,
-конфигурации, примеры, тесты, документацию и ноутбук 15.
+Commit `368b6bb` contains Stage 14: `BlockMeanFieldQAOACPU`, a compact `m/q`
+bank, two Gauss–Seidel/Jacobi schedules, angle/moment damping, local surrogate
+criteria, full sign-rounded output, catalog cards, configurations, examples,
+tests, documentation and notebook 15.
 
-Checkpoint реализован на границах полного sweep; mid-sweep child codec,
-fault injection и replay receipts остаются ограничениями версии.
+Checkpointing is implemented at full-sweep boundaries; a mid-sweep child codec,
+fault injection and replay receipts remain limitations of this version.

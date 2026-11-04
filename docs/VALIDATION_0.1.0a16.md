@@ -1,55 +1,57 @@
-# Проверка 0.1.0a16
+# Verification 0.1.0a16
 
-Дата: 2 ноября 2026 года.
+Date: 2 November 2026.
 
-## База
+## Base
 
 - `QA_max_cut_lib 0.1.0a16`, Python 3.12.14, NumPy 2.5.4.
 - CPU: `198 passed, 1 skipped, 1 warning`.
-- Sphinx `-W`: успешно.
-- Wheel установлен в `.venv` и `.venv-wheelcheck`; CLI/examples вне src.
+- Sphinx `-W`: success.
+- Wheel installed into `.venv` and `.venv-wheelcheck`; CLI/examples outside
+  `src`.
 
 ## A/B/C/D
 
 - Product plus: `I_Q=0`, `I_Z=0`, `ZZ=0`.
-- Bell Φ/Ψ: `I_Q=2 bits`, `I_Z=1 bit`; знак ZZ различается, MI нет.
+- Bell Φ/Ψ: `I_Q=2 bits`, `I_Z=1 bit`; the ZZ sign differs, the MI does not.
 - CZ plus: `I_Q=2`, `I_Z=0`.
 - GHZ: `S_i=1`, pair `I_Q=I_Z=1`.
-- Bell(A,E)⊗|0>_B: QMI пары A,B = 0; правильная S_B=0 (старый s2=s1 bug
-  дал бы ложное значение).
+- Bell(A,E)⊗|0>_B: the QMI of pair A,B = 0; the correct S_B=0 (the old
+  s2=s1 bug would have given a false value).
 - Complex RDM: labels `80,-7,101,10`, `ρ_{-7}=[[0.5,-0.5i],[0.5i,0.5]]`.
 
 ## E/F/G
 
 - Counts `[[3,1],[1,3]]`, M=8: `I_Z=0.18872187554086717` bits.
-- Mask/statistics: values `(2,0,0)` дают mean `2/3`, min `0`, max `2`,
-  population std `2√2/3`; реальные нули не отфильтрованы.
-- Prefix p=3, θ=(0.1,0.2,0.3,0.4,0.5,0.6): layer 2 использует
-  `(0.1,0.2,0.4,0.5)`; theta halves не смешиваются.
+- Mask/statistics: values `(2,0,0)` give mean `2/3`, min `0`, max `2`,
+  population std `2√2/3`; real zeros are not filtered out.
+- Prefix p=3, θ=(0.1,0.2,0.3,0.4,0.5,0.6): layer 2 uses
+  `(0.1,0.2,0.4,0.5)`; the theta halves are not mixed.
 
 ## Observer passivity
 
-QAOA target: baseline `qaoa_cpu` и `laboratory.qaoa_mi_cpu` на одном
-graph/seed дают одинаковые solution, cut, selected angles и shots.
-Observer добавляет MI frames, но не второй readout и не новые samples.
-Для p=2/two iterations/M_train=16/readout=64 фактический расход — 352
-shots, 3 prefix snapshots, 15 all-pairs на snapshot.
+QAOA target: baseline `qaoa_cpu` and `laboratory.qaoa_mi_cpu` on the same
+graph/seed give identical solution, cut, selected angles and shots.
+The observer adds MI frames, but not a second readout and not new samples.
+For p=2/two iterations/M_train=16/readout=64 the actual spend is 352 shots,
+3 prefix snapshots, 15 all-pairs per snapshot.
 
-Контроль p=1/three iterations/M_train=32/readout=64: baseline и observer дают одинаковый solution/angles и **544 shots**.
+Control p=1/three iterations/M_train=32/readout=64: baseline and observer give
+the same solution/angles and **544 shots**.
 
-RQAOA observer: full-state CPU source, frames до reducer commit, 2
-reduction steps, `max_abs_correlation` не изменён. Correlation/reuse
-provenance сохраняется отдельно.
+RQAOA observer: full-state CPU source, frames before reducer commit, 2
+reduction steps, `max_abs_correlation` unchanged. Correlation/reuse
+provenance is stored separately.
 
 ## Not run
 
-- реальный cross-process restore анализа I;
+- a real cross-process restore of analysis I;
 - fault-injection/unknown-charge observer phase;
-- полная 12-trial серия и CPU profile;
+- the full 12-trial series and the CPU profile;
 - GPU/tomography/MI-guided selector/reconstruction;
 - all production pair-scope/analysis-limit combinations.
 
-## Артефакты
+## Artifacts
 
 - wheel: `qa_max_cut_lib-0.1.0a16-py3-none-any.whl`, SHA-256
   `c5884c7f02552b99a044b64faa126cb877a63fe91e5275c1fe359dbfa5b28d2d`;

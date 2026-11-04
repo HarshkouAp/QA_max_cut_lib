@@ -1,38 +1,39 @@
-# Проверка 0.1.0rc1
+# Verification 0.1.0rc1
 
-Дата: 3 ноября 2026 года.
+Date: 3 November 2026.
 
-## Фактический статус
+## Actual status
 
-`0.1.0rc1` — **release candidate**, не финальный `0.1.0`.
-Blockers: полный Stage 19 controller set, 89-source closure, G8 GPU
-revalidation и полная R01–R65 evidence matrix. См.
+`0.1.0rc1` is a **release candidate**, not the final `0.1.0`.
+Blockers: the full Stage 19 controller set, 89-source closure, G8 GPU
+revalidation and the complete R01–R65 evidence matrix. See
 `RELEASE_READINESS.md`.
 
-## Проверки CPU
+## CPU checks
 
 - `216 passed, 1 skipped, 1 warning`.
-- Sphinx `-W`: успешно.
-- Wheel установлен в `.venv` и `.venv-wheelcheck`; CLI/examples вне src.
-- `00_quickstart.ipynb` и `01_full_guide.ipynb` выполнены в CPU kernel.
+- Sphinx `-W`: success.
+- Wheel installed into `.venv` and `.venv-wheelcheck`; CLI/examples outside
+  `src`.
+- `00_quickstart.ipynb` and `01_full_guide.ipynb` executed in the CPU kernel.
 - 48-case generator/plan/analysis series: 0 quantum shots.
-- Benchmark297: 297/297 materialized, без Max-Cut solves.
+- Benchmark297: 297/297 materialized, without Max-Cut solves.
 
 ## Formula components
 
-Проверены `ParityForest` (accepted/conflict/redundant), odds fusion
-`15/17`, selected observation, quantization ties-to-even, restriction
-proxy `6.3`, legacy/positive history mixing и Fréchet-invalid
-hierarchical proxy `sqrt(.19)`.
+Verified: `ParityForest` (accepted/conflict/redundant), odds fusion `15/17`,
+selected observation, quantization ties-to-even, restriction proxy `6.3`,
+legacy/positive history mixing and the Fréchet-invalid hierarchical proxy
+`sqrt(.19)`.
 
-## Ограничения
+## Limitations
 
-End-to-end `BatchLSRQAOACPU`, backtracking, hierarchical source,
-quantized solver wrappers и полный каталог legacy branches не заявлены.
-G8 GPU в этом цикле не перепроверен; CPU candidate не подменяет GPU
+End-to-end `BatchLSRQAOACPU`, backtracking, hierarchical source, quantized
+solver wrappers and the full catalog of legacy branches are not claimed.
+G8 GPU was not re-checked in this cycle; a CPU candidate does not replace GPU
 acceptance.
 
-## Артефакты
+## Artifacts
 
 - wheel: `qa_max_cut_lib-0.1.0rc1-py3-none-any.whl`, SHA-256
   `5aa80a0db4ffad03254a1bab9206b52a54f96320c6d0a19ee648fd9e0e74fda9`;

@@ -1,12 +1,12 @@
 # Git stage 18
 
-Версия: `0.1.0a18`.
+Version: `0.1.0a18`.
 
-Добавлены `generators.recipes`, `benchmarks`, `structured`, `plans`,
-`generators.cli`, `tools.partition_analysis` и edge-subset capability
-adapter. Сохранены schema1 recipes и induced LS defaults; новые семейства
-имеют schema2 и versioned builder IDs.
+Added `generators.recipes`, `benchmarks`, `structured`, `plans`,
+`generators.cli`, `tools.partition_analysis` and an edge-subset capability
+adapter. Schema1 recipes and induced LS defaults are preserved; the new
+families have schema2 and versioned builder IDs.
 
-Не перенесены сложные GraphDecomposer_light branches, pattern recovery
-oracle и полный отдельный edge-subset LS controller. 48-case series и
-297-ID decoder validation находятся в docs/results.
+The complex GraphDecomposer_light branches, the pattern recovery oracle and a
+full separate edge-subset LS controller were not ported. The 48-case series and
+the 297-ID decoder validation are in docs/results.

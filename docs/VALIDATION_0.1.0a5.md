@@ -1,66 +1,65 @@
-# Проверка сборки 0.1.0a5
+# Build verification 0.1.0a5
 
-**Версия:** `QA_max_cut_lib 0.1.0a5`, 2 ноября 2026 года.  
-**База:** локальная сборка после этапа 04 (`0.1.0a4`).  
-**Окружение:** Python 3.12.14, Windows 10 `10.0.19043`, 8 логических CPU,
-15.7 ГиБ RAM. CPU-профиль без CUDA/CuPy.
+**Version:** `QA_max_cut_lib 0.1.0a5`, 2 November 2026.  
+**Base:** local build after stage 04 (`0.1.0a4`).  
+**Environment:** Python 3.12.14, Windows 10 `10.0.19043`, 8 logical CPUs,
+15.7 GiB RAM. CPU profile without CUDA/CuPy.
 
-## 1. Что проверялось
+## 1. What was verified
 
-1. Два построителя подграфов и их контракт покрытия.
-2. Индуцированные локальные задачи без граничных рёбер и полей.
-3. Средний агрегатор по наблюдениям каждой пары.
-4. Покрытие `A_t`/`C_t`, `require_full`, anchor-задача.
-5. Один глобальный `GraphReducer` на шаг и восстановление энергии.
-6. Аналитический источник p=1 и statevector-источник p=1/p=2.
-7. Последовательный и параллельный режимы одного плана.
-8. Общий shot-бюджет, round-robin квоты и остановка.
-9. Автономный HTML, сохранение и повторная загрузка.
-10. Чистая установка wheel и ноутбук 06 вне исходного дерева.
+1. The two subgraph builders and their coverage contract.
+2. Induced local problems without boundary edges or fields.
+3. Mean aggregation over the observations of each pair.
+4. `A_t`/`C_t` coverage, `require_full`, the anchor problem.
+5. A single global `GraphReducer` per step and energy restoration.
+6. The analytic p=1 source and the statevector p=1/p=2 source.
+7. Sequential and parallel modes of the same plan.
+8. The shared shot budget, round-robin quotas and stopping.
+9. Standalone HTML, saving and reloading.
+10. A clean wheel installation and notebook 06 outside the source tree.
 
-## 2. Исходная готовность предыдущих этапов
+## 2. Baseline readiness of the previous stages
 
-Локальная база `0.1.0a4` содержала этапы 02–04 и проходила 92 теста.
-Проверены `GraphReducer`, `RQAOACPU`, statevector- и аналитический источники,
-точный финишёр и инструменты. В `0.1.0a5` добавлен только LS-слой; прежняя
-редукционная математика не копировалась.
+The local `0.1.0a4` base contained stages 02–04 and passed 92 tests.
+`GraphReducer`, `RQAOACPU`, the statevector and analytic sources, the exact
+finisher and the tools were checked. `0.1.0a5` adds only the LS layer; the
+earlier reduction mathematics was not duplicated.
 
-## 3. Тесты
+## 3. Tests
 
 ```text
 109 passed, 1 warning
 ```
 
-Предупреждение относится к `tight_layout` для 15 панелей `p=3` в старом тесте
-RQAOA и не является ошибкой LS. Новые проверки находятся в
-`tests/test_ls_rqaoa.py`.
+The warning concerns `tight_layout` for 15 panels at `p=3` in the old RQAOA
+test and is not an LS error. New checks live in `tests/test_ls_rqaoa.py`.
 
-## 4. Последовательный и параллельный аналитический LS
+## 4. Sequential and parallel analytic LS
 
-Граф: `configs/graphs/erdos_signed_30.json`, 30 вершин, 128 рёбер.
-Источник: `qaoa_analytic_p1_cpu`, 17 точек gamma, 24 редукции.
+Graph: `configs/graphs/erdos_signed_30.json`, 30 vertices, 128 edges.
+Source: `qaoa_analytic_p1_cpu`, 17 gamma points, 24 reductions.
 
-| Режим | Cut | Reductions | Local tasks | Applied P | Shots |
+| Mode | Cut | Reductions | Local tasks | Applied P | Shots |
 |---|---:|---:|---:|---:|---:|
 | CLI, P=1 | 41.7465463 | 24 | 98 | 1 | 0 |
 | CLI, P=4 | 41.7465463 | 24 | 98 | 4 | 0 |
 | Notebook, P=1 | 41.7465463 | 24 | 98 | 1 | 0 |
 | Notebook CLI, P=2 | 41.7465463 | 24 | 98 | 2 | 0 |
 
-Решение и число редукций совпали. В ноутбуке параллельный запуск выполнен
-импортируемым CLI как подпроцесс; внутри CLI использован
-`ProcessPoolExecutor` со `spawn`.
+The solution and the number of reductions matched. In the notebook the
+parallel run is performed by the importable CLI as a subprocess; inside the
+CLI a `ProcessPoolExecutor` with `spawn` was used.
 
 ## 5. Statevector p=2
 
-Граф: 30 вершин, `qaoa_statevector_cpu`, `layers=2`, локальный предел 20,
-`max_size=8`, P=2. Запуск завершён: 25 редукций, 124 локальные задачи,
-`num_treads_applied=2`, `shots_used=0`. Предел statevector проверяется по
-размеру локальной задачи, а не по 30 вершинам родителя.
+Graph: 30 vertices, `qaoa_statevector_cpu`, `layers=2`, local limit 20,
+`max_size=8`, P=2. The run completed: 25 reductions, 124 local tasks,
+`num_treads_applied=2`, `shots_used=0`. The statevector limit is checked
+against the size of the local problem, not against the 30-vertex parent.
 
-## 6. Шотовый statevector и остановка по бюджету
+## 6. Shot-based statevector and budget stopping
 
-`configs/solvers/ls_rqaoa_shots.json`, 30 вершин, `shots_per_evaluation=64`,
+`configs/solvers/ls_rqaoa_shots.json`, 30 vertices, `shots_per_evaluation=64`,
 `correlations.shots=128`, `shots_total=6000`, P=2.
 
 ```text
@@ -71,29 +70,29 @@ shots_used=5760
 local_tasks=10
 ```
 
-Возвращено полное решение на всех 30 вершинах. Сумма расходов не превысила
-6000. При малом бюджете 1000 не запускается ни одна задача шага: обязательный
-резерв 10×128 уже больше лимита, `shots_used=0`.
+A complete solution over all 30 vertices was returned. Total spending did not
+exceed 6000. With a small budget of 1000 no task of the step starts: the
+mandatory reserve of 10×128 already exceeds the limit, `shots_used=0`.
 
-## 7. Общий CPU-профиль
+## 7. Shared CPU profile
 
-Источник: `docs/PERFORMANCE_LS_0.1.0a5.json`.
-Граф 64 вершины; 58 редукций; 442 локальные задачи; 9 точек gamma; один и тот
-же cut `66.3797621` при P=1/2/4.
+Source: `docs/PERFORMANCE_LS_0.1.0a5.json`.
+64-vertex graph; 58 reductions; 442 local tasks; 9 gamma points; the same cut
+`66.3797621` at P=1/2/4.
 
-| P | Applied P | Время, s | Пик tracemalloc, MiB | Совпадение решения |
+| P | Applied P | Time, s | Peak tracemalloc, MiB | Solution match |
 |---:|---:|---:|---:|---|
-| 1 | 1 | 12.80 | 3.38 | да |
-| 2 | 2 | 7.22 | 3.57 | да |
-| 4 | 4 | 6.65 | 3.07 | да |
+| 1 | 1 | 12.80 | 3.38 | yes |
+| 2 | 2 | 7.22 | 3.57 | yes |
+| 4 | 4 | 6.65 | 3.07 | yes |
 
-На малых локальных задачах накладные расходы `spawn` заметны; ускорение не
-является математическим требованием. Профиль показывает реальное пересечение
-времени задач и одинаковый научный результат.
+On small local problems the `spawn` overhead is noticeable; speedup is not a
+mathematical requirement. The profile shows a real overlap of task time and
+the same scientific result.
 
-## 8. Ограниченная проверка 1000 вершин
+## 8. Limited 1000-vertex check
 
-Источник: `docs/SCALE_LS_0.1.0a5.json`.
+Source: `docs/SCALE_LS_0.1.0a5.json`.
 
 ```text
 N=1000, E=4004
@@ -102,33 +101,34 @@ status=stopped, reason=max_reductions
 reductions=2, local_tasks=246, skipped=4
 applied P=4, shots=0
 time=26.49 s, peak tracemalloc=6.02 MiB
-complete solution: да
+complete solution: yes
 ```
 
-Это ограниченная проверка подготовки, памяти и двух редукций. Она не является
-завершённым решением задачи на 1000 вершин.
+This is a limited check of preparation, memory and two reductions. It is not a
+completed solution of a 1000-vertex problem.
 
-## 9. Сборка, документация и установка
+## 9. Build, documentation and installation
 
 - `python -m pytest -q`: **109 passed, 1 warning**.
-- `python -m build`: wheel и sdist `0.1.0a5`.
-- SHA-256 wheel: `cf02444530bcba89e856ab11cc9dfcb38f985fee26e97ed64dba830ec4034e31`.
-- SHA-256 sdist: `1079ba402cc14d651475ad28b3f59894e283e8f0e6f20f50da716c66812aedff`.
-- `python -m sphinx -W -b html docs docs/_build/html`: успешно.
-- Wheel установлен в `.venv-wheelcheck` через `uv pip install --python ...`;
-  импорт идёт из `site-packages`.
-- Ноутбук 06 исполнен через установленный wheel; CLI-подпроцесс использовал
-  тот же интерпретатор.
-- `plot_parameter_trajectories_3d` создаёт автономный HTML без внешних
-  `<script src>`; Plotly.js встроен.
+- `python -m build`: wheel and sdist `0.1.0a5`.
+- Wheel SHA-256: `cf02444530bcba89e856ab11cc9dfcb38f985fee26e97ed64dba830ec4034e31`.
+- sdist SHA-256: `1079ba402cc14d651475ad28b3f59894e283e8f0e6f20f50da716c66812aedff`.
+- `python -m sphinx -W -b html docs docs/_build/html`: success.
+- The wheel was installed into `.venv-wheelcheck` via `uv pip install --python ...`;
+  the import resolves from `site-packages`.
+- Notebook 06 was executed through the installed wheel; the CLI subprocess
+  used the same interpreter.
+- `plot_parameter_trajectories_3d` produces standalone HTML with no external
+  `<script src>`; Plotly.js is embedded.
 
-## 10. Ограничения
+## 10. Limitations
 
-- Только базовый LS: `mean`, `refresh_all`, индуцированные задачи без полей,
-  точный финишёр.
-- Нет QAOA-in-QAOA, Meta-LS, частичных обновлений, полей и GPU.
-- На Windows/Jupyter прямой `spawn` зависит от главного модуля; ноутбук
-  использует документированный CLI-подпроцесс.
-- `max_local_tasks_total` — жёсткий предел плана шага, а не динамический
-  планировщик.
-- 3D-сцена проверена статически; headless-браузер среды не поддерживает WebGL.
+- Basic LS only: `mean`, `refresh_all`, induced problems without fields, the
+  exact finisher.
+- No QAOA-in-QAOA, Meta-LS, partial updates, fields or GPU.
+- On Windows/Jupyter a direct `spawn` depends on the main module; the notebook
+  uses the documented CLI subprocess.
+- `max_local_tasks_total` is a hard limit on the step plan, not a dynamic
+  scheduler.
+- The 3D scene was verified statically; this environment's headless browser
+  does not support WebGL.

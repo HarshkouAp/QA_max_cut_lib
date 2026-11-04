@@ -1,0 +1,68 @@
+Acceptance and historical evidence
+===================================
+
+This hidden section keeps every historical page reachable from the Sphinx
+toctree. The public reader path is in :doc:`index`; these pages are evidence,
+not an introduction.
+
+.. toctree::
+   :hidden:
+
+   API
+   ARCHITECTURE_MAP
+   ARCHIVE
+   BLOCK_MEAN_FIELD
+   CHECKPOINTS
+   CONDITIONAL
+   DISTRIBUTED_LS
+   DOCUMENTATION_STYLE
+   EXPERIMENTS
+   GENERATORS_PLANS
+   GIT_STAGE02
+   GIT_STAGE04
+   GIT_STAGE05
+   GIT_STAGE07
+   GIT_STAGE08
+   GIT_STAGE09
+   GIT_STAGE10
+   GIT_STAGE11
+   GIT_STAGE12
+   GIT_STAGE13
+   GIT_STAGE14
+   GIT_STAGE15
+   GIT_STAGE16
+   GIT_STAGE17
+   GIT_STAGE18
+   GPU
+   INCREMENTAL_LS
+   INSTALLATION
+   LABORATORY_CONTROLLERS
+   LABORATORY
+   MATHEMATICS
+   MIGRATION_STATUS
+   MUTUAL_INFORMATION
+   PROJECT_SETUP
+   PUBLISHING
+   VALIDATION
+   VALIDATION_0.1.0a10
+   VALIDATION_0.1.0a11
+   VALIDATION_0.1.0a12
+   VALIDATION_0.1.0a13
+   VALIDATION_0.1.0a14
+   VALIDATION_0.1.0a15
+   VALIDATION_0.1.0a16
+   VALIDATION_0.1.0a17
+   VALIDATION_0.1.0a18
+   VALIDATION_0.1.0a2
+   VALIDATION_0.1.0a3
+   VALIDATION_0.1.0a4
+   VALIDATION_0.1.0a5
+   VALIDATION_0.1.0a6
+   VALIDATION_0.1.0a7
+   VALIDATION_0.1.0a8
+   VALIDATION_0.1.0a9
+   VALIDATION_0.1.0rc1
+   VALIDATION_0.1.0rc2
+   VALIDATION_LOCAL
+   WARM_START_RQAOA
+   reference/MaxCut_Library_Architecture

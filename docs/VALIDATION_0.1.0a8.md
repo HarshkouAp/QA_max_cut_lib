@@ -1,72 +1,75 @@
-# Проверка 0.1.0a8
+# Verification 0.1.0a8
 
-Дата: 2 ноября 2026 года. База: `0.1.0a7`; предыдущие CPU/GPU-проверки
-сохранены. Новые зависимости проверены в реальном окружении:
+Date: 2 November 2026. Base: `0.1.0a7`; previous CPU/GPU checks are
+preserved. New dependencies were verified in the real environment:
 CVXPY `1.9.3`, SCS `3.3.1`, dimod `0.12.23`, `dwave-samplers 1.8.0`.
 
-## 1. Тесты
+## 1. Tests
 
-| Область | Команда | Результат |
+| Area | Command | Result |
 |---|---|---|
-| CPU-регрессия | `.venv-stage02/Scripts/python.exe -m pytest -q -m "not gpu"` | **134 passed, 1 skipped, 1 warning** |
-| GPU-регрессия | `.venv/Scripts/python.exe -m pytest -q -m gpu` | **10 passed** |
-| GW | реальный CVXPY/SCS, треугольник и signed/small графы | OK |
-| SA | реальный `dwave.samplers.SimulatedAnnealingSampler` | OK |
-| Refiner | D/E/F/G и лимит состояний | OK |
+| CPU regression | `.venv-stage02/Scripts/python.exe -m pytest -q -m "not gpu"` | **134 passed, 1 skipped, 1 warning** |
+| GPU regression | `.venv/Scripts/python.exe -m pytest -q -m gpu` | **10 passed** |
+| GW | real CVXPY/SCS, triangle and signed/small graphs | OK |
+| SA | real `dwave.samplers.SimulatedAnnealingSampler` | OK |
+| Refiner | D/E/F/G and the state limit | OK |
 | RefinedSolver | ExactCPU, QAOACPU, RQAOACPU base | OK |
-| Импорт без extras | `.venv-stage02` без CuPy, классические зависимости не при импорте | OK |
-| Документация | `sphinx -W` | OK |
-| Ноутбук | `09_classical_baselines_and_refinement.ipynb` | Исполнен |
+| Import without extras | `.venv-stage02` without CuPy, classical dependencies not imported at import time | OK |
+| Documentation | `sphinx -W` | OK |
+| Notebook | `09_classical_baselines_and_refinement.ipynb` | Executed |
 
-## 2. Контрольные примеры
+## 2. Control examples
 
-### A/B: знак BQM
+### A/B: sign of the BQM
 
-Для ребра `(10,30,2)`:
-`h=0`, `J=+1`, `offset=-1`; противоположные спины дают `C=2`, `E=-2`.
-Для `(10,30,-2)`: `J=-1`, `offset=+1`; совпадение даёт `C=0`, `E=0`.
-Изолированный узел `80` присутствует в каждом полном словаре.
+For edge `(10,30,2)`:
+`h=0`, `J=+1`, `offset=-1`; opposite spins give `C=2`, `E=-2`.
+For `(10,30,-2)`: `J=-1`, `offset=+1`; equal spins give `C=0`, `E=0`.
+The isolated node `80` is present in every complete dictionary.
 
-### C: треугольник GW
+### C: GW triangle
 
-Три ребра веса 1. Фактический SCS-результат:
-`sdp_objective_raw=2.25000000088`, `sdp_status=optimal`, минимальное
-собственное значение `-1.17e-09`, диагональный residual `2.09e-12`.
-Округлённый C не обязан быть 2 в каждом seed; проверка не требует этого.
-`sdp_upper_bound=null`; причина — нет строгого dual certificate.
+Three edges of weight 1. Actual SCS result:
+`sdp_objective_raw=2.25000000088`, `sdp_status=optimal`, minimum eigenvalue
+`-1.17e-09`, diagonal residual `2.09e-12`.
+The rounded C need not be 2 for every seed; the check does not require it.
+`sdp_upper_bound=null`; the reason is the absence of a strict dual certificate.
 
-### D: условный блок
+### D: conditional block
 
-Для `S={10,30}`, `t_80=+1`:
-`h_10=2`, `h_30=1.5`, `c_S=-4`, условный оптимум `x=(-1,-1)`, итоговый
-`C=7`. Фиксация одного внутреннего спина не используется.
+For `S={10,30}`, `t_80=+1`:
+`h_10=2`, `h_30=1.5`, `c_S=-4`, conditional optimum `x=(-1,-1)`, final
+`C=7`. Fixing one internal spin is not used.
 
-### E: нет внутренних рёбер
+### E: no internal edges
 
-`S={10}`, внешнее ребро веса 3, `t_30=+1`: поле `h_10=1.5`, переворот
-даёт `C=3`, а не пропускается как «блок без внутренних рёбер».
+`S={10}`, external edge of weight 3, `t_30=+1`: field `h_10=1.5`, the flip
+gives `C=3`, and the block is not skipped as "a block without internal edges".
 
-### F: последовательное окружение
+### F: sequential environment
 
-Блоки `[10]` и `[30]` на старом окружении дают по `gain=1`; последовательный
-refiner принимает первую коррекцию, пересчитывает поле и отклоняет вторую:
-`C=1`. Одновременное применение дало бы `C=-4`; такой режим не реализован.
+Blocks `[10]` and `[30]` under the previous environment each give `gain=1`;
+the sequential refiner accepts the first correction, recomputes the field and
+rejects the second: `C=1`. Simultaneous application would give `C=-4`; that
+mode is not implemented.
 
-### G/H: неухудшение и лимиты
+### G/H: non-degradation and limits
 
-- Refiner с уже оптимальным входом возвращает равный полный словарь.
-- `refinement_states_total=4` при первом блоке `2^3` не запускает блок,
-  возвращает исходное назначение и `stop_reason=refinement_states_total`.
-- `refinement_states_total=10` выполняет первый блок из 8 состояний,
-  второй блок из 4 не начинает и честно сообщает `states_evaluated=8`.
-- SA при `num_reads=10`, `num_sweeps=64`, `anneal_sweeps_total=192`
-  выполняет ровно 3 полных reads; дробного отжига нет.
+- A refiner with an already optimal input returns an equal complete
+  dictionary.
+- `refinement_states_total=4` with a first block of `2^3` does not start the
+  block, returns the original assignment and
+  `stop_reason=refinement_states_total`.
+- `refinement_states_total=10` executes the first block of 8 states, does not
+  start the second block of 4 and honestly reports `states_evaluated=8`.
+- SA with `num_reads=10`, `num_sweeps=64`, `anneal_sweeps_total=192`
+  performs exactly 3 complete reads; there is no fractional anneal.
 
-## 3. Реальные измерения
+## 3. Real measurements
 
-Полные данные: `docs/PERFORMANCE_CLASSICAL_0.1.0a8.json`.
+Full data: `docs/PERFORMANCE_CLASSICAL_0.1.0a8.json`.
 
-| Метод | N | Время, с | C | Примечание |
+| Method | N | Time, s | C | Note |
 |---|---:|---:|---:|---|
 | ExactCPU | 7 | — | 6 | control graph |
 | GW | 32 | 1.22 | 24.886145 | SCS |
@@ -78,19 +81,21 @@ refiner принимает первую коррекцию, пересчитыв
 | Refiner | 128 | 0.027 | 48.734279 | all-plus input, 4 blocks |
 | Refiner | 512 | 0.169 | 39.280090 | all-plus input, 4 blocks |
 
-Времена включают запуск зависимостей и полный public solve. Различие
-1/2/4 потоков на SA не объявляется ускорением: малые reads и запуск пула
-могут доминировать. GW-разрез не является доказанным оптимумом. Для N=7
-ExactCPU, GW и SA на одном control graph дали C=6; это малая проверка
-конвенции, а не гарантия качества на произвольных знаковых графах.
+Times include dependency start-up and a full public solve. The difference
+between 1/2/4 threads for SA is not declared a speedup: small reads and pool
+start-up may dominate. A GW cut is not a proven optimum. For N=7 ExactCPU,
+GW and SA on one control graph gave C=6; this is a small check of the
+convention, not a quality guarantee on arbitrary signed graphs.
 
-## 4. Ограничения
+## 4. Limitations
 
-- Строгий SDP dual certificate не строится; `sdp_upper_bound=null`.
-- `optimal_inaccurate` по умолчанию отклоняется; разрешение требует
-  явного `allow_inaccurate=true`.
-- CUDA/QPU не используются в новых методах. RefinedSolver может принять
-  GPU base, но это отдельная композиция, не подтверждающая classical GPU.
-- Полные Benchmark/ParallelismProfiler и checkpoint/resume не реализованы.
-- Refiner перебирает блоки последовательно; одновременное сложение
-  локальных gains запрещено.
+- No strict SDP dual certificate is built; `sdp_upper_bound=null`.
+- `optimal_inaccurate` is rejected by default; allowing it requires an
+  explicit `allow_inaccurate=true`.
+- CUDA/QPU are not used in the new methods. RefinedSolver can accept a GPU
+  base, but that is a separate composition and does not confirm classical GPU
+  work.
+- Full Benchmark/ParallelismProfiler and checkpoint/resume are not
+  implemented.
+- The refiner enumerates blocks sequentially; simultaneous addition of local
+  gains is forbidden.

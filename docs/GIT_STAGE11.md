@@ -1,8 +1,8 @@
 # Git Stage 11
 
-Основной коммит: `e08a343` — `Stage 11: add Laboratory catalog and warm-start CPU (0.1.0a11)`.
+Main commit: `e08a343` — `Stage 11: add Laboratory catalog and warm-start CPU (0.1.0a11)`.
 
-## Состав
+## Contents
 
 - versioned `laboratory/data/inventory.json` (89 files) and `catalog.json`;
 - inventory/catalog JSON schemas and import-light `catalog.py`;
@@ -11,7 +11,7 @@
 - provided-spin, fractional-probability, GW and SA configs;
 - H series (`experiments/benchmark_warm_start.json`);
 - notebook 12 and HTML/PNG preview;
-- `LABORATORY_RU.md`, validation report, tests and examples.
+- `LABORATORY.md`, validation report, tests and examples.
 
 ## Checks
 
