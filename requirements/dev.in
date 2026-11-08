@@ -1,5 +1,0 @@
-# Development tooling.
-
-pytest>=8
-build>=1
-wheel

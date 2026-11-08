@@ -1,6 +1,0 @@
-# Documentation tooling. Install separately from the CPU profile.
-
-sphinx>=7
-numpydoc>=1.6
-pydata-sphinx-theme>=0.15
-myst-nb>=1.0

@@ -1,7 +1,0 @@
-{
-  "schema_version": 1,
-  "type": "complete",
-  "seed": 10,
-  "parameters": {"n_vertices": 7, "nodes": [10, 20, 30, 50, 80, 130, 210]},
-  "weights": {"type": "signed_discrete", "seed": 11, "parameters": {"values": [-1.0, 1.0]}}
-}

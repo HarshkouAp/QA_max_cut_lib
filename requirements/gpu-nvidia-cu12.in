@@ -1,7 +1,0 @@
-# NVIDIA GPU profile for CUDA 12.x.
-# Install exactly one GPU profile. Do not combine it with gpu-nvidia-cu13.in.
-# A compatible NVIDIA driver is required separately.
-# The ctk extra installs the CUDA components into the environment.
-
--r cpu.in
-cupy-cuda12x[ctk]

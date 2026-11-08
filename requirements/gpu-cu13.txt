@@ -1,2 +1,0 @@
-# Future GPU dependencies. Do not combine with gpu-cu12.txt.
--e .[cpu,gpu-cu13]

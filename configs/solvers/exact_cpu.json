@@ -1,8 +1,0 @@
-{
-  "schema_version": 1,
-  "type": "exact_cpu",
-  "seed": 42,
-  "num_treads": 1,
-  "parameters": {"max_vertices": 24, "batch_size": 65536, "tie_tolerance": 0.0},
-  "output": {"report": 0, "logs": 0, "color": "auto"}
-}

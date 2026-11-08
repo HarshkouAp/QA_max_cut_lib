@@ -1,5 +1,0 @@
-{
-  "selection": {"top_k": 16},
-  "style": {"text_engine": "mathtext", "figsize": [10, 6], "label_size": 19, "tick_size": 16},
-  "output": {"show": false}
-}
