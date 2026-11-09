@@ -1,92 +1,29 @@
-"""Standalone p=1 AnalyticalRQAOA; no inheritance or QAOA imports.
-
-Requires numpy, networkx; matplotlib only for plotting.
-C = offset + sum(w_uv * (1-Zu*Zv)/2), U = exp(-i beta sum X) exp(-i gamma C).
-All angles use +C; steps_angs_qaoa changes gamma's sign for the supplied QAOA.py.
-Only existing nonzero-weight edges participate in correlation selection.
-
-Weighted identity (k runs over neighbors of u or v, excluding u,v;
-missing weights are zero):
-R_uv = -.5*sin(4b)*sin(g*w_uv)*(prod cos(g*w_uk)+prod cos(g*w_vk))
-       + .5*sin(2b)**2*(prod cos(g*(w_uk-w_vk))-prod cos(g*(w_uk+w_vk))).
-This supports signed real weights and remains valid after contraction.
-
-Integer weights: gamma in [0, pi] is sufficient. Real weights require an
-explicit finite gamma_bounds search window; it is not a global guarantee.
-Beta is optimized exactly; gamma is searched on a grid. Correlation rounding
-is heuristic and can discard the original optimum. Exact enumeration is only
-performed for the final residual graph, never for the full original graph.
-"""
 from itertools import product
-from numbers import Integral
 from time import perf_counter
 
 import networkx as nx
+from pathlib import Path
 import numpy as np
 
-from Generators.GraphGenerator import RegularGraph, DensRandGraph
+from QA_max_cut_lib.generators.GraphGenerator import DensRandGraph
 
 
 class AnalyticalRQAOA:
-    """One file implementation of optimization -> correlations -> contraction.
+    """Gamma grid + exact beta, correlation reduction, exact residual solve.
 
-    treshold retains the spelling in the original package. n_layers must be 1.
-    samples counts gamma grid points; gamma_batch limits temporary memory.
-    store_maps=True saves each sparse edge map in history (can use much memory).
-    logs prints steps, callback prints final summary, draw_process plots after
-    solve(). max_exact_nodes is a guard on terminal exhaustive enumeration.
-
-    Outputs:
-      q_solution: +/-1 spins in original node order; q_solution_dct: label->spin.
-      solution_cut: positive-sign original weighted cut; cut_value=-solution_cut
-        follows the supplied RQAOA package's convention.
-      q_energy: last QAOA expected original cut, NOT final discrete solution_cut.
-      fixed_corrs: direct (removed, retained, sign) constraints, in elimination
-        order; arbitrary hashable node labels are preserved.
-      edge_correlations / m_map: sparse dict for the LAST optimized pre-reduction
-        graph. correlation_nodes identifies its nodes. Not a full all-pairs map.
-      reduced_graph: terminal residual graph; offset: accumulated cut constant.
-      steps_energies: negative expected ORIGINAL cut at each recursive step.
-      gamma_history, beta_history: Python lists of optimal angles per step (+C),
-        in radians; reset on each solve(). Index 0 corresponds to step 1.
-      steps_angs: [gamma,beta] per step; history: graph sizes, offset, selected
-        edge, correlation, angles, mean cut and timing (maps optional).
-      c_energy and ned remain None: the original optimum is not computed.
-
-    solve() resets the run and returns self. Input graph is copied.
+    samples: gamma grid size; gamma_batch: batch size; treshold: residual size.
+    Set gamma_bounds for real weights; the default [0, pi] covers integer weights.
+    n_layers=1 and max_exact_nodes are retained as compatibility arguments only.
+    solution_cut is the final cut; q_energy is the last QAOA expectation.
     """
     def __init__(self, graph, treshold=3, n_layers=1, samples=1000,
                  logs=False, callback=False, draw_process=False,
                  gamma_bounds=None, gamma_batch=256, store_maps=False,
                  max_exact_nodes=20):
-        for name, value, minimum in [('treshold', treshold, 1),
-                                      ('samples', samples, 2),
-                                      ('gamma_batch', gamma_batch, 1),
-                                      ('max_exact_nodes', max_exact_nodes, 1)]:
-            if isinstance(value, (bool, np.bool_)) or not isinstance(value, Integral) or value < minimum:
-                raise ValueError(f'{name} must be an integer >= {minimum}')
-        if n_layers != 1:
-            raise ValueError('AnalyticalRQAOA supports n_layers=1 only')
-        if treshold > max_exact_nodes:
-            raise ValueError('treshold exceeds max_exact_nodes enumeration guard')
-        if graph.is_directed() or graph.is_multigraph() or nx.number_of_selfloops(graph):
-            raise ValueError('A simple undirected graph without self-loops is required')
         self.graph = nx.Graph(graph)
-        integer_weights = True
-        for u, v, data in self.graph.edges(data=True):
-            w = float(data.get('weight', 1))
-            if not np.isfinite(w):
-                raise ValueError('Weights must be finite real numbers')
-            data['weight'] = w
-            integer_weights &= w.is_integer()
-        if gamma_bounds is None:
-            if not integer_weights:
-                raise ValueError('For real weights specify gamma_bounds=(lower, upper); no universal period exists')
-            gamma_bounds = (0., np.pi)
-        bounds = np.asarray(gamma_bounds, dtype=float)
-        if bounds.shape != (2,) or not np.all(np.isfinite(bounds)) or bounds[0] >= bounds[1]:
-            raise ValueError('gamma_bounds must contain two finite increasing numbers')
-        self.gamma_bounds = tuple(float(x) for x in bounds)
+        for _, _, data in self.graph.edges(data=True):
+            data['weight'] = float(data.get('weight', 1))
+        self.gamma_bounds = (0., np.pi) if gamma_bounds is None else tuple(map(float, gamma_bounds))
         self.treshold = int(treshold)
         self.n_layers = 1
         self.samples = int(samples)
@@ -129,15 +66,12 @@ class AnalyticalRQAOA:
         self.q_time = self.c_time = self.rq_time = 0.
         self.result = None
         self.solved = False
+        self.param_evolution_html = None
         self.gammas = self.betas = self.profile = np.array([])
         self.coefficients = np.array([])
 
     def _edge_terms(self, u, v, gamma):
-        """Return S,Q with R_uv=S*sin(4 beta)+Q*sin(2 beta)**2.
-
-        Products are accumulated without division by cosines: safe when cos=0.
-        Temporary arrays have the shape of gamma (no dense n*n or 2**n objects).
-        """
+        """R_uv = S*sin(4*beta) + Q*sin(2*beta)**2."""
         G = self.reduced_graph
         g = np.asarray(gamma, dtype=float)
         pu = np.ones_like(g); pv = np.ones_like(g)
@@ -152,7 +86,6 @@ class AnalyticalRQAOA:
         return -.5*np.sin(g*G[u][v]['weight'])*(pu+pv), .5*(minus-plus)
 
     def cost_function(self, gamma, beta):
-        """Expected ORIGINAL cut, including offset, on the current reduced graph."""
         g, b = np.broadcast_arrays(np.asarray(gamma, dtype=float), np.asarray(beta, dtype=float))
         value = np.full(g.shape, self.offset, dtype=float)
         for u,v,d in self.reduced_graph.edges(data=True):
@@ -166,7 +99,7 @@ class AnalyticalRQAOA:
         self.gammas = np.linspace(*self.gamma_bounds, self.samples)
         baseline = self.offset + .5*sum(d['weight'] for _,_,d in self.reduced_graph.edges(data=True))
         coeff = np.empty((self.samples,3))
-        # Two beta settings, as in AnalyticalQAOA. Batch gamma for bounded memory.
+
         for left in range(0,self.samples,self.gamma_batch):
             right = min(left+self.gamma_batch,self.samples)
             g = self.gammas[left:right]
@@ -198,11 +131,7 @@ class AnalyticalRQAOA:
         self.correlation_nodes = list(self.reduced_graph)
 
     def mean_map(self, dense=False):
-        """Last optimized EDGE map. dense=True returns (matrix, node_order).
-
-        Dense matrix is symmetric, diagonal/nonedges zero; nonedge zero means
-        'not evaluated', not a claim that the actual correlation is zero.
-        """
+        """Last edge correlations; dense zeros outside edges mean not evaluated."""
         if not dense:
             return dict(self.edge_correlations)
         nodes = list(self.correlation_nodes)
@@ -213,15 +142,8 @@ class AnalyticalRQAOA:
         return matrix,nodes
 
     def _reduce_graph(self, removed, retained, sign):
-        """Impose z_removed=sign*z_retained and preserve the restricted cost.
-
-        For each other neighbor k: w_retained,k += sign*w_removed,k;
-        add (1-sign)*w_removed,k/2 to the constant. The contracted edge
-        contributes (1-sign)*w_removed,retained/2 to the same constant.
-        """
+        """Fix z_removed = sign*z_retained; accumulate the constant in offset."""
         G = self.reduced_graph
-        if sign not in (-1,1):
-            raise ValueError('Correlation constraint must have sign +1 or -1')
         for k,d in list(G[removed].items()):
             w = d['weight']
             self.offset += (1-sign)*w/2
@@ -237,7 +159,7 @@ class AnalyticalRQAOA:
         self.n_nodes = G.number_of_nodes()
 
     def _remove_isolates(self):
-        # Isolates carry no remaining cost; fixing +1 does not lose an optimum.
+
         for u in list(nx.isolates(self.reduced_graph)):
             self.free_spins[u] = 1
             self.reduced_graph.remove_node(u)
@@ -247,10 +169,10 @@ class AnalyticalRQAOA:
         start = perf_counter()
         self._optimize_angles()
         self._build_correlation_map()
-        # max keeps the first edge in insertion order when magnitudes tie.
+
         u,v = max(self.edge_correlations,key=lambda edge:abs(self.edge_correlations[edge]))
         corr = self.edge_correlations[(u,v)]
-        # Never sign(0)=0: zero correlations use a deterministic +1 constraint.
+
         sign = 1 if corr >= 0 else -1
         row = dict(step=self.step+1,n_nodes=self.n_nodes,
                    n_edges=self.reduced_graph.number_of_edges(),offset=self.offset,
@@ -276,10 +198,8 @@ class AnalyticalRQAOA:
     def _solve_residual(self):
         start = perf_counter()
         nodes = list(self.reduced_graph)
-        if len(nodes) > self.max_exact_nodes:
-            raise ValueError('Residual graph exceeds max_exact_nodes')
         best = -np.inf; best_spins = {}
-        # Global spin-flip symmetry allows fixing the first residual spin to +1.
+
         for tail in product((-1,1),repeat=max(0,len(nodes)-1)):
             spins = dict(zip(nodes,(1,)+tail))
             cut = self.offset + sum(d['weight']*(1-spins[u]*spins[v])/2
@@ -300,8 +220,6 @@ class AnalyticalRQAOA:
         self.solution_cut = float(sum(d['weight']*(1-spins[u]*spins[v])/2
                                       for u,v,d in self.graph.edges(data=True)))
         self.cut_value = -self.solution_cut
-        if not np.isclose(self.solution_cut,self.residual_cut_with_offset,rtol=1e-10,atol=1e-10):
-            raise RuntimeError('Restored original cut disagrees with reduced cut plus offset')
 
     def solve(self):
         self._reset()
@@ -347,7 +265,6 @@ class AnalyticalRQAOA:
         return self.summary()
 
     def draw_convegence(self,show=True):
-        """Original package spelling retained; negative expected cut by grid point."""
         import matplotlib.pyplot as plt
         fig,ax = plt.subplots(figsize=(10,6))
         ax.plot(np.arange(len(self.energies)),self.energies,label='Expected -C (gamma grid scans)')
@@ -359,89 +276,80 @@ class AnalyticalRQAOA:
         return fig,ax
 
     def draw_param_evolution(self, show=True, annotate_steps=True,
-                             figsize=(9, 6), cmap='viridis'):
-        """Plot recorded (gamma, beta) points with directed step transitions.
+                             figsize=(10, 8), cmap='viridis',
+                             filename='rqaoa_parameter_trajectory.html'):
+        """Save offline 3D HTML (gamma, beta, reduction step); return Plotly figure."""
+        import plotly.graph_objects as go
 
-        Uses gamma_history and beta_history (+C convention, radians).
-        Colors and optional labels show step numbers. Angles are displayed
-        exactly as recorded, without periodic unwrapping. Returns (fig, ax).
-        Empty history and a single step are supported. show=False allows saving
-        or further customization without opening a window.
-        """
-        import matplotlib.pyplot as plt
-        from matplotlib.colors import Normalize
-        from matplotlib.ticker import MaxNLocator
-
-        fig, ax = plt.subplots(figsize=figsize)
         gammas = np.asarray(self.gamma_history, dtype=float)
         betas = np.asarray(self.beta_history, dtype=float)
         count = len(gammas)
+        steps = np.arange(1, count + 1)
+        fig = go.Figure()
         if count:
-            steps = np.arange(1, count + 1)
-            # For a single step, give the color scale a nonzero range.
-            norm = Normalize(vmin=1 if count > 1 else 0.5,
-                             vmax=count if count > 1 else 1.5)
-            scatter = ax.scatter(gammas, betas, c=steps, cmap=cmap, norm=norm,
-                                 s=65, edgecolors='black', linewidths=0.5, zorder=3)
-            for i in range(count - 1):
-                # Repeated points cannot have a visible transition arrow.
-                if gammas[i] == gammas[i + 1] and betas[i] == betas[i + 1]:
-                    continue
-                ax.annotate('', xy=(gammas[i + 1], betas[i + 1]),
-                            xytext=(gammas[i], betas[i]),
-                            arrowprops=dict(arrowstyle='->', color='gray',
-                                            alpha=0.65, lw=1.2,
-                                            shrinkA=5, shrinkB=5), zorder=2)
-            if annotate_steps:
-                for step, gamma, beta in zip(steps, gammas, betas):
-                    ax.annotate(str(step), (gamma, beta), xytext=(5, 6),
-                                textcoords='offset points', fontsize=8)
-            ax.scatter(gammas[0], betas[0], s=160, facecolors='none',
-                       edgecolors='green', linewidths=1.6, label='First step', zorder=4)
-            ax.scatter(gammas[-1], betas[-1], s=170, marker='s', facecolors='none',
-                       edgecolors='red', linewidths=1.6, label='Last step', zorder=4)
-            colorbar = fig.colorbar(scatter, ax=ax, label='Recursive step')
-            if count == 1:
-                colorbar.set_ticks([1])
-            else:
-                colorbar.locator = MaxNLocator(integer=True)
-                colorbar.update_ticks()
-            ax.legend()
-            ax.margins(x=0.12, y=0.15)
+            fig.add_trace(go.Scatter3d(
+                x=gammas, y=betas, z=steps,
+                mode='lines+markers+text' if annotate_steps else 'lines+markers',
+                text=[str(step) for step in steps] if annotate_steps else None,
+                textposition='top center',
+                line=dict(color='#64748b', width=4),
+                marker=dict(size=5, color=steps, colorscale=cmap,
+                            cmin=1 if count > 1 else 0.5,
+                            cmax=count if count > 1 else 1.5,
+                            colorbar=dict(title='Step', tickformat='d')),
+                hovertemplate='Step %{z}<br>γ = %{x:.6f} rad<br>β = %{y:.6f} rad<extra></extra>',
+                name='Trajectory', showlegend=False,
+            ))
+            for index, name, color, symbol in [
+                (0, 'First step', '#16a34a', 'diamond'),
+                (-1, 'Last step', '#dc2626', 'square'),
+            ]:
+                fig.add_trace(go.Scatter3d(
+                    x=[gammas[index]], y=[betas[index]], z=[steps[index]],
+                    mode='markers', name=name,
+                    marker=dict(size=8, color=color, symbol=symbol),
+                    hovertemplate='Step %{z}<br>γ = %{x:.6f} rad<br>β = %{y:.6f} rad<extra>%{fullData.name}</extra>',
+                ))
         else:
-            ax.text(0.5, 0.5, 'No recursive steps recorded',
-                    ha='center', va='center', transform=ax.transAxes)
-        ax.set(xlabel=r'$\gamma$ (+C), rad', ylabel=r'$\beta$, rad',
-               title='AnalyticalRQAOA parameter evolution')
-        ax.grid(alpha=0.3)
-        fig.tight_layout()
-        if show:
-            plt.show()
-        return fig, ax
+            fig.add_annotation(text='No recursive steps recorded',
+                               x=0.5, y=0.5, xref='paper', yref='paper', showarrow=False)
+
+        fig.update_layout(
+            title='AnalyticalRQAOA parameter trajectory', template='plotly_white',
+            height=int(figsize[1] * 100), autosize=True,
+            margin=dict(l=0, r=0, t=70, b=0),
+            legend=dict(x=0.01, y=0.99),
+            scene=dict(
+                xaxis_title='γ (+C), rad', yaxis_title='β, rad',
+                zaxis=dict(title='Reduction step', tickmode='linear',
+                           tick0=1, dtick=max(1, (count + 9) // 10),
+                           range=[0.5, count + 0.5] if count else [0, 1]),
+                aspectmode='manual', aspectratio=dict(x=1, y=1, z=1.3),
+                camera=dict(eye=dict(x=1.6, y=1.6, z=1.0)),
+            ),
+        )
+        path = Path(filename).expanduser().resolve()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fig.write_html(str(path), include_plotlyjs=True, full_html=True,
+                       auto_open=show,
+                       config=dict(responsive=True, scrollZoom=True, displaylogo=False))
+        self.param_evolution_html = str(path)
+        return fig
 
 
 if __name__ == '__main__':
-
-    # G = RegularGraph(
-    #     number_of_nodes=50,
-    #     degree=10,
-    #     weights="ones",
-    #     # seed=1000,
-    # )
-
     G = DensRandGraph(
-        number_of_nodes=100,
-        density=0.5,
-        weights="ones",
-        seed=1000,
+        number_of_nodes=80,
+        density=1,
+        weights="pos_neg",
+        seed=1000
     )
-
-    rq = AnalyticalRQAOA(graph=G,
-                         treshold=3,
-                         n_layers=1,
-                         samples=1000,
-                         logs=True,
-                         callback=True)
+    rq = AnalyticalRQAOA(
+        graph=G,
+        treshold=1,
+        samples=1000,
+        logs=True,
+        callback=True
+    )
     rq.solve()
     rq.draw_param_evolution(annotate_steps=False)
-

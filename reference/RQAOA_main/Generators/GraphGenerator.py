@@ -2,7 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from itertools import product
 import numpy as np
-from sympy.codegen.fnodes import dimension
 
 
 def ConnectedRandGraph(number_of_nodes, number_of_edges, weights="ones", seed=None):

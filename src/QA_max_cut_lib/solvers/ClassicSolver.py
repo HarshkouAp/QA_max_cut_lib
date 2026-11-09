@@ -47,10 +47,11 @@ class ClassicSolver:
 
 if __name__ == '__main__':
 
-    G = DensRandGraph(number_of_nodes=25,
-                      density=0.5,
-                      random_weights=False,
-                      seed=42)
+    G = DensRandGraph(
+        number_of_nodes=25,
+        density=0.5,
+        random_weights=False,
+        seed=42)
 
     c = ClassicSolver(G)
     c.solve()
